@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package rds;
+
+import "common.proto";
+
+service ProxySQLService {
+  rpc Start(ProxySQLInitRequest) returns (ProxySQLInitResponse);
+}
+
+message ProxySQLInitRequest {
+  RequestMetadata meta = 1;
+  string hostname = 2;
+  uint32 port = 3;
+  string username = 4;
+  string password = 5;
+}
+
+message ProxySQLInitResponse {
+  ResponseMetadata meta = 1;
+  bool success = 2;
+  string message = 3;
+}

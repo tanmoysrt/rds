@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package rds;
+
+import "google/protobuf/empty.proto";
+import "common.proto";
+import "proxysql.proto";
+
+service JobService {
+  rpc Listen(google.protobuf.Empty) returns (stream JobResponse);
+  rpc GetStatus(JobIdRequest) returns (JobStatusResponse);
+  rpc GetJob(JobIdRequest) returns (JobResponse);
+  rpc Schedule(JobIdRequest) returns (JobStatusResponse);
+  rpc Cancel(JobIdRequest) returns (JobStatusResponse);
+  rpc Acknowledge(JobIdRequest) returns (google.protobuf.Empty);
+}
+
+message JobIdRequest {
+  uint64 id = 1;
+}
+
+message JobStatusResponse {
+  Status status = 1;
+}
+
+message JobResponse {
+  oneof kind {
+    ProxySQLInitResponse proxy_sql_init_response = 1;
+  }
+}

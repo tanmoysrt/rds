@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package rds;
+
+import "google/protobuf/timestamp.proto";
+
+enum Status {
+  UNKNOWN = 0;
+  DRAFT = 1;
+  SCHEDULED = 2;
+  QUEUED = 3;
+  RUNNING = 4;
+  FAILURE = 5;
+  SUCCESS = 6;
+  CANCELLED = 7;
+}
+message RequestMetadata {
+  bool is_async = 1;
+  optional string ref = 2;
+  optional uint32 timeout = 3;
+  optional google.protobuf.Timestamp scheduled_at = 4;
+}
+
+message ResponseMetadata {
+  uint64 job_id = 1;
+  optional string ref = 2;
+  Status status = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp scheduled_at = 5;
+  optional google.protobuf.Timestamp started_at = 6;
+  optional google.protobuf.Timestamp ended_at = 7;
+  optional string error_message = 8;
+  optional string traceback = 9;
+}
+
+message UnknownError {
+  string error_message = 1;
+  string traceback = 2;
+}

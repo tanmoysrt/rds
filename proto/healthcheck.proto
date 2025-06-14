@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package rds;
+
+import "google/protobuf/empty.proto";
+
+service HealthCheckService {
+  rpc Ping(google.protobuf.Empty) returns (PingResponse);
+}
+
+message PingResponse {
+  bool success = 1;
+}

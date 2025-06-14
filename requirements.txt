@@ -1,0 +1,14 @@
+click==8.2.1
+filelock==3.18.0
+future==1.0.0
+grpcio==1.73.0
+grpcio-tools==1.73.0
+honcho==2.0.0
+peewee==3.18.1
+pefile==2021.9.3
+protobuf==6.31.1
+redis==6.2.0
+rq==2.4.0
+ruff==0.11.13
+setuptools==80.9.0
+types-protobuf==6.30.2.20250516
