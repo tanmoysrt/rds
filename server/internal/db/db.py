@@ -1,9 +1,9 @@
 from server.internal.db import local_database
-from server.internal.db.models import Job
+from server.internal.db.models import JobModel, SystemdServiceModel
 
 
 def init_db():
-	local_database.create_tables([Job])
+	local_database.create_tables([JobModel, SystemdServiceModel])
 
 	# Create the indexes
 	local_database.execute_sql(

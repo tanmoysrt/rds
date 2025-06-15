@@ -1,0 +1,26 @@
+[Unit]
+Description=Service for Container - {{ id }}
+After=local-fs.target
+
+[Container]
+Image={{ image }}:{{ tag }}
+ContainerName={{ id }}
+Network=host
+
+{% for mount in mounts %}
+Volume={{ mount.source }}:{{ mount.target }}
+{% endfor %}
+
+{% for env in environment_variables %}
+Environment={{ env.key }}={{ env.value }}
+{% endfor %}
+
+{% for arg in podman_args %}
+PodmanArgs={{ arg }}
+{% endfor %}
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

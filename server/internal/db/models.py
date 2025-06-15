@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import contextlib
 import datetime
+import json
 from enum import IntEnum
 
 from peewee import BlobField, BooleanField, CharField, DateTimeField, IntegerField, Model, TextField
@@ -24,7 +25,7 @@ class JobStatus(IntEnum):
     FAILURE = 5
     CANCELLED = 6
 
-class Job(Model):
+class JobModel(Model):
     id = IntegerField(primary_key=True)
     ref = CharField(max_length=500, null=True, default=None)
     status = IntegerField(
@@ -101,4 +102,50 @@ class Job(Model):
 
     def acknowledge(self):
         self.acknowledged = True
-        self.save(only=[Job.acknowledged])
+        self.save(only=[JobModel.acknowledged])
+
+class SystemdServiceModel(Model):
+    id = TextField(primary_key=True)
+    image = TextField(null=True, default="")
+    tag = TextField(null=True, default="")
+    environment_variables = TextField(null=True, default="{}")
+    mounts = TextField(null=True, default="{}")
+    podman_args = TextField(null=True, default="[]")
+
+    class Meta:
+        database = local_database
+        table_name = "systemd_service"
+
+    @classmethod
+    def create(cls, **kwargs):
+        # If the json parameters are provided as dicts, convert them to JSON strings and set to corresponding fields
+        if 'environment_variables_json' in kwargs:
+            kwargs['environment_variables'] = json.dumps(kwargs.pop('environment_variables_json', {}))
+        if 'mounts_json' in kwargs:
+            kwargs['mounts'] = json.dumps(kwargs.pop('mounts_json', {}))
+        return super().create(**kwargs)
+
+
+    @property
+    def environment_variables_json(self) -> dict[str, str]:
+        return json.loads(self.environment_variables or '{}')
+
+    @environment_variables_json.setter
+    def environment_variables_json(self, values):
+        self.environment_variables = json.dumps(values or {})
+
+    @property
+    def mounts_json(self) -> dict[str, str]:
+        return json.loads(self.mounts or '{}')
+
+    @mounts_json.setter
+    def mounts_json(self, values):
+        self.mounts = json.dumps(values or {})
+
+    @property
+    def podman_args_json(self) -> list[str]:
+        return json.loads(self.podman_args or '[]')
+
+    @podman_args_json.setter
+    def podman_args_json(self, values):
+        self.podman_args = json.dumps(values or [])
