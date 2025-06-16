@@ -62,7 +62,7 @@ class ProxyService(ProxyServiceServicer):
         proxy.restart()
         return ProxyStatusResponse(status=proxy.status.name)
 
-    def Delete(self, request, context) -> ProxyDeleteResponse:
+    def Delete(self, request:ProxyIdRequest, context) -> ProxyDeleteResponse:
         proxy = Proxy(request.id)
         proxy.delete()
         return ProxyDeleteResponse(deleted=True)

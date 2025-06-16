@@ -57,10 +57,13 @@ class AsyncJobInterceptor(grpc.ServerInterceptor):
 
                 try:
                     response = original_handler(request, context)
-                    if is_response_message_support_meta and not hasattr(request, "meta"):
-                        response.meta = ResponseMetadata(
+                    if is_response_message_support_meta and (
+                        not hasattr(response, "meta")
+                        or response.meta.status == 0
+                    ):
+                        response.meta.CopyFrom(ResponseMetadata(
                             status=Status.SUCCESS
-                        )
+                        ))
                     return response
                 except grpc.RpcError as e:
                     # Don't handle RpcError here, let it propagate

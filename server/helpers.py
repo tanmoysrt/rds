@@ -1,3 +1,4 @@
+import hashlib
 import os
 import random
 import secrets
@@ -21,7 +22,7 @@ def modify_systemctl_commands_for_user_mode( commands:list[list[str]]):
     for command in commands:
         command.insert(1, "--user")
 
-def generate_random_password(length:int=16) -> str:
+def generate_random_password(length:int=32) -> str:
     alphabet = string.ascii_letters + string.digits
     return ''.join(secrets.choice(alphabet) for _ in range(length))
 
@@ -44,3 +45,14 @@ def is_port_available(port:int) -> bool:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) != 0
 
+def generate_mysql_password_hash(password:str, append_asterisk:bool=True) -> str:
+    first_hash = hashlib.sha1(password.encode()).digest()
+    second_hash = hashlib.sha1(first_hash).digest()
+    actual_hash = second_hash.hex().upper()
+    if append_asterisk:
+        """
+        In MySQL, the password hash is typically stored with an asterisk at the start
+        to indicate that it is a hashed password. This is a convention used by MySQL/MariaDB/ProxySQL.
+        """
+        actual_hash = '*' + actual_hash
+    return actual_hash

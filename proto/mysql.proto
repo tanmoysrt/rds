@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package rds;
+
+import "common.proto";
+
+service MySQLService {
+  rpc Create(MySQLCreateRequest) returns (MySQLInfoResponse);
+  rpc Get(MySQLIdRequest) returns (MySQLInfoResponse);
+  rpc Status(MySQLIdRequest) returns (MySQLStatusResponse);
+  rpc Start(MySQLIdRequest) returns (MySQLStatusResponse);
+  rpc Stop(MySQLIdRequest) returns (MySQLStatusResponse);
+  rpc Restart(MySQLIdRequest) returns (MySQLStatusResponse);
+  rpc Delete(MySQLIdRequest) returns (MySQLDeleteResponse);
+  rpc Upgrade(MySQLUpgradeRequest) returns (MySQLInfoResponse);
+}
+
+message MySQLIdRequest {
+  RequestMetadata meta = 1;
+  string id = 2;
+}
+
+message MySQLCreateRequest {
+  RequestMetadata meta = 1;
+  optional string id = 2;
+  optional string image = 3;
+  optional string tag = 4;
+  optional uint32 server_id = 5;
+  optional uint32 db_port = 6;
+  string service = 7;
+  string base_path = 8;
+}
+
+message MySQLUpgradeRequest {
+  RequestMetadata meta = 1;
+  string id = 2;
+  string image = 3;
+  string tag = 4;
+}
+
+message MySQLInfoResponse {
+  ResponseMetadata meta = 1;
+  string id = 2;
+  string image = 3;
+  string tag = 4;
+  uint32 server_id = 5;
+  uint32 db_port = 6;
+  string service = 7;
+  string base_path = 8;
+  SystemdServiceStatus status = 9;
+}
+
+message MySQLStatusResponse {
+  ResponseMetadata meta = 1;
+  SystemdServiceStatus status = 2;
+}
+
+message MySQLDeleteResponse {
+  ResponseMetadata meta = 1;
+  bool deleted = 2;
+}

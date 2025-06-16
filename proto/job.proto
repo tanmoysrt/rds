@@ -5,6 +5,7 @@ package rds;
 import "google/protobuf/empty.proto";
 import "common.proto";
 import "proxy.proto";
+import "mysql.proto";
 
 service JobService {
   rpc Listen(google.protobuf.Empty) returns (stream JobResponse);
@@ -32,5 +33,11 @@ message JobResponse {
     ProxyMonitorCredentialResponse proxy_monitor_credential_response = 5;
     ProxyUpgradeRequest proxy_upgrade_request = 6;
     ProxyDeleteResponse proxy_delete_response = 7;
+    MySQLIdRequest my_sql_id_request = 30;
+    MySQLCreateRequest my_sql_create_request = 31;
+    MySQLUpgradeRequest my_sql_upgrade_request = 32;
+    MySQLInfoResponse my_sql_info_response = 33;
+    MySQLStatusResponse my_sql_status_response = 34;
+    MySQLDeleteResponse my_sql_delete_response = 35;
   }
 }
