@@ -1,7 +1,11 @@
 
 
+
+import traceback
+
 import grpc
 
+from generated.common_pb2 import ResponseMetadata, Status
 from server.internal.bg_job.utils import create_job
 from server.internal.db.models import JobModel
 from server.internal.proto_utils import ServiceImplInfo
@@ -26,14 +30,17 @@ class AsyncJobInterceptor(grpc.ServerInterceptor):
             def new_handler(request, context):
                 request_message_type = f"{request.__class__.__module__}.{request.__class__.__name__}"
                 response_message_type = self.service_impls[service].method_response_types[method]
+                is_request_message_support_meta = request_message_type in self.protobuf_messages_with_meta
+                is_response_message_support_meta = response_message_type in self.protobuf_messages_with_meta
+
                 # If is_async tag is found in metadata
                 # Then verify, if both request and response message types for async job
                 # Create a job and return a response with metadata
                 if (
                         hasattr(request, "meta") and
                         getattr(request.meta, "is_async", False) and
-                        request_message_type in self.protobuf_messages_with_meta and
-                        response_message_type in self.protobuf_messages_with_meta
+                        is_request_message_support_meta and
+                        is_response_message_support_meta
                 ):
                     metadata = request.meta
                     job:JobModel = create_job(
@@ -47,7 +54,27 @@ class AsyncJobInterceptor(grpc.ServerInterceptor):
                         timeout=metadata.timeout if metadata.HasField("timeout") else None,
                     )
                     return job.grpc_response
-                return original_handler(request, context)
+
+                try:
+                    response = original_handler(request, context)
+                    if is_response_message_support_meta and not hasattr(request, "meta"):
+                        response.meta = ResponseMetadata(
+                            status=Status.SUCCESS
+                        )
+                    return response
+                except grpc.RpcError as e:
+                    # Don't handle RpcError here, let it propagate
+                    raise e
+                except Exception as e:
+                    if is_response_message_support_meta:
+                        return self.protobuf_messages[response_message_type](
+                            meta=ResponseMetadata(
+                                status=Status.FAILURE,
+                                error_message=str(e),
+                                traceback=traceback.format_exc(),
+                            )
+                        )
+                    raise e
 
             return grpc.unary_unary_rpc_method_handler(
                 new_handler,
