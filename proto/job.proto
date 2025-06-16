@@ -4,7 +4,7 @@ package rds;
 
 import "google/protobuf/empty.proto";
 import "common.proto";
-import "proxysql.proto";
+import "proxy.proto";
 
 service JobService {
   rpc Listen(google.protobuf.Empty) returns (stream JobResponse);
@@ -25,6 +25,12 @@ message JobStatusResponse {
 
 message JobResponse {
   oneof kind {
-    ProxySQLInitResponse proxy_sql_init_response = 1;
+    ProxyCreateRequest proxy_create_request = 1;
+    ProxyInfoResponse proxy_info_response = 2;
+    ProxyIdRequest proxy_id_request = 3;
+    ProxyStatusResponse proxy_status_response = 4;
+    ProxyMonitorCredentialResponse proxy_monitor_credential_response = 5;
+    ProxyUpgradeRequest proxy_upgrade_request = 6;
+    ProxyDeleteResponse proxy_delete_response = 7;
   }
 }

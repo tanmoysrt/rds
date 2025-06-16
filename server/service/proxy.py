@@ -1,15 +1,77 @@
-import time
 
-from generated.common_pb2 import ResponseMetadata, Status
-from generated.proxysql_pb2 import ProxySQLInitResponse
-from generated.proxysql_pb2_grpc import ProxySQLServiceServicer
+from generated.proxy_pb2 import (
+    ProxyCreateRequest,
+    ProxyDeleteResponse,
+    ProxyIdRequest,
+    ProxyInfoResponse,
+    ProxyMonitorCredentialResponse,
+    ProxyStatusResponse,
+    ProxyUpgradeRequest,
+)
+from generated.proxy_pb2_grpc import ProxyServiceServicer
+from server.domain.proxy import Proxy
 
 
-class ProxySQLService(ProxySQLServiceServicer):
-    def Start(self, request, context):
-        time.sleep(1)
-        return ProxySQLInitResponse(
-            meta=ResponseMetadata(status=Status.SUCCESS),
-            success=True,
-            message="Hello from ProxySQLService.Start()",
-        )
+def to_grpc_proxy_info(proxy: Proxy) -> ProxyInfoResponse:
+    return ProxyInfoResponse(
+        id=proxy.model.id,
+        image=proxy.model.image,
+        tag=proxy.model.tag,
+        db_readwrite_port=proxy.db_readwrite_port,
+        db_readonly_port=proxy.db_readonly_port,
+        base_path=proxy.base_path,
+        status=proxy.status.name,
+    )
+
+class ProxyService(ProxyServiceServicer):
+    def Create(self, request:ProxyCreateRequest, context) -> ProxyInfoResponse:
+        if request.base_path is None:
+            raise ValueError("base_path is required")
+
+        if request.id and Proxy.exists(request.id):
+            raise ValueError(f"Proxy with id {request.id} already exists")
+
+        return to_grpc_proxy_info(Proxy.create(
+            service_id=request.id if request.HasField("id") else None,
+            base_path=request.base_path,
+            image=request.image if request.HasField("image") else "docker.io/proxysql/proxysql",
+            tag=request.tag if request.HasField("tag") else "latest",
+            db_readwrite_port=request.db_readwrite_port,
+            db_readonly_port=request.db_readonly_port,
+        ))
+
+    def Get(self, request:ProxyIdRequest, context) -> ProxyInfoResponse:
+        return to_grpc_proxy_info(Proxy(request.id))
+
+    def Status(self, request:ProxyIdRequest, context) -> ProxyStatusResponse:
+        proxy = Proxy(request.id)
+        return ProxyStatusResponse(status=proxy.status.name)
+
+    def Start(self, request:ProxyIdRequest, context) -> ProxyStatusResponse:
+        proxy = Proxy(request.id)
+        proxy.start()
+        return ProxyStatusResponse(status=proxy.status.name)
+
+    def Stop(self, request:ProxyIdRequest, context) -> ProxyStatusResponse:
+        proxy = Proxy(request.id)
+        proxy.stop()
+        return ProxyStatusResponse(status=proxy.status.name)
+
+    def Restart(self, request:ProxyIdRequest, context) -> ProxyStatusResponse:
+        proxy = Proxy(request.id)
+        proxy.restart()
+        return ProxyStatusResponse(status=proxy.status.name)
+
+    def Delete(self, request, context) -> ProxyDeleteResponse:
+        proxy = Proxy(request.id)
+        proxy.delete()
+        return ProxyDeleteResponse(deleted=True)
+
+    def GetMonitorCredential(self, request:ProxyIdRequest, context) -> ProxyMonitorCredentialResponse:
+        proxy = Proxy(request.id)
+        return ProxyMonitorCredentialResponse(username="monitor", password=proxy.monitor_password)
+
+    def Upgrade(self, request:ProxyUpgradeRequest, context) -> ProxyInfoResponse:
+        proxy = Proxy(request.id)
+        proxy.update_version(image=request.image, tag=request.tag)
+        return to_grpc_proxy_info(proxy)

@@ -24,22 +24,22 @@ _sym_db = _symbol_database.Default()
 
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 from . import common_pb2 as common__pb2
-from . import proxysql_pb2 as proxysql__pb2
+from . import proxy_pb2 as proxy__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tjob.proto\x12\x03rds\x1a\x1bgoogle/protobuf/empty.proto\x1a\x0c\x63ommon.proto\x1a\x0eproxysql.proto\"\x1a\n\x0cJobIdRequest\x12\n\n\x02id\x18\x01 \x01(\x04\"0\n\x11JobStatusResponse\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.rds.Status\"S\n\x0bJobResponse\x12<\n\x17proxy_sql_init_response\x18\x01 \x01(\x0b\x32\x19.rds.ProxySQLInitResponseH\x00\x42\x06\n\x04kind2\xcf\x02\n\nJobService\x12\x34\n\x06Listen\x12\x16.google.protobuf.Empty\x1a\x10.rds.JobResponse0\x01\x12\x36\n\tGetStatus\x12\x11.rds.JobIdRequest\x1a\x16.rds.JobStatusResponse\x12-\n\x06GetJob\x12\x11.rds.JobIdRequest\x1a\x10.rds.JobResponse\x12\x35\n\x08Schedule\x12\x11.rds.JobIdRequest\x1a\x16.rds.JobStatusResponse\x12\x33\n\x06\x43\x61ncel\x12\x11.rds.JobIdRequest\x1a\x16.rds.JobStatusResponse\x12\x38\n\x0b\x41\x63knowledge\x12\x11.rds.JobIdRequest\x1a\x16.google.protobuf.Emptyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tjob.proto\x12\x03rds\x1a\x1bgoogle/protobuf/empty.proto\x1a\x0c\x63ommon.proto\x1a\x0bproxy.proto\"\x1a\n\x0cJobIdRequest\x12\n\n\x02id\x18\x01 \x01(\x04\"0\n\x11JobStatusResponse\x12\x1b\n\x06status\x18\x01 \x01(\x0e\x32\x0b.rds.Status\"\xfe\x02\n\x0bJobResponse\x12\x37\n\x14proxy_create_request\x18\x01 \x01(\x0b\x32\x17.rds.ProxyCreateRequestH\x00\x12\x35\n\x13proxy_info_response\x18\x02 \x01(\x0b\x32\x16.rds.ProxyInfoResponseH\x00\x12/\n\x10proxy_id_request\x18\x03 \x01(\x0b\x32\x13.rds.ProxyIdRequestH\x00\x12\x39\n\x15proxy_status_response\x18\x04 \x01(\x0b\x32\x18.rds.ProxyStatusResponseH\x00\x12P\n!proxy_monitor_credential_response\x18\x05 \x01(\x0b\x32#.rds.ProxyMonitorCredentialResponseH\x00\x12\x39\n\x15proxy_upgrade_request\x18\x06 \x01(\x0b\x32\x18.rds.ProxyUpgradeRequestH\x00\x42\x06\n\x04kind2\xcf\x02\n\nJobService\x12\x34\n\x06Listen\x12\x16.google.protobuf.Empty\x1a\x10.rds.JobResponse0\x01\x12\x36\n\tGetStatus\x12\x11.rds.JobIdRequest\x1a\x16.rds.JobStatusResponse\x12-\n\x06GetJob\x12\x11.rds.JobIdRequest\x1a\x10.rds.JobResponse\x12\x35\n\x08Schedule\x12\x11.rds.JobIdRequest\x1a\x16.rds.JobStatusResponse\x12\x33\n\x06\x43\x61ncel\x12\x11.rds.JobIdRequest\x1a\x16.rds.JobStatusResponse\x12\x38\n\x0b\x41\x63knowledge\x12\x11.rds.JobIdRequest\x1a\x16.google.protobuf.Emptyb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'job_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_JOBIDREQUEST']._serialized_start=77
-  _globals['_JOBIDREQUEST']._serialized_end=103
-  _globals['_JOBSTATUSRESPONSE']._serialized_start=105
-  _globals['_JOBSTATUSRESPONSE']._serialized_end=153
-  _globals['_JOBRESPONSE']._serialized_start=155
-  _globals['_JOBRESPONSE']._serialized_end=238
-  _globals['_JOBSERVICE']._serialized_start=241
-  _globals['_JOBSERVICE']._serialized_end=576
+  _globals['_JOBIDREQUEST']._serialized_start=74
+  _globals['_JOBIDREQUEST']._serialized_end=100
+  _globals['_JOBSTATUSRESPONSE']._serialized_start=102
+  _globals['_JOBSTATUSRESPONSE']._serialized_end=150
+  _globals['_JOBRESPONSE']._serialized_start=153
+  _globals['_JOBRESPONSE']._serialized_end=535
+  _globals['_JOBSERVICE']._serialized_start=538
+  _globals['_JOBSERVICE']._serialized_end=873
 # @@protoc_insertion_point(module_scope)

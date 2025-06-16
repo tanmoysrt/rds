@@ -4,8 +4,15 @@ package rds;
 
 import "google/protobuf/timestamp.proto";
 
+enum SystemdServiceStatus {
+  SYSTEMD_SERVICE_STATUS_UNKNOWN = 0;
+  ACTIVE = 1;
+  INACTIVE = 2;
+  FAILED = 3;
+}
+
 enum Status {
-  UNKNOWN = 0;
+  STATUS_UNKNOWN = 0;
   DRAFT = 1;
   SCHEDULED = 2;
   QUEUED = 3;
@@ -14,6 +21,7 @@ enum Status {
   SUCCESS = 6;
   CANCELLED = 7;
 }
+
 message RequestMetadata {
   bool is_async = 1;
   optional string ref = 2;

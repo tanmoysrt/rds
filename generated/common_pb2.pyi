@@ -7,9 +7,16 @@ from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class SystemdServiceStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    SYSTEMD_SERVICE_STATUS_UNKNOWN: _ClassVar[SystemdServiceStatus]
+    ACTIVE: _ClassVar[SystemdServiceStatus]
+    INACTIVE: _ClassVar[SystemdServiceStatus]
+    FAILED: _ClassVar[SystemdServiceStatus]
+
 class Status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
-    UNKNOWN: _ClassVar[Status]
+    STATUS_UNKNOWN: _ClassVar[Status]
     DRAFT: _ClassVar[Status]
     SCHEDULED: _ClassVar[Status]
     QUEUED: _ClassVar[Status]
@@ -17,7 +24,11 @@ class Status(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     FAILURE: _ClassVar[Status]
     SUCCESS: _ClassVar[Status]
     CANCELLED: _ClassVar[Status]
-UNKNOWN: Status
+SYSTEMD_SERVICE_STATUS_UNKNOWN: SystemdServiceStatus
+ACTIVE: SystemdServiceStatus
+INACTIVE: SystemdServiceStatus
+FAILED: SystemdServiceStatus
+STATUS_UNKNOWN: Status
 DRAFT: Status
 SCHEDULED: Status
 QUEUED: Status

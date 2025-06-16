@@ -4,20 +4,63 @@ package rds;
 
 import "common.proto";
 
-service ProxySQLService {
-  rpc Start(ProxySQLInitRequest) returns (ProxySQLInitResponse);
+service ProxyService {
+  rpc Create(ProxyCreateRequest) returns (ProxyInfoResponse);
+  rpc Get(ProxyIdRequest) returns (ProxyInfoResponse);
+  rpc Status(ProxyIdRequest) returns (ProxyStatusResponse);
+  rpc Start(ProxyIdRequest) returns (ProxyStatusResponse);
+  rpc Stop(ProxyIdRequest) returns (ProxyStatusResponse);
+  rpc Restart(ProxyIdRequest) returns (ProxyStatusResponse);
+  rpc Delete(ProxyIdRequest) returns (ProxyDeleteResponse);
+  rpc GetMonitorCredential(ProxyIdRequest) returns (ProxyMonitorCredentialResponse);
+  rpc Upgrade(ProxyUpgradeRequest) returns (ProxyInfoResponse);
 }
 
-message ProxySQLInitRequest {
+message ProxyIdRequest {
   RequestMetadata meta = 1;
-  string hostname = 2;
-  uint32 port = 3;
-  string username = 4;
-  string password = 5;
+  string id = 2;
 }
 
-message ProxySQLInitResponse {
+message ProxyCreateRequest {
+  RequestMetadata meta = 1;
+  optional string id = 2;
+  optional string image = 3;
+  optional string tag = 4;
+  uint32 db_readwrite_port = 5;
+  uint32 db_readonly_port = 6;
+  string base_path = 7;
+}
+
+message ProxyUpgradeRequest {
+  RequestMetadata meta = 1;
+  string id = 2;
+  string image = 3;
+  string tag = 4;
+}
+
+message ProxyInfoResponse {
   ResponseMetadata meta = 1;
-  bool success = 2;
-  string message = 3;
+  string id = 2;
+  string image = 3;
+  string tag = 4;
+  uint32 db_readwrite_port = 5;
+  uint32 db_readonly_port = 6;
+  string base_path = 7;
+  SystemdServiceStatus status = 8;
+}
+
+message ProxyStatusResponse {
+  ResponseMetadata meta = 1;
+  SystemdServiceStatus status = 2;
+}
+
+message ProxyMonitorCredentialResponse {
+  ResponseMetadata meta = 1;
+  string username = 2;
+  string password = 3;
+}
+
+message ProxyDeleteResponse {
+  ResponseMetadata meta = 1;
+  bool deleted = 2;
 }

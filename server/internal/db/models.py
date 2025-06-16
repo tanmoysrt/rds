@@ -106,11 +106,13 @@ class JobModel(Model):
 
 class SystemdServiceModel(Model):
     id = TextField(primary_key=True)
+    service = TextField(null=True, default="")
     image = TextField(null=True, default="")
     tag = TextField(null=True, default="")
     environment_variables = TextField(null=True, default="{}")
     mounts = TextField(null=True, default="{}")
     podman_args = TextField(null=True, default="[]")
+    metadata = TextField(null=True, default="{}")
 
     class Meta:
         database = local_database
@@ -123,6 +125,10 @@ class SystemdServiceModel(Model):
             kwargs['environment_variables'] = json.dumps(kwargs.pop('environment_variables_json', {}))
         if 'mounts_json' in kwargs:
             kwargs['mounts'] = json.dumps(kwargs.pop('mounts_json', {}))
+        if 'podman_args_json' in kwargs:
+            kwargs['podman_args'] = json.dumps(kwargs.pop('podman_args_json', []))
+        if 'metadata_json' in kwargs:
+            kwargs['metadata'] = json.dumps(kwargs.pop('metadata_json', {}))
         return super().create(**kwargs)
 
 
@@ -149,3 +155,11 @@ class SystemdServiceModel(Model):
     @podman_args_json.setter
     def podman_args_json(self, values):
         self.podman_args = json.dumps(values or [])
+
+    @property
+    def metadata_json(self) -> dict[str, str]:
+        return json.loads(self.metadata or '{}')
+
+    @metadata_json.setter
+    def metadata_json(self, values):
+        self.metadata = json.dumps(values or {})
