@@ -7,6 +7,7 @@ from pathlib import Path
 import etcd3
 
 from server import ServerConfig
+from server.domain.db_client import DatabaseClient
 from server.helpers import modify_systemctl_commands_for_user_mode, render_template
 from server.internal.db.models import SystemdServiceModel
 
@@ -155,3 +156,20 @@ class SystemdService:
             user=self.model.etcd_username,
             password=self.model.etcd_password
         )
+
+    @property
+    def db_conn(self) -> DatabaseClient:
+        """
+        Returns the instance of database client used by this service.
+        """
+        raise NotImplementedError("You must implement this method in the subclass")
+
+    def check_health(self) -> (bool, dict):
+        """
+        Check the health of the service.
+        :return:
+            first value is a boolean indicating if the service is healthy
+            second value is a dictionary containing health status information
+        """
+        raise NotImplementedError("You must implement this method in the subclass")
+

@@ -1,5 +1,7 @@
 from pathlib import Path
+from typing import override
 
+from server.domain.db_client import DatabaseClient
 from server.domain.systemd_service import SystemdService
 from server.helpers import (
     find_available_port,
@@ -80,5 +82,15 @@ class Proxy(SystemdService):
     def update_version(self, image:str, tag:str):
         return self.update(image=image, tag=tag)
 
-
+    @override
+    @property
+    def db_conn(self):
+        return DatabaseClient(
+            db_type=self.model.service,
+            host="localhost",
+            port=self.admin_port,
+            user="admin",
+            password=self.admin_password,
+            schema=""
+        )
 

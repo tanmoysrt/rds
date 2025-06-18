@@ -9,6 +9,7 @@ honcho==2.0.0
 idna==3.10
 Jinja2==3.1.6
 MarkupSafe==3.0.2
+mysqlclient==2.2.7
 peewee==3.18.1
 pefile==2021.9.3
 protobuf==6.31.1
