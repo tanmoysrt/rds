@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package rds;
+
+/*
+If you need to add some proto files for generic usage,
+Not related to grpc server or client,
+
+Its' recommended to keep those in this file.
+*/
+
+enum DBType {
+  MYSQL = 0;
+  MARIADB = 1;
+}
+
+message DBHealthStatus {
+  DBType db_type = 1;
+  int64 reported_at = 2; // Timestamp in milliseconds
+  string global_transaction_id = 3; // Useful for MySQL/MariaDB
+}

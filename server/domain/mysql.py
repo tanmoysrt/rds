@@ -1,8 +1,11 @@
+import contextlib
 import random
+import time
 from pathlib import Path
 from typing import override
 
-from server.domain.db_client import DatabaseClient
+from generated.extras_pb2 import DBHealthStatus, DBType
+from server import ServerConfig
 from server.domain.systemd_service import SystemdService
 from server.helpers import (
     find_available_port,
@@ -10,11 +13,13 @@ from server.helpers import (
     generate_random_password,
     render_template,
 )
+from server.internal.db_client import DatabaseClient
+from server.internal.utils import get_redis_client
 
 
 class MySQL(SystemdService):
     @classmethod
-    def create(cls, service_id:str, base_path:str, image:str, tag:str, server_id:int|None=None, db_port:int|None=None, service:str="mariadb", **kwargs):
+    def create(cls, service_id:str, base_path:str, image:str, tag:str, cluster_id:str, server_id:int|None=None, db_port:int|None=None, service:str="mariadb", etcd_username:str|None=None, etcd_password:str|None=None, **kwargs):
         if service not in ("mariadb", "mysql"):
             raise ValueError(f"Unknown service {service}")
 
@@ -64,7 +69,7 @@ class MySQL(SystemdService):
                 f.write(render_template("mysql/config/rds.cnf", metadata))
 
         # Create the service
-        return super().create(
+        record = super().create(
             service_id=service_id,
             service=service,
             image=image,
@@ -80,7 +85,17 @@ class MySQL(SystemdService):
             },
             metadata=metadata,
             podman_args=["--userns=keep-id:uid=999,gid=999"],
+            cluster_id=cluster_id,
+            etcd_username=etcd_username,
+            etcd_password=etcd_password,
         )
+
+        with contextlib.suppress(Exception):
+            # Publish the command to pubsub to notify monitoring services to start monitoring this MySQL instance
+            redis = get_redis_client()
+            redis.publish(ServerConfig().mysql_monitor_commands_redis_channel, f"add {record.model.id}")
+
+        return record
 
     def __init__(self, record_id:str):
         super().__init__(record_id)
@@ -94,15 +109,51 @@ class MySQL(SystemdService):
         self.config_path = metadata["config_path"]
         self.init_path = metadata["init_path"]
 
+        self._db_instance_for_health_check:DatabaseClient|None = None
+
     def update_version(self, image:str, tag:str):
         return self.update(image=image, tag=tag)
+
+    @override
+    def delete(self):
+        super().delete()
+        with contextlib.suppress(Exception):
+            # Publish the command to pubsub to notify monitoring services to stop monitoring this MySQL instance
+            redis = get_redis_client()
+            redis.publish(ServerConfig().mysql_monitor_commands_redis_channel, f"remove {self.model.id}")
+
+    @override
+    def get_health_info(self) -> (bool, DBHealthStatus | None):
+        """
+        Fetch gtid from the database to check health
+        + getting the info of replication
+
+        Try to use same db connection rather than creating a new one each time.
+        """
+        try:
+            if not self._db_instance_for_health_check:
+                self._db_instance_for_health_check = self.db_conn
+
+            gtid = self._db_instance_for_health_check.query("SELECT @@gtid_current_pos")[0]["@@gtid_current_pos"]
+            return True, DBHealthStatus(
+                db_type=DBType.MYSQL if self.model.service == "mysql" else DBType.MARIADB,
+                reported_at=time.time_ns() // 1_000_000,
+                global_transaction_id=gtid,
+            )
+        except Exception as e:
+            print(e)
+            return False, None
+
+    @staticmethod
+    def get_all(**kwargs) -> list[str]:
+        return SystemdService.get_all(["mariadb", "mysql"])
 
     @override
     @property
     def db_conn(self):
         return DatabaseClient(
             db_type=self.model.service,
-            host="localhost",
+            host="127.0.0.1", # localhost does not work with same network namespace
             port=self.db_port,
             user="root",
             password=self.mysql_root_password,

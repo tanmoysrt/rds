@@ -23,12 +23,15 @@ message MySQLIdRequest {
 message MySQLCreateRequest {
   RequestMetadata meta = 1;
   optional string id = 2;
-  optional string image = 3;
-  optional string tag = 4;
-  optional uint32 server_id = 5;
-  optional uint32 db_port = 6;
-  string service = 7;
-  string base_path = 8;
+  string cluster_id = 3;
+  optional string image = 4;
+  optional string tag = 5;
+  optional uint32 server_id = 6;
+  optional uint32 db_port = 7;
+  string service = 8;
+  string base_path = 9;
+  string etcd_username = 10;
+  string etcd_password = 11;
 }
 
 message MySQLUpgradeRequest {
@@ -41,13 +44,14 @@ message MySQLUpgradeRequest {
 message MySQLInfoResponse {
   ResponseMetadata meta = 1;
   string id = 2;
-  string image = 3;
-  string tag = 4;
-  uint32 server_id = 5;
-  uint32 db_port = 6;
-  string service = 7;
-  string base_path = 8;
-  SystemdServiceStatus status = 9;
+  string cluster_id = 3;
+  string image = 4;
+  string tag = 5;
+  uint32 server_id = 6;
+  uint32 db_port = 7;
+  string service = 8;
+  string base_path = 9;
+  SystemdServiceStatus status = 10;
 }
 
 message MySQLStatusResponse {

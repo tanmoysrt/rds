@@ -2,14 +2,14 @@ import enum
 import os
 import subprocess
 import uuid
+from functools import cached_property
 from pathlib import Path
 
-import etcd3
-
 from server import ServerConfig
-from server.domain.db_client import DatabaseClient
 from server.helpers import modify_systemctl_commands_for_user_mode, render_template
 from server.internal.db.models import SystemdServiceModel
+from server.internal.db_client import DatabaseClient
+from server.internal.etcd_client import Etcd3Client
 
 
 class ServiceStatus(enum.Enum):
@@ -19,7 +19,7 @@ class ServiceStatus(enum.Enum):
 
 class SystemdService:
     @classmethod
-    def create(cls, image:str, tag:str, environment_variables:dict[str, str], mounts:dict[str,str], podman_args:list[str], service_id:str|None=None, service:str="", metadata:dict[str, str]|None=None):
+    def create(cls, image:str, tag:str, environment_variables:dict[str, str], mounts:dict[str,str], podman_args:list[str], cluster_id:str, service_id:str|None=None, service:str="", metadata:dict[str, str]|None=None, etcd_username:str|None=None, etcd_password:str|None=None):
         if not isinstance(environment_variables, dict):
             raise ValueError("environment_variables must be a dictionary")
         if not isinstance(mounts, dict):
@@ -29,12 +29,16 @@ class SystemdService:
 
         service = SystemdServiceModel.create(
             id=service_id or str(uuid.uuid4()),
+            service=service,
             image=image,
             tag=tag,
             environment_variables_json=environment_variables,
             mounts_json=mounts,
             podman_args_json=podman_args,
             metadata_json=metadata or {},
+            cluster_id=cluster_id,
+            etcd_username=etcd_username,
+            etcd_password=etcd_password,
         )
         return cls(service.id)
 
@@ -148,13 +152,32 @@ class SystemdService:
         })
 
     @property
+    def kv_cluster_config_key(self) -> str:
+        return ServerConfig().kv_cluster_config_key.format(cluster_id=self.model.cluster_id)
+
+    @property
+    def kv_cluster_current_master_key(self) -> str:
+        return ServerConfig().kv_cluster_current_master_key.format(cluster_id=self.model.cluster_id)
+
+    @property
+    def kv_cluster_election_lock_key(self) -> str:
+        return ServerConfig().kv_cluster_election_lock_key.format(cluster_id=self.model.cluster_id)
+
+    @property
+    def kv_cluster_node_status_key(self) -> str:
+        return ServerConfig().kv_cluster_node_status_key.format(cluster_id=self.model.cluster_id, node_id=self.model.id)
+
+    @property
+    def kv_cluster_node_cluster_state_key(self) -> str:
+        return ServerConfig().kv_cluster_node_cluster_state_key.format(cluster_id=self.model.cluster_id, node_id=self.model.id)
+
+    @cached_property
     def kv(self):
         config = ServerConfig()
-        return etcd3.client(
-            host=config.etcd_host,
-            port=config.etcd_port,
-            user=self.model.etcd_username,
-            password=self.model.etcd_password
+        return Etcd3Client(
+            addresses=[f"{config.etcd_host}:{config.etcd_port}"],
+            user=self.model.etcd_username or None,
+            password=self.model.etcd_password or None,
         )
 
     @property
@@ -164,7 +187,7 @@ class SystemdService:
         """
         raise NotImplementedError("You must implement this method in the subclass")
 
-    def check_health(self) -> (bool, dict):
+    def get_health_info(self) -> (bool, any):
         """
         Check the health of the service.
         :return:
@@ -173,3 +196,10 @@ class SystemdService:
         """
         raise NotImplementedError("You must implement this method in the subclass")
 
+
+    @staticmethod
+    def get_all(services:list[str]|None=None) -> list[str]:
+        query = SystemdServiceModel.select(SystemdServiceModel.id)
+        if services is not None:
+            query = query.where(SystemdServiceModel.service.in_(services))
+        return [i[0] for i in query.tuples()]

@@ -16,11 +16,24 @@ class ServerConfig:
     service_impl_dir:str
     grpc_port:int
 
-    job_update_stream_redis_channel:str
+    # pubsub channels
+    job_update_stream_redis_channel:str = "job_update_stream"
+    mysql_monitor_commands_redis_channel:str = "mysql_monitor_commands"
+
+    db_healthcheck_interval_ms:int = 250 # Healthcheck interval in milliseconds
+    db_healthcheck_minimum_interval_ms:int = 100
 
     # etcd cluster information
     etcd_host:str
-    etcd_port:int
+    etcd_port:int = 2379
+
+    # kv keys
+    kv_cluster_config_key:str = "/cluster/{cluster_id}/config"
+    kv_cluster_current_master_key:str = "/cluster/{cluster_id}/master"
+    kv_cluster_election_lock_key:str = "/cluster/{cluster_id}/election/lock"
+    kv_cluster_node_status_key:str = "/cluster/{cluster_id}/node/{node_id}/status"
+    kv_cluster_node_cluster_state_key:str = "/cluster/{cluster_id}/node/{node_id}/state"
+
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:

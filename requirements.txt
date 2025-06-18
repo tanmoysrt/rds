@@ -1,6 +1,6 @@
 anyio==4.9.0
 click==8.2.1
-etcd3==0.12.0
+etcd3 @ git+https://github.com/kragniz/python-etcd3.git@e58a899579ba416449c4e225b61f039457c8072a
 filelock==3.18.0
 future==1.0.0
 grpcio==1.73.0

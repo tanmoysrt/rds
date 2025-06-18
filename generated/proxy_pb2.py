@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from . import common_pb2 as common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bproxy.proto\x12\x03rds\x1a\x0c\x63ommon.proto\"@\n\x0eProxyIdRequest\x12\"\n\x04meta\x18\x01 \x01(\x0b\x32\x14.rds.RequestMetadata\x12\n\n\x02id\x18\x02 \x01(\t\"\xd0\x01\n\x12ProxyCreateRequest\x12\"\n\x04meta\x18\x01 \x01(\x0b\x32\x14.rds.RequestMetadata\x12\x0f\n\x02id\x18\x02 \x01(\tH\x00\x88\x01\x01\x12\x12\n\x05image\x18\x03 \x01(\tH\x01\x88\x01\x01\x12\x10\n\x03tag\x18\x04 \x01(\tH\x02\x88\x01\x01\x12\x19\n\x11\x64\x62_readwrite_port\x18\x05 \x01(\r\x12\x18\n\x10\x64\x62_readonly_port\x18\x06 \x01(\r\x12\x11\n\tbase_path\x18\x07 \x01(\tB\x05\n\x03_idB\x08\n\x06_imageB\x06\n\x04_tag\"a\n\x13ProxyUpgradeRequest\x12\"\n\x04meta\x18\x01 \x01(\x0b\x32\x14.rds.RequestMetadata\x12\n\n\x02id\x18\x02 \x01(\t\x12\r\n\x05image\x18\x03 \x01(\t\x12\x0b\n\x03tag\x18\x04 \x01(\t\"\xd3\x01\n\x11ProxyInfoResponse\x12#\n\x04meta\x18\x01 \x01(\x0b\x32\x15.rds.ResponseMetadata\x12\n\n\x02id\x18\x02 \x01(\t\x12\r\n\x05image\x18\x03 \x01(\t\x12\x0b\n\x03tag\x18\x04 \x01(\t\x12\x19\n\x11\x64\x62_readwrite_port\x18\x05 \x01(\r\x12\x18\n\x10\x64\x62_readonly_port\x18\x06 \x01(\r\x12\x11\n\tbase_path\x18\x07 \x01(\t\x12)\n\x06status\x18\x08 \x01(\x0e\x32\x19.rds.SystemdServiceStatus\"e\n\x13ProxyStatusResponse\x12#\n\x04meta\x18\x01 \x01(\x0b\x32\x15.rds.ResponseMetadata\x12)\n\x06status\x18\x02 \x01(\x0e\x32\x19.rds.SystemdServiceStatus\"i\n\x1eProxyMonitorCredentialResponse\x12#\n\x04meta\x18\x01 \x01(\x0b\x32\x15.rds.ResponseMetadata\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"K\n\x13ProxyDeleteResponse\x12#\n\x04meta\x18\x01 \x01(\x0b\x32\x15.rds.ResponseMetadata\x12\x0f\n\x07\x64\x65leted\x18\x02 \x01(\x08\x32\xa7\x04\n\x0cProxyService\x12\x39\n\x06\x43reate\x12\x17.rds.ProxyCreateRequest\x1a\x16.rds.ProxyInfoResponse\x12\x32\n\x03Get\x12\x13.rds.ProxyIdRequest\x1a\x16.rds.ProxyInfoResponse\x12\x37\n\x06Status\x12\x13.rds.ProxyIdRequest\x1a\x18.rds.ProxyStatusResponse\x12\x36\n\x05Start\x12\x13.rds.ProxyIdRequest\x1a\x18.rds.ProxyStatusResponse\x12\x35\n\x04Stop\x12\x13.rds.ProxyIdRequest\x1a\x18.rds.ProxyStatusResponse\x12\x38\n\x07Restart\x12\x13.rds.ProxyIdRequest\x1a\x18.rds.ProxyStatusResponse\x12\x37\n\x06\x44\x65lete\x12\x13.rds.ProxyIdRequest\x1a\x18.rds.ProxyDeleteResponse\x12P\n\x14GetMonitorCredential\x12\x13.rds.ProxyIdRequest\x1a#.rds.ProxyMonitorCredentialResponse\x12;\n\x07Upgrade\x12\x18.rds.ProxyUpgradeRequest\x1a\x16.rds.ProxyInfoResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bproxy.proto\x12\x03rds\x1a\x0c\x63ommon.proto\"@\n\x0eProxyIdRequest\x12\"\n\x04meta\x18\x01 \x01(\x0b\x32\x14.rds.RequestMetadata\x12\n\n\x02id\x18\x02 \x01(\t\"\x92\x02\n\x12ProxyCreateRequest\x12\"\n\x04meta\x18\x01 \x01(\x0b\x32\x14.rds.RequestMetadata\x12\x0f\n\x02id\x18\x02 \x01(\tH\x00\x88\x01\x01\x12\x12\n\ncluster_id\x18\x03 \x01(\t\x12\x12\n\x05image\x18\x04 \x01(\tH\x01\x88\x01\x01\x12\x10\n\x03tag\x18\x05 \x01(\tH\x02\x88\x01\x01\x12\x19\n\x11\x64\x62_readwrite_port\x18\x06 \x01(\r\x12\x18\n\x10\x64\x62_readonly_port\x18\x07 \x01(\r\x12\x11\n\tbase_path\x18\x08 \x01(\t\x12\x15\n\retcd_username\x18\t \x01(\t\x12\x15\n\retcd_password\x18\n \x01(\tB\x05\n\x03_idB\x08\n\x06_imageB\x06\n\x04_tag\"a\n\x13ProxyUpgradeRequest\x12\"\n\x04meta\x18\x01 \x01(\x0b\x32\x14.rds.RequestMetadata\x12\n\n\x02id\x18\x02 \x01(\t\x12\r\n\x05image\x18\x03 \x01(\t\x12\x0b\n\x03tag\x18\x04 \x01(\t\"\xe7\x01\n\x11ProxyInfoResponse\x12#\n\x04meta\x18\x01 \x01(\x0b\x32\x15.rds.ResponseMetadata\x12\n\n\x02id\x18\x02 \x01(\t\x12\x12\n\ncluster_id\x18\x03 \x01(\t\x12\r\n\x05image\x18\x04 \x01(\t\x12\x0b\n\x03tag\x18\x05 \x01(\t\x12\x19\n\x11\x64\x62_readwrite_port\x18\x06 \x01(\r\x12\x18\n\x10\x64\x62_readonly_port\x18\x07 \x01(\r\x12\x11\n\tbase_path\x18\x08 \x01(\t\x12)\n\x06status\x18\t \x01(\x0e\x32\x19.rds.SystemdServiceStatus\"e\n\x13ProxyStatusResponse\x12#\n\x04meta\x18\x01 \x01(\x0b\x32\x15.rds.ResponseMetadata\x12)\n\x06status\x18\x02 \x01(\x0e\x32\x19.rds.SystemdServiceStatus\"i\n\x1eProxyMonitorCredentialResponse\x12#\n\x04meta\x18\x01 \x01(\x0b\x32\x15.rds.ResponseMetadata\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"K\n\x13ProxyDeleteResponse\x12#\n\x04meta\x18\x01 \x01(\x0b\x32\x15.rds.ResponseMetadata\x12\x0f\n\x07\x64\x65leted\x18\x02 \x01(\x08\x32\xa7\x04\n\x0cProxyService\x12\x39\n\x06\x43reate\x12\x17.rds.ProxyCreateRequest\x1a\x16.rds.ProxyInfoResponse\x12\x32\n\x03Get\x12\x13.rds.ProxyIdRequest\x1a\x16.rds.ProxyInfoResponse\x12\x37\n\x06Status\x12\x13.rds.ProxyIdRequest\x1a\x18.rds.ProxyStatusResponse\x12\x36\n\x05Start\x12\x13.rds.ProxyIdRequest\x1a\x18.rds.ProxyStatusResponse\x12\x35\n\x04Stop\x12\x13.rds.ProxyIdRequest\x1a\x18.rds.ProxyStatusResponse\x12\x38\n\x07Restart\x12\x13.rds.ProxyIdRequest\x1a\x18.rds.ProxyStatusResponse\x12\x37\n\x06\x44\x65lete\x12\x13.rds.ProxyIdRequest\x1a\x18.rds.ProxyDeleteResponse\x12P\n\x14GetMonitorCredential\x12\x13.rds.ProxyIdRequest\x1a#.rds.ProxyMonitorCredentialResponse\x12;\n\x07Upgrade\x12\x18.rds.ProxyUpgradeRequest\x1a\x16.rds.ProxyInfoResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,17 +35,17 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_PROXYIDREQUEST']._serialized_start=34
   _globals['_PROXYIDREQUEST']._serialized_end=98
   _globals['_PROXYCREATEREQUEST']._serialized_start=101
-  _globals['_PROXYCREATEREQUEST']._serialized_end=309
-  _globals['_PROXYUPGRADEREQUEST']._serialized_start=311
-  _globals['_PROXYUPGRADEREQUEST']._serialized_end=408
-  _globals['_PROXYINFORESPONSE']._serialized_start=411
-  _globals['_PROXYINFORESPONSE']._serialized_end=622
-  _globals['_PROXYSTATUSRESPONSE']._serialized_start=624
-  _globals['_PROXYSTATUSRESPONSE']._serialized_end=725
-  _globals['_PROXYMONITORCREDENTIALRESPONSE']._serialized_start=727
-  _globals['_PROXYMONITORCREDENTIALRESPONSE']._serialized_end=832
-  _globals['_PROXYDELETERESPONSE']._serialized_start=834
-  _globals['_PROXYDELETERESPONSE']._serialized_end=909
-  _globals['_PROXYSERVICE']._serialized_start=912
-  _globals['_PROXYSERVICE']._serialized_end=1463
+  _globals['_PROXYCREATEREQUEST']._serialized_end=375
+  _globals['_PROXYUPGRADEREQUEST']._serialized_start=377
+  _globals['_PROXYUPGRADEREQUEST']._serialized_end=474
+  _globals['_PROXYINFORESPONSE']._serialized_start=477
+  _globals['_PROXYINFORESPONSE']._serialized_end=708
+  _globals['_PROXYSTATUSRESPONSE']._serialized_start=710
+  _globals['_PROXYSTATUSRESPONSE']._serialized_end=811
+  _globals['_PROXYMONITORCREDENTIALRESPONSE']._serialized_start=813
+  _globals['_PROXYMONITORCREDENTIALRESPONSE']._serialized_end=918
+  _globals['_PROXYDELETERESPONSE']._serialized_start=920
+  _globals['_PROXYDELETERESPONSE']._serialized_end=995
+  _globals['_PROXYSERVICE']._serialized_start=998
+  _globals['_PROXYSERVICE']._serialized_end=1549
 # @@protoc_insertion_point(module_scope)

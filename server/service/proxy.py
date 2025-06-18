@@ -15,6 +15,7 @@ from server.domain.proxy import Proxy
 def to_grpc_proxy_info(proxy: Proxy) -> ProxyInfoResponse:
     return ProxyInfoResponse(
         id=proxy.model.id,
+        cluster_id=proxy.model.cluster_id,
         image=proxy.model.image,
         tag=proxy.model.tag,
         db_readwrite_port=proxy.db_readwrite_port,
@@ -28,16 +29,25 @@ class ProxyService(ProxyServiceServicer):
         if request.base_path is None:
             raise ValueError("base_path is required")
 
+        if request.cluster_id is None:
+            raise ValueError("cluster_id is required")
+
+        if request.etcd_username is None or request.etcd_password is None:
+            raise ValueError("etcd_username and etcd_password are required")
+
         if request.id and Proxy.exists(request.id):
             raise ValueError(f"Proxy with id {request.id} already exists")
 
         return to_grpc_proxy_info(Proxy.create(
             service_id=request.id if request.HasField("id") else None,
+            cluster_id=request.cluster_id,
             base_path=request.base_path,
             image=request.image if request.HasField("image") else "docker.io/proxysql/proxysql",
             tag=request.tag if request.HasField("tag") else "latest",
             db_readwrite_port=request.db_readwrite_port,
             db_readonly_port=request.db_readonly_port,
+            etcd_username=request.etcd_username,
+            etcd_password=request.etcd_password,
         ))
 
     def Get(self, request:ProxyIdRequest, context) -> ProxyInfoResponse:

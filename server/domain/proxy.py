@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import override
 
-from server.domain.db_client import DatabaseClient
 from server.domain.systemd_service import SystemdService
 from server.helpers import (
     find_available_port,
@@ -9,11 +8,12 @@ from server.helpers import (
     is_port_available,
     render_template,
 )
+from server.internal.db_client import DatabaseClient
 
 
 class Proxy(SystemdService):
     @classmethod
-    def create(cls, service_id:str, base_path:str, image:str, tag:str, db_readwrite_port:int|None=None, db_readonly_port:int|None=None, **kwargs):
+    def create(cls, service_id:str, base_path:str, image:str, tag:str, cluster_id:str, db_readwrite_port:int|None=None, db_readonly_port:int|None=None, etcd_username:str|None=None, etcd_password:str|None=None, **kwargs):
         # Create the base path if it doesn't exist
         path = Path(base_path)
         path.mkdir(parents=True, exist_ok=True)
@@ -64,7 +64,10 @@ class Proxy(SystemdService):
                 str(metadata["config_path"]): "/etc/proxysql.cnf",
             },
             metadata=metadata,
-            podman_args=["--userns=keep-id"]
+            podman_args=["--userns=keep-id"],
+            cluster_id=cluster_id,
+            etcd_username=etcd_username,
+            etcd_password=etcd_password,
         )
 
     def __init__(self, record_id:str):
@@ -81,6 +84,11 @@ class Proxy(SystemdService):
 
     def update_version(self, image:str, tag:str):
         return self.update(image=image, tag=tag)
+
+
+    @staticmethod
+    def get_all(**kwargs) -> list[str]:
+        return super().get_all(["proxysql"])
 
     @override
     @property

@@ -24,11 +24,14 @@ message ProxyIdRequest {
 message ProxyCreateRequest {
   RequestMetadata meta = 1;
   optional string id = 2;
-  optional string image = 3;
-  optional string tag = 4;
-  uint32 db_readwrite_port = 5;
-  uint32 db_readonly_port = 6;
-  string base_path = 7;
+  string cluster_id = 3;
+  optional string image = 4;
+  optional string tag = 5;
+  uint32 db_readwrite_port = 6;
+  uint32 db_readonly_port = 7;
+  string base_path = 8;
+  string etcd_username = 9;
+  string etcd_password = 10;
 }
 
 message ProxyUpgradeRequest {
@@ -41,12 +44,13 @@ message ProxyUpgradeRequest {
 message ProxyInfoResponse {
   ResponseMetadata meta = 1;
   string id = 2;
-  string image = 3;
-  string tag = 4;
-  uint32 db_readwrite_port = 5;
-  uint32 db_readonly_port = 6;
-  string base_path = 7;
-  SystemdServiceStatus status = 8;
+  string cluster_id = 3;
+  string image = 4;
+  string tag = 5;
+  uint32 db_readwrite_port = 6;
+  uint32 db_readonly_port = 7;
+  string base_path = 8;
+  SystemdServiceStatus status = 9;
 }
 
 message ProxyStatusResponse {
