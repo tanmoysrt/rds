@@ -4,6 +4,9 @@ import subprocess
 import uuid
 from pathlib import Path
 
+import etcd3
+
+from server import ServerConfig
 from server.helpers import modify_systemctl_commands_for_user_mode, render_template
 from server.internal.db.models import SystemdServiceModel
 
@@ -142,3 +145,13 @@ class SystemdService:
             } for i in self.model.environment_variables_json.items()],
             "podman_args": self.model.podman_args_json,
         })
+
+    @property
+    def kv(self):
+        config = ServerConfig()
+        return etcd3.client(
+            host=config.etcd_host,
+            port=config.etcd_port,
+            user=self.model.etcd_username,
+            password=self.model.etcd_password
+        )

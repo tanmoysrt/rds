@@ -18,6 +18,10 @@ class ServerConfig:
 
     job_update_stream_redis_channel:str
 
+    # etcd cluster information
+    etcd_host:str
+    etcd_port:int
+
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)

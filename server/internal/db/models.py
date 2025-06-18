@@ -113,6 +113,9 @@ class SystemdServiceModel(Model):
     mounts = TextField(null=True, default="{}")
     podman_args = TextField(null=True, default="[]")
     metadata = TextField(null=True, default="{}")
+    cluster_id = TextField(null=True, default="")
+    etcd_username = TextField(null=True, default="")
+    etcd_password = TextField(null=True, default="")
 
     class Meta:
         database = local_database
@@ -163,3 +166,4 @@ class SystemdServiceModel(Model):
     @metadata_json.setter
     def metadata_json(self, values):
         self.metadata = json.dumps(values or {})
+
