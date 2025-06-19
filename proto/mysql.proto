@@ -30,8 +30,9 @@ message MySQLCreateRequest {
   optional uint32 db_port = 7;
   string service = 8;
   string base_path = 9;
-  string etcd_username = 10;
-  string etcd_password = 11;
+  string root_password = 10;
+  string etcd_username = 11;
+  string etcd_password = 12;
 }
 
 message MySQLUpgradeRequest {

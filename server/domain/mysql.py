@@ -10,7 +10,6 @@ from server.domain.systemd_service import SystemdService
 from server.helpers import (
     find_available_port,
     generate_mysql_password_hash,
-    generate_random_string,
     render_template,
 )
 from server.internal.db_client import DatabaseClient
@@ -19,7 +18,7 @@ from server.internal.utils import get_redis_client
 
 class MySQL(SystemdService):
     @classmethod
-    def create(cls, service_id:str, base_path:str, image:str, tag:str, cluster_id:str, server_id:int|None=None, db_port:int|None=None, service:str="mariadb", etcd_username:str|None=None, etcd_password:str|None=None, **kwargs):
+    def create(cls, service_id:str, base_path:str, image:str, tag:str, cluster_id:str, root_password:str, server_id:int|None=None, db_port:int|None=None, service:str="mariadb", etcd_username:str|None=None, etcd_password:str|None=None, **kwargs):
         if service not in ("mariadb", "mysql"):
             raise ValueError(f"Unknown service {service}")
 
@@ -45,10 +44,9 @@ class MySQL(SystemdService):
         if not server_id:
             server_id = random.randint(1, 1000000)
 
-        mysql_root_password = generate_random_string(length=64)
         metadata = {
-            "mysql_root_password": mysql_root_password,
-            "mysql_hashed_root_password": generate_mysql_password_hash(mysql_root_password),
+            "mysql_root_password": root_password,
+            "mysql_hashed_root_password": generate_mysql_password_hash(root_password),
             "server_id": server_id,
             "db_port": db_port,
             "base_path": str(path),

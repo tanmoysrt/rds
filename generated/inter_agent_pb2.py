@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11inter_agent.proto\x12\x03rds\x1a\x1bgoogle/protobuf/empty.proto\"@\n\x19RequestRsyncAccessRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x0f\n\x07node_id\x18\x02 \x01(\t\"u\n\x1aRequestRsyncAccessResponse\x12\x13\n\x0binstance_id\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\x05\x12\x10\n\x08username\x18\x03 \x01(\t\x12\x10\n\x08password\x18\x04 \x01(\t\x12\x10\n\x08src_path\x18\x05 \x01(\t\"T\n\x18RevokeRsyncAccessRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x0f\n\x07node_id\x18\x02 \x01(\t\x12\x13\n\x0binstance_id\x18\x03 \x01(\t2\xb6\x01\n\x11InterAgentService\x12U\n\x12RequestRsyncAccess\x12\x1e.rds.RequestRsyncAccessRequest\x1a\x1f.rds.RequestRsyncAccessResponse\x12J\n\x11RevokeRsyncAccess\x12\x1d.rds.RevokeRsyncAccessRequest\x1a\x16.google.protobuf.Emptyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11inter_agent.proto\x12\x03rds\x1a\x1bgoogle/protobuf/empty.proto\"@\n\x19RequestRsyncAccessRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x0f\n\x07node_id\x18\x02 \x01(\t\"u\n\x1aRequestRsyncAccessResponse\x12\x13\n\x0binstance_id\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\x05\x12\x10\n\x08username\x18\x03 \x01(\t\x12\x10\n\x08password\x18\x04 \x01(\t\x12\x10\n\x08src_path\x18\x05 \x01(\t\"C\n\x18RevokeRsyncAccessRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x13\n\x0binstance_id\x18\x02 \x01(\t2\xb6\x01\n\x11InterAgentService\x12U\n\x12RequestRsyncAccess\x12\x1e.rds.RequestRsyncAccessRequest\x1a\x1f.rds.RequestRsyncAccessResponse\x12J\n\x11RevokeRsyncAccess\x12\x1d.rds.RevokeRsyncAccessRequest\x1a\x16.google.protobuf.Emptyb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -37,7 +37,7 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_REQUESTRSYNCACCESSRESPONSE']._serialized_start=121
   _globals['_REQUESTRSYNCACCESSRESPONSE']._serialized_end=238
   _globals['_REVOKERSYNCACCESSREQUEST']._serialized_start=240
-  _globals['_REVOKERSYNCACCESSREQUEST']._serialized_end=324
-  _globals['_INTERAGENTSERVICE']._serialized_start=327
-  _globals['_INTERAGENTSERVICE']._serialized_end=509
+  _globals['_REVOKERSYNCACCESSREQUEST']._serialized_end=307
+  _globals['_INTERAGENTSERVICE']._serialized_start=310
+  _globals['_INTERAGENTSERVICE']._serialized_end=492
 # @@protoc_insertion_point(module_scope)

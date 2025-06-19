@@ -15,7 +15,7 @@ class MySQLIdRequest(_message.Message):
     def __init__(self, meta: _Optional[_Union[_common_pb2.RequestMetadata, _Mapping]] = ..., id: _Optional[str] = ...) -> None: ...
 
 class MySQLCreateRequest(_message.Message):
-    __slots__ = ("meta", "id", "cluster_id", "image", "tag", "server_id", "db_port", "service", "base_path", "etcd_username", "etcd_password")
+    __slots__ = ("meta", "id", "cluster_id", "image", "tag", "server_id", "db_port", "service", "base_path", "root_password", "etcd_username", "etcd_password")
     META_FIELD_NUMBER: _ClassVar[int]
     ID_FIELD_NUMBER: _ClassVar[int]
     CLUSTER_ID_FIELD_NUMBER: _ClassVar[int]
@@ -25,6 +25,7 @@ class MySQLCreateRequest(_message.Message):
     DB_PORT_FIELD_NUMBER: _ClassVar[int]
     SERVICE_FIELD_NUMBER: _ClassVar[int]
     BASE_PATH_FIELD_NUMBER: _ClassVar[int]
+    ROOT_PASSWORD_FIELD_NUMBER: _ClassVar[int]
     ETCD_USERNAME_FIELD_NUMBER: _ClassVar[int]
     ETCD_PASSWORD_FIELD_NUMBER: _ClassVar[int]
     meta: _common_pb2.RequestMetadata
@@ -36,9 +37,10 @@ class MySQLCreateRequest(_message.Message):
     db_port: int
     service: str
     base_path: str
+    root_password: str
     etcd_username: str
     etcd_password: str
-    def __init__(self, meta: _Optional[_Union[_common_pb2.RequestMetadata, _Mapping]] = ..., id: _Optional[str] = ..., cluster_id: _Optional[str] = ..., image: _Optional[str] = ..., tag: _Optional[str] = ..., server_id: _Optional[int] = ..., db_port: _Optional[int] = ..., service: _Optional[str] = ..., base_path: _Optional[str] = ..., etcd_username: _Optional[str] = ..., etcd_password: _Optional[str] = ...) -> None: ...
+    def __init__(self, meta: _Optional[_Union[_common_pb2.RequestMetadata, _Mapping]] = ..., id: _Optional[str] = ..., cluster_id: _Optional[str] = ..., image: _Optional[str] = ..., tag: _Optional[str] = ..., server_id: _Optional[int] = ..., db_port: _Optional[int] = ..., service: _Optional[str] = ..., base_path: _Optional[str] = ..., root_password: _Optional[str] = ..., etcd_username: _Optional[str] = ..., etcd_password: _Optional[str] = ...) -> None: ...
 
 class MySQLUpgradeRequest(_message.Message):
     __slots__ = ("meta", "id", "image", "tag")

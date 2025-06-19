@@ -28,11 +28,9 @@ class RequestRsyncAccessResponse(_message.Message):
     def __init__(self, instance_id: _Optional[str] = ..., port: _Optional[int] = ..., username: _Optional[str] = ..., password: _Optional[str] = ..., src_path: _Optional[str] = ...) -> None: ...
 
 class RevokeRsyncAccessRequest(_message.Message):
-    __slots__ = ("cluster_id", "node_id", "instance_id")
+    __slots__ = ("cluster_id", "instance_id")
     CLUSTER_ID_FIELD_NUMBER: _ClassVar[int]
-    NODE_ID_FIELD_NUMBER: _ClassVar[int]
     INSTANCE_ID_FIELD_NUMBER: _ClassVar[int]
     cluster_id: str
-    node_id: str
     instance_id: str
-    def __init__(self, cluster_id: _Optional[str] = ..., node_id: _Optional[str] = ..., instance_id: _Optional[str] = ...) -> None: ...
+    def __init__(self, cluster_id: _Optional[str] = ..., instance_id: _Optional[str] = ...) -> None: ...

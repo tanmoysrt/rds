@@ -37,6 +37,9 @@ class MySQLService(MySQLServiceServicer):
         if request.id and MySQL.exists(request.id):
             raise ValueError(f"MySQL with id {request.id} already exists")
 
+        if not request.root_password or len(request.root_password) < 5:
+            raise ValueError("root_password must be at least 5 characters long")
+
         return to_grpc_mysql_info(MySQL.create(
             service_id=request.id if request.HasField("id") else None,
             cluster_id=request.cluster_id,
@@ -46,6 +49,7 @@ class MySQLService(MySQLServiceServicer):
             server_id=request.server_id if request.HasField("server_id") else None,
             db_port=request.db_port if request.HasField("db_port") else None,
             service=request.service,
+            root_password=request.root_password,
             etcd_username=request.etcd_username,
             etcd_password=request.etcd_password,
         ))
