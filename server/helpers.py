@@ -22,7 +22,7 @@ def modify_systemctl_commands_for_user_mode( commands:list[list[str]]):
     for command in commands:
         command.insert(1, "--user")
 
-def generate_random_password(length:int=32) -> str:
+def generate_random_string(length:int=32) -> str:
     alphabet = string.ascii_letters + string.digits
     return ''.join(secrets.choice(alphabet) for _ in range(length))
 

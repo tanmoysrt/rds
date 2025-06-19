@@ -4,7 +4,7 @@ from typing import override
 from server.domain.systemd_service import SystemdService
 from server.helpers import (
     find_available_port,
-    generate_random_password,
+    generate_random_string,
     is_port_available,
     render_template,
 )
@@ -41,13 +41,13 @@ class Proxy(SystemdService):
         config_path = path / "proxysql.cnf"
         metadata = {
             "db_readwrite_port": db_readwrite_port,
-            "db_readonly_port": db_readonly_port,
-            "admin_port": find_available_port(exclude_ports={db_readonly_port, db_readwrite_port}),
-            "admin_password": generate_random_password(),
-            "monitor_password": generate_random_password(),
-            "base_path": str(path),
-            "data_path": str(data_path),
-            "config_path": str(config_path),
+            "db_readonly_port":  db_readonly_port,
+            "admin_port":        find_available_port(exclude_ports={db_readonly_port, db_readwrite_port}),
+            "admin_password":    generate_random_string(),
+            "monitor_password":  generate_random_string(),
+            "base_path":         str(path),
+            "data_path":         str(data_path),
+            "config_path":       str(config_path),
         }
         with open(config_path, "w") as f:
             f.write(render_template("proxy/proxysql.cnf", metadata))

@@ -10,7 +10,7 @@ from server.domain.systemd_service import SystemdService
 from server.helpers import (
     find_available_port,
     generate_mysql_password_hash,
-    generate_random_password,
+    generate_random_string,
     render_template,
 )
 from server.internal.db_client import DatabaseClient
@@ -45,7 +45,7 @@ class MySQL(SystemdService):
         if not server_id:
             server_id = random.randint(1, 1000000)
 
-        mysql_root_password = generate_random_password(length=64)
+        mysql_root_password = generate_random_string(length=64)
         metadata = {
             "mysql_root_password": mysql_root_password,
             "mysql_hashed_root_password": generate_mysql_password_hash(mysql_root_password),

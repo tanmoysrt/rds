@@ -29,6 +29,11 @@ class ServerConfig:
     db_healthcheck_interval_ms:int = 250 # Healthcheck interval in milliseconds
     db_healthcheck_minimum_interval_ms:int = 100
 
+    # default docker images
+    rsync_image:str = "tanmoysrt/sshd:latest"
+    rsync_default_uid:int = 1000
+    rsync_default_gid:int = 1000
+
     # etcd cluster information
     etcd_host:str
     etcd_port:int = 2379

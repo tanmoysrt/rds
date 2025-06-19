@@ -132,6 +132,8 @@ class SystemdServiceModel(Model):
             kwargs['podman_args'] = json.dumps(kwargs.pop('podman_args_json', []))
         if 'metadata_json' in kwargs:
             kwargs['metadata'] = json.dumps(kwargs.pop('metadata_json', {}))
+        if 'id' in kwargs and "." in str(kwargs['id']):
+            raise ValueError("ID should not contain a dot (.) character")
         return super().create(**kwargs)
 
 

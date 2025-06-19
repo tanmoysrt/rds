@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package rds;
 
+import "google/protobuf/empty.proto";
+
 
 /*
 NOTE: This file is for inter-agent RPCs that are not directly related to the main services.
@@ -17,6 +19,25 @@ Requirement for RPC method:
 - Each request should container a field `cluster_id`  to identify the cluster on server end.
 */
 
-service InterAgentRpcService {
+service InterAgentService {
+  rpc RequestRsyncAccess(RequestRsyncAccessRequest) returns (RequestRsyncAccessResponse);
+  rpc RevokeRsyncAccess(RevokeRsyncAccessRequest) returns (google.protobuf.Empty);
+}
 
+message RequestRsyncAccessRequest {
+  string cluster_id = 1;
+  string node_id = 2;
+}
+
+message RequestRsyncAccessResponse {
+  string instance_id = 1;
+  int32 port = 2;
+  string username = 3;
+  string password = 4;
+  string src_path = 5;
+}
+
+message RevokeRsyncAccessRequest {
+  string cluster_id = 1;
+  string instance_id = 2;
 }

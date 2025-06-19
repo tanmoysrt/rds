@@ -2,9 +2,16 @@ from typing import Literal
 
 import grpc
 
+from generated.common_pb2 import *
+from generated.extras_pb2 import *
 from generated.healthcheck_pb2_grpc import HealthCheckServiceStub
+from generated.inter_agent_pb2 import *
+from generated.inter_agent_pb2_grpc import InterAgentServiceStub
+from generated.job_pb2 import *
 from generated.job_pb2_grpc import JobServiceStub
+from generated.mysql_pb2 import *
 from generated.mysql_pb2_grpc import MySQLServiceStub
+from generated.proxy_pb2 import *
 from generated.proxy_pb2_grpc import ProxyServiceStub
 
 
@@ -30,12 +37,12 @@ class Agent:
         return HealthCheckServiceStub(self.channel)
 
     @property
-    def inter_agent_rpc_service(self) -> HealthCheckServiceStub:
+    def inter_agent_service(self) -> InterAgentServiceStub:
         """
         This service is used for inter-agent communication in a cluster.
         It allows agents to check the health of each other to help in automated failover and also to perform basic operations.
         """
-        return HealthCheckServiceStub(self.channel)
+        return InterAgentServiceStub(self.channel)
 
     @property
     def job_service(self) -> JobServiceStub:
