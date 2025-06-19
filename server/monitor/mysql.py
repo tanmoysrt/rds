@@ -19,7 +19,6 @@ class MySQLHealthCheckMonitor:
         self.sync_db_ids_lock = asyncio.Lock()
 
     async def monitor_db_health(self, db_id:str):
-        _ = self.config
         loop = asyncio.get_running_loop()
         db_record = MySQL(db_id)
         while True:

@@ -1,11 +1,10 @@
-
-
-
+import hashlib
 import traceback
 
 import grpc
 
 from generated.common_pb2 import ResponseMetadata, Status
+from server import ServerConfig
 from server.internal.bg_job.utils import create_job
 from server.internal.db.models import JobModel
 from server.internal.proto_utils import ServiceImplInfo
@@ -37,6 +36,7 @@ class AsyncJobInterceptor(grpc.ServerInterceptor):
                 # Then verify, if both request and response message types for async job
                 # Create a job and return a response with metadata
                 if (
+                        service != "InterAgentRpcService" and # This is to avoid creating jobs for inter-agent RPCs by mistake
                         hasattr(request, "meta") and
                         getattr(request.meta, "is_async", False) and
                         is_request_message_support_meta and
@@ -86,3 +86,74 @@ class AsyncJobInterceptor(grpc.ServerInterceptor):
             )
 
         return handler
+
+
+class AuthTokenValidatorInterceptor(grpc.ServerInterceptor):
+    def __init__(self, config: ServerConfig):
+        super().__init__()
+        self.config = config
+
+    def intercept_service(self, continuation, handler_call_details):
+        """
+        'direct' users can call any function, but 'cluster' users can only call InterAgentRpcService functions.
+        """
+        handler = continuation(handler_call_details)
+        if handler is None:
+            return None
+
+        metadata = dict(handler_call_details.invocation_metadata or [])
+        auth_token = metadata.get('auth_token')
+        try:
+            _, service, _ = handler_call_details.method.split("/")
+
+            # Split it and check the src_type and target
+            src_type, token, cluster_id = auth_token.split(':', 2)
+            if not src_type or not token or src_type not in ['direct', 'cluster']:
+                raise ValueError("Invalid auth_token format")
+
+            # cluster type can't be used for calling any function other than InterAgentRpcService
+            if src_type == "cluster" and service != "InterAgentRpcService":
+                raise ValueError("Cluster auth_token can only be used for InterAgentRpcService")
+
+            # cluster type should have a valid cluster_id
+            if src_type == "cluster" and not cluster_id:
+                raise ValueError("Cluster auth_token must include a cluster_id")
+
+            # In inter-agent cluster communication, only unary methods are allowed
+            if src_type == "cluster" and not handler.unary_unary:
+                raise ValueError("Cluster auth_token can only be used for unary methods")
+
+            # Validate auth token
+            if src_type == "direct" and hashlib.sha256(token.encode()).hexdigest() != self.config.auth_token_hash:
+                raise ValueError("Invalid auth_token")
+
+            elif src_type == "cluster":
+                if cluster_id not in self.config.inter_cluster_communication_tokens:
+                    raise ValueError("Invalid cluster_id in auth_token")
+                if token != self.config.inter_cluster_communication_tokens[cluster_id]:
+                    raise ValueError("Invalid auth_token for the given cluster_id")
+
+            # Add `cluster_id` to the request (If required)
+            if src_type == "cluster":
+                def new_handler(request, context):
+                    request.cluster_id = cluster_id
+                    return handler.unary_unary(request, context)
+                return grpc.unary_unary_rpc_method_handler(new_handler)
+            elif src_type == "direct":
+                def new_handler(request, context):
+                    if (src_type == "direct" and
+                            service == "InterAgentRpcService" and
+                            not (hasattr(request, "cluster_id") or request.cluster_id)
+                    ):
+                        raise ValueError("To access InterAgentRpcService from control node, please include cluster_id in request")
+
+                    return handler.unary_unary(request, context)
+                return grpc.unary_unary_rpc_method_handler(new_handler)
+            else:
+                raise ValueError("Invalid src_type")
+        except ValueError as e:
+            message = str(e) or 'Invalid auth_token format'
+            def abort_handler(request, context, message=message):
+                context.abort(grpc.StatusCode.UNAUTHENTICATED, message)
+            return grpc.unary_unary_rpc_method_handler(abort_handler)
+

@@ -12,9 +12,8 @@ def shutdown(signum, frame):
 
 if __name__ == "__main__":
     server = init_server()
-    config = ServerConfig()
-    server.add_insecure_port(f"[::]:{config.grpc_port}")
     server.start()
+    config = ServerConfig()
     print("Server running on port ", config.grpc_port)
 
     signal.signal(signal.SIGINT, shutdown)

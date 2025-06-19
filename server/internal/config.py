@@ -14,7 +14,13 @@ class ServerConfig:
     redis_port:int
     generated_protobuf_dir:str
     service_impl_dir:str
+
+    # grpc related
+    auth_token_hash:str
     grpc_port:int
+    grpc_ca_path:str = None
+    grpc_cert_path:str = None
+    grpc_key_path:str = None
 
     # pubsub channels
     job_update_stream_redis_channel:str = "job_update_stream"
@@ -26,6 +32,7 @@ class ServerConfig:
     # etcd cluster information
     etcd_host:str
     etcd_port:int = 2379
+    inter_cluster_communication_tokens:dict = {} # cluster_id -> token mapping
 
     # kv keys
     kv_cluster_config_key:str = "/cluster/{cluster_id}/config"
@@ -33,7 +40,6 @@ class ServerConfig:
     kv_cluster_election_lock_key:str = "/cluster/{cluster_id}/election/lock"
     kv_cluster_node_status_key:str = "/cluster/{cluster_id}/node/{node_id}/status"
     kv_cluster_node_cluster_state_key:str = "/cluster/{cluster_id}/node/{node_id}/state"
-
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:

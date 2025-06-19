@@ -5,6 +5,8 @@ import uuid
 from functools import cached_property
 from pathlib import Path
 
+from client import Agent
+from generated.extras_pb2 import ClusterConfig
 from server import ServerConfig
 from server.helpers import modify_systemctl_commands_for_user_mode, render_template
 from server.internal.db.models import SystemdServiceModel
@@ -113,11 +115,36 @@ class SystemdService:
         self.model.delete_instance()
         """
         Please Note:
-        It's intentional to not removing the folders used by volume mount
+        It's intentional to not remove the folders used by volume mount
         To prevent accidental data loss.
         
         Ansible should handle these cleanups.
         """
+
+    @property
+    def cluster_config(self) -> ClusterConfig:
+        value = self.kv.get(self.kv_cluster_config_key)
+        if not value:
+            raise ValueError(f"Cluster config not found for key: {self.kv_cluster_config_key}")
+        config = ClusterConfig()
+        config.ParseFromString(value)
+        return config
+
+    def get_agent_for_node(self, node_id:str) -> Agent:
+        config = self.cluster_config
+        if node_id not in config.nodes:
+            raise ValueError(f"Node with id {node_id} not found in cluster config")
+        
+        node = config.nodes[node_id]
+        return Agent(
+            host=node.ip,
+            port=node.agent_port,
+            trusted_ca_path=ServerConfig().grpc_ca_path,
+            token=config.shared_token,
+            com_type="cluster",
+            cluster_id=self.model.cluster_id
+        )
+    
 
     def _deploy(self):
         # Create the service file

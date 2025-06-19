@@ -6,5 +6,7 @@ config.lock
 config.json
 db.*
 !db.py
-client
 *.rdb
+client/test.py
+certs
+server/__init__.py
