@@ -39,7 +39,7 @@ class MySQLHealthCheckMonitor:
                 wait_time = max(wait_time, self.config.db_healthcheck_minimum_interval_ms)
                 await asyncio.sleep(wait_time/1000)  # Convert ms to seconds
 
-    async def add_db(self, db_id:str):
+    async def add_db_to_monitoring(self, db_id:str):
         async with self.tasks_lock:
             if db_id in self.tasks:
                 return
@@ -48,7 +48,7 @@ class MySQLHealthCheckMonitor:
             task = asyncio.create_task(self.monitor_db_health(db_id))
             self.tasks[db_id] = task
 
-    async def remove_db(self, db_id:str):
+    async def remove_db_from_monitoring(self, db_id:str):
         async with self.tasks_lock:
             if db_id not in self.tasks:
                 return
@@ -59,7 +59,7 @@ class MySQLHealthCheckMonitor:
                 pass
             del self.tasks[db_id]
 
-    async def process_requested_changes(self):
+    async def process_requested_changes_in_monitoring(self):
         while True:
             try:
                 pubsub = self.redis.pubsub()
@@ -79,10 +79,10 @@ class MySQLHealthCheckMonitor:
                             db_id = cmd_parts[1]
 
                             if cmd in ["remove", "reload"]:
-                                await self.remove_db(db_id)
+                                await self.remove_db_from_monitoring(db_id)
 
                             if cmd in ["add", "reload"]:
-                                await self.add_db(db_id)
+                                await self.add_db_to_monitoring(db_id)
                     except Exception as e:
                         print("Command handling error:", e)
                         traceback.print_exc()
@@ -91,7 +91,7 @@ class MySQLHealthCheckMonitor:
                 traceback.print_exc()
                 await asyncio.sleep(5)
 
-    async def sync_monitored_db_ids(self):
+    async def sync_monitored_db_ids_periodically(self):
         while True:
             try:
                 # Try to acquire the lock to prevent concurrent modifications
@@ -116,8 +116,8 @@ class MySQLHealthCheckMonitor:
 
     async def run(self):
         await asyncio.gather(
-            self.process_requested_changes(),
-            self.sync_monitored_db_ids(),
+            self.process_requested_changes_in_monitoring(),
+            self.sync_monitored_db_ids_periodically(),
         )
 
 
