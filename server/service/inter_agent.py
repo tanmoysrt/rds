@@ -1,6 +1,7 @@
 import traceback
 
 import grpc
+import podman.errors.exceptions
 from google.protobuf.empty_pb2 import Empty
 from podman import PodmanClient
 
@@ -8,6 +9,7 @@ from generated.inter_agent_pb2 import (
     RequestRsyncAccessRequest,
     RequestRsyncAccessResponse,
     RevokeRsyncAccessRequest,
+    SyncReplicationUserRequest,
 )
 from generated.inter_agent_pb2_grpc import InterAgentServiceServicer
 from server import ServerConfig
@@ -32,11 +34,10 @@ class InterAgentService(InterAgentServiceServicer):
         password = generate_random_string(length=32)
 
         try:
-            with PodmanClient() as client:
+            with PodmanClient.from_env() as client:
                 client.containers.run(
                     name=rsync_container_id,
                     image=config.rsync_image,
-                    remove=True,
                     detach=True,
                     mounts=[{
                         "type": "bind",
@@ -54,6 +55,7 @@ class InterAgentService(InterAgentServiceServicer):
                         "USER_PASSWORD": password
                     }
                 )
+
             return RequestRsyncAccessResponse(
                 instance_id=rsync_container_id,
                 port=port,
@@ -62,7 +64,6 @@ class InterAgentService(InterAgentServiceServicer):
                 src_path="/data"
             )
         except Exception as e:
-            print(str(e))
             traceback.print_exc()
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details("Failed to create rsync container.")
@@ -74,7 +75,7 @@ class InterAgentService(InterAgentServiceServicer):
             context.set_details("Invalid instance ID or does not match the cluster and node.")
             return Empty()
 
-        with PodmanClient() as client:
+        with PodmanClient.from_env() as client:
             # Check if the container exists
             if not client.containers.exists(request.instance_id):
                 return Empty()
@@ -82,9 +83,20 @@ class InterAgentService(InterAgentServiceServicer):
             # Force remove the container
             try:
                 client.containers.remove(request.instance_id, force=True)
-            except Exception as e:
-                print(str(e))
+            except podman.errors.exceptions.NotFound:
+                return Empty()
+            except Exception:
                 traceback.print_exc()
                 context.set_code(grpc.StatusCode.INTERNAL)
                 context.set_details("Failed to remove rsync container")
+
+        return Empty()
+
+    def SyncReplicationUser(self, request:SyncReplicationUserRequest, context):
+        mysql = MySQL(request.node_id)
+        if mysql.model.cluster_id != request.cluster_id:
+            context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+            context.set_details("Node does not belong to the specified cluster.")
+            return Empty()
+        mysql.sync_replica_user()
         return Empty()

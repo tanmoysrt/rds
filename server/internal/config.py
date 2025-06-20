@@ -37,7 +37,7 @@ class ServerConfig:
     # etcd cluster information
     etcd_host:str
     etcd_port:int = 2379
-    inter_cluster_communication_tokens:dict = {} # cluster_id -> token mapping
+    cluster_shared_token:dict = {} # cluster_id -> token mapping
 
     # kv keys
     kv_cluster_config_key:str = "/cluster/{cluster_id}/config"

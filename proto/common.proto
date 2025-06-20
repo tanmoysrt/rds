@@ -45,3 +45,11 @@ message UnknownError {
   string error_message = 1;
   string traceback = 2;
 }
+
+message EmptyRequestWithMeta {
+  RequestMetadata meta = 1;
+}
+
+message EmptyResponseWithMeta {
+  ResponseMetadata meta = 1;
+}

@@ -1,16 +1,24 @@
 import contextlib
 import random
+import subprocess
 import time
 from pathlib import Path
 from typing import override
 
-from generated.extras_pb2 import DBHealthStatus, DBType
+from generated.extras_pb2 import ClusterNodeType, DBHealthStatus, DBType
+from generated.inter_agent_pb2 import (
+    RequestRsyncAccessRequest,
+    RequestRsyncAccessResponse,
+    RevokeRsyncAccessRequest,
+    SyncReplicationUserRequest,
+)
 from server import ServerConfig
 from server.domain.systemd_service import SystemdService
 from server.helpers import (
     find_available_port,
     generate_mysql_password_hash,
     render_template,
+    wait_for_ssh_daemon,
 )
 from server.internal.db_client import DatabaseClient
 from server.internal.utils import get_redis_client
@@ -112,6 +120,169 @@ class MySQL(SystemdService):
     def update_version(self, image:str, tag:str):
         return self.update(image=image, tag=tag)
 
+    def setup_replica(self):
+        """
+        Replicate this MySQL instance from the one master node.
+        """
+        config = self.cluster_config
+        master_node_id = None
+        master_node_config = None
+
+        for node_id in config.nodes:
+            if node_id != self.model.id and config.nodes[node_id].type == ClusterNodeType.MASTER:
+                master_node_id = node_id
+                master_node_config = config.nodes[node_id]
+                break
+
+        if not master_node_id or not master_node_config:
+            raise Exception("In the cluster no valid master node found for replication.")
+
+        # Ensure that MySQL node is stopped before making changes
+        self.stop()
+
+        # Ask for rsync access to the master node
+        src_node_agent = self.get_agent_for_node(master_node_id)
+        rsync_access: RequestRsyncAccessResponse = src_node_agent.inter_agent_service.RequestRsyncAccess(RequestRsyncAccessRequest(
+            cluster_id=self.model.cluster_id,
+            node_id=self.model.id,
+        ))
+
+        def revoke_rsync_access():
+            if rsync_access and rsync_access.instance_id:
+                try:
+                    src_node_agent.inter_agent_service.RevokeRsyncAccess(RevokeRsyncAccessRequest(
+                        cluster_id=self.model.cluster_id,
+                        instance_id=rsync_access.instance_id,
+                    ))
+                except Exception as e:
+                    print(f"Failed to revoke rsync access: {e}")
+
+        try:
+            wait_for_ssh_daemon(master_node_config.ip, rsync_access.port, rsync_access.username, rsync_access.password, timeout=30)
+            # Start copying data from the master node
+            command  = [
+                "sshpass", "-p", rsync_access.password,
+                "rsync", "-rlptvz", "--delete",
+                "--rsync-path", "sudo rsync",
+                "--exclude", "mysql.sock",
+                "--exclude", "mysql.pid",
+                "--exclude", "mysql-bin.*",
+                "--exclude", "mysql-bin.index",
+                "--exclude", "mariadb-bin.*",
+                "--exclude", "mariadb-bin.index",
+                "--exclude", "galera.*",
+                "--exclude", "ib_logfile*",
+                "--inplace", # To avoid creating temporary files, for large ibd files it's useful
+                "-e", f"ssh -p {rsync_access.port} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null",
+                f"{rsync_access.username}@{master_node_config.ip}:/data/", self.data_path
+            ]
+
+            # Phase 1 : Copy the data directory from the master node without impacting the running master MySQL instance
+            subprocess.run(command, check=True)
+
+            # Ask master to sync the replication user
+            src_node_agent.inter_agent_service.SyncReplicationUser(SyncReplicationUserRequest(
+                cluster_id=self.model.cluster_id,
+                node_id=master_node_id
+            ))
+
+            # Establish connection to the master database
+            with DatabaseClient(
+                db_type=self.model.service,
+                host=master_node_config.ip,
+                port=master_node_config.db_port,
+                user=config.replication_user,
+                password=config.replication_password,
+            ) as master_db_conn:
+                # Phase 2 : Take read lock on the master database and rsync the data directory
+                # to ensure that we have a consistent snapshot of the database.
+                master_db_conn.query("FLUSH TABLES WITH READ LOCK")
+                subprocess.run(command, check=True)
+
+                # Release the read lock
+                master_db_conn.query("UNLOCK TABLES")
+
+            self.start()
+            self.wait_for_db(timeout=180)
+            self.start_replication()
+        finally:
+            revoke_rsync_access()
+
+    def wait_for_db(self, timeout:int):
+        """
+        Wait for the MySQL database to be ready.
+        This is useful after starting the service or after replication.
+        """
+        conn = self.db_conn
+        start_time = time.time()
+        db_active = False
+        while  time.time() - start_time < timeout:
+            try:
+                conn.query("SELECT 1")
+                db_active = True
+                break
+            except:
+                time.sleep(1)
+
+        if not db_active:
+            raise Exception("Failed to connect to the MySQL database after waiting")
+
+    def start_replication(self, master_node_id:str|None=None):
+        config = self.cluster_config
+        # Pick the master node
+        master_node_config = None
+        if master_node_id:
+            if master_node_id not in config.nodes:
+                raise ValueError("Invalid master node ID provided for replication.")
+            master_node_config = config.nodes[master_node_id]
+        else:
+            # Pick a random master node from the cluster configuration
+            for node_id in config.nodes:
+                if node_id != self.model.id and config.nodes[node_id].type == ClusterNodeType.MASTER:
+                    master_node_config = config.nodes[node_id]
+                    break
+
+        if not master_node_config:
+            raise Exception("In cluster configuration, no master node found")
+
+        self.stop_replication()
+        conn = self.db_conn
+        conn.query("RESET SLAVE ALL")  # Reset any previous slave configuration
+        conn.query(
+            """CHANGE MASTER TO
+                            MASTER_HOST = %s,
+                            MASTER_PORT = %s,
+                            MASTER_USER = %s,
+                            MASTER_PASSWORD = %s, 
+                            MASTER_USE_GTID = slave_pos""",
+            (master_node_config.ip, master_node_config.db_port, config.replication_user, config.replication_password),
+        )
+        conn.query("START SLAVE")
+
+    def stop_replication(self):
+        self.db_conn.query("STOP SLAVE")
+
+    def sync_replica_user(self):
+        config = self.cluster_config
+        conn = self.db_conn
+        # Fetch current hash of the replication user password
+        current_hash = conn.query("SELECT authentication_string FROM mysql.user WHERE user = %s AND host = '%%'", (config.replication_user,))
+        user_exist = False
+        if len(current_hash) == 1:
+            user_exist = True
+            if current_hash[0]["authentication_string"] == generate_mysql_password_hash(config.replication_password):
+                return
+
+        if user_exist:
+            conn.query(
+                "ALTER USER %s@'%%' IDENTIFIED BY %s", (config.replication_user, config.replication_password)
+            )
+        else:
+            conn.query("CREATE USER IF NOT EXISTS %s@'%%' IDENTIFIED BY %s", (config.replication_user, config.replication_password))
+
+        conn.query("GRANT REPLICATION SLAVE, REPLICATION CLIENT, RELOAD ON *.* TO %s@'%%'", (config.replication_user,))
+        conn.query("FLUSH PRIVILEGES")
+
     @override
     def delete(self):
         super().delete()
@@ -130,7 +301,7 @@ class MySQL(SystemdService):
         """
         try:
             if not self._db_instance_for_health_check:
-                self._db_instance_for_health_check = self.db_conn
+                self._db_instance_for_health_check = self.get_db_conn(autocommit=True)
 
             gtid = self._db_instance_for_health_check.query("SELECT @@gtid_current_pos")[0]["@@gtid_current_pos"]
             return True, DBHealthStatus(
@@ -138,8 +309,7 @@ class MySQL(SystemdService):
                 reported_at=time.time_ns() // 1_000_000,
                 global_transaction_id=gtid,
             )
-        except Exception as e:
-            print(e)
+        except:
             return False, None
 
     @staticmethod
@@ -149,11 +319,15 @@ class MySQL(SystemdService):
     @override
     @property
     def db_conn(self):
+        return self.get_db_conn(autocommit=False)
+
+    def get_db_conn(self, autocommit:bool=False) -> DatabaseClient:
         return DatabaseClient(
             db_type=self.model.service,
             host="127.0.0.1", # localhost does not work with same network namespace
             port=self.db_port,
             user="root",
             password=self.mysql_root_password,
-            schema=""
+            schema="",
+            autocommit=autocommit
         )

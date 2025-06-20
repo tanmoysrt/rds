@@ -95,7 +95,7 @@ class AuthTokenValidatorInterceptor(grpc.ServerInterceptor):
 
     def intercept_service(self, continuation, handler_call_details):
         """
-        'direct' users can call any function, but 'cluster' users can only call InterAgentService functions.
+        'direct' users can call any function, but 'cluster' users can only call rds.InterAgentService functions.
         """
         handler = continuation(handler_call_details)
         if handler is None:
@@ -111,9 +111,9 @@ class AuthTokenValidatorInterceptor(grpc.ServerInterceptor):
             if not src_type or not token or src_type not in ['direct', 'cluster']:
                 raise ValueError("Invalid auth_token format")
 
-            # cluster type can't be used for calling any function other than InterAgentService
-            if src_type == "cluster" and service != "InterAgentService":
-                raise ValueError("Cluster auth_token can only be used for InterAgentService")
+            # cluster type can't be used for calling any function other than rds.InterAgentService
+            if src_type == "cluster" and service != "rds.InterAgentService":
+                raise ValueError("Cluster auth_token can only be used for rds.InterAgentService")
 
             # cluster type should have a valid cluster_id
             if src_type == "cluster" and not cluster_id:
@@ -128,9 +128,9 @@ class AuthTokenValidatorInterceptor(grpc.ServerInterceptor):
                 raise ValueError("Invalid auth_token")
 
             if src_type == "cluster":
-                if cluster_id not in self.config.inter_cluster_communication_tokens:
+                if cluster_id not in self.config.cluster_shared_token:
                     raise ValueError("Invalid cluster_id in auth_token")
-                if token != self.config.inter_cluster_communication_tokens[cluster_id]:
+                if token != self.config.cluster_shared_token[cluster_id]:
                     raise ValueError("Invalid auth_token for the given cluster_id")
 
             # Add `cluster_id` to the request (If required)
@@ -146,10 +146,10 @@ class AuthTokenValidatorInterceptor(grpc.ServerInterceptor):
             if src_type == "direct":
                 def new_handler(request, context):
                     if (src_type == "direct" and
-                            service == "InterAgentService" and
+                            service == "rds.InterAgentService" and
                             not (hasattr(request, "cluster_id") or request.cluster_id)
                     ):
-                        raise ValueError("To access InterAgentService from control node, please include cluster_id in request")
+                        raise ValueError("To access rds.InterAgentService from control node, please include cluster_id in request")
 
                     return handler.unary_unary(request, context)
                 return grpc.unary_unary_rpc_method_handler(

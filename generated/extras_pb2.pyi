@@ -68,7 +68,7 @@ class ClusterProxyConfig(_message.Message):
     def __init__(self, ip: _Optional[str] = ..., agent_port: _Optional[int] = ..., read_port: _Optional[int] = ..., read_write_port: _Optional[int] = ..., monitor_user: _Optional[str] = ..., monitor_password_hash: _Optional[str] = ...) -> None: ...
 
 class ClusterConfig(_message.Message):
-    __slots__ = ("version", "current_master", "desired_master", "promoted_by", "replica_count", "min_replication_lag_ms", "failover_cooldown_ms", "last_failover_timestamp", "nodes", "proxy", "shared_token")
+    __slots__ = ("version", "current_master", "desired_master", "promoted_by", "replica_count", "min_replication_lag_ms", "failover_cooldown_ms", "last_failover_timestamp", "nodes", "proxy", "replication_user", "replication_password", "shared_token")
     class NodesEntry(_message.Message):
         __slots__ = ("key", "value")
         KEY_FIELD_NUMBER: _ClassVar[int]
@@ -86,6 +86,8 @@ class ClusterConfig(_message.Message):
     LAST_FAILOVER_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     NODES_FIELD_NUMBER: _ClassVar[int]
     PROXY_FIELD_NUMBER: _ClassVar[int]
+    REPLICATION_USER_FIELD_NUMBER: _ClassVar[int]
+    REPLICATION_PASSWORD_FIELD_NUMBER: _ClassVar[int]
     SHARED_TOKEN_FIELD_NUMBER: _ClassVar[int]
     version: int
     current_master: str
@@ -97,5 +99,7 @@ class ClusterConfig(_message.Message):
     last_failover_timestamp: int
     nodes: _containers.MessageMap[str, ClusterNodeConfig]
     proxy: ClusterProxyConfig
+    replication_user: str
+    replication_password: str
     shared_token: str
-    def __init__(self, version: _Optional[int] = ..., current_master: _Optional[str] = ..., desired_master: _Optional[str] = ..., promoted_by: _Optional[str] = ..., replica_count: _Optional[int] = ..., min_replication_lag_ms: _Optional[int] = ..., failover_cooldown_ms: _Optional[int] = ..., last_failover_timestamp: _Optional[int] = ..., nodes: _Optional[_Mapping[str, ClusterNodeConfig]] = ..., proxy: _Optional[_Union[ClusterProxyConfig, _Mapping]] = ..., shared_token: _Optional[str] = ...) -> None: ...
+    def __init__(self, version: _Optional[int] = ..., current_master: _Optional[str] = ..., desired_master: _Optional[str] = ..., promoted_by: _Optional[str] = ..., replica_count: _Optional[int] = ..., min_replication_lag_ms: _Optional[int] = ..., failover_cooldown_ms: _Optional[int] = ..., last_failover_timestamp: _Optional[int] = ..., nodes: _Optional[_Mapping[str, ClusterNodeConfig]] = ..., proxy: _Optional[_Union[ClusterProxyConfig, _Mapping]] = ..., replication_user: _Optional[str] = ..., replication_password: _Optional[str] = ..., shared_token: _Optional[str] = ...) -> None: ...

@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add --no-cache openssh shadow gosu rsync
+RUN apk add --no-cache openssh shadow gosu rsync sudo
 
 # Configure SSH: disable root login, enable password login
 RUN sed -i 's/^#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && \

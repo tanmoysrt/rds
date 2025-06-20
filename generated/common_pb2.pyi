@@ -78,3 +78,15 @@ class UnknownError(_message.Message):
     error_message: str
     traceback: str
     def __init__(self, error_message: _Optional[str] = ..., traceback: _Optional[str] = ...) -> None: ...
+
+class EmptyRequestWithMeta(_message.Message):
+    __slots__ = ("meta",)
+    META_FIELD_NUMBER: _ClassVar[int]
+    meta: RequestMetadata
+    def __init__(self, meta: _Optional[_Union[RequestMetadata, _Mapping]] = ...) -> None: ...
+
+class EmptyResponseWithMeta(_message.Message):
+    __slots__ = ("meta",)
+    META_FIELD_NUMBER: _ClassVar[int]
+    meta: ResponseMetadata
+    def __init__(self, meta: _Optional[_Union[ResponseMetadata, _Mapping]] = ...) -> None: ...

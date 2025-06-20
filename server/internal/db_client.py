@@ -7,7 +7,7 @@ from MySQLdb.connections import Connection
 
 
 class DatabaseClient:
-    def __init__(self, db_type:Literal["mysql", "mariadb", "proxysql"], host:str, port:int|str, user:str, password:str, schema:str=""):
+    def __init__(self, db_type:Literal["mysql", "mariadb", "proxysql"], host:str, port:int|str, user:str, password:str, schema:str="", autocommit:bool=False):
         if db_type not in ("mysql", "mariadb", "proxysql"):
             raise ValueError(f"Unsupported database type: {db_type}")
         self.host = host
@@ -15,6 +15,7 @@ class DatabaseClient:
         self.user = user
         self.password = password
         self.schema = schema
+        self.autocommit = autocommit
 
         self._connection_instance: Connection | None = None
 
@@ -22,12 +23,14 @@ class DatabaseClient:
     def _connection(self):
         if not self._connection_instance:
             self._connection_instance = Connection(
-                host=self.host,
+                # In case of localhost, the client try to connect to the local socket
+                host="127.0.0.1" if self.host == "localhost" else self.host,
                 port=self.port,
                 user=self.user,
                 passwd=self.password,
                 db=self.schema,
                 connect_timeout=5,
+                autocommit=self.autocommit,
             )
         return self._connection_instance
 
@@ -37,7 +40,13 @@ class DatabaseClient:
                 self._connection_instance.close()
             self._connection_instance = None
 
+    def __enter__(self):
+        return self
+
     def __del__(self):
+        self.close()
+
+    def __exit__(self, exc_type, exc_value, traceback):
         self.close()
 
     def query(self, query: str, params: tuple = (), as_dict: bool = True):

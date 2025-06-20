@@ -21,6 +21,7 @@ class MySQLHealthCheckMonitor:
     async def monitor_db_health(self, db_id:str):
         loop = asyncio.get_running_loop()
         db_record = MySQL(db_id)
+        _ = db_record.get_db_conn() # Ensure the connection object is created
         while True:
             start = time.time()
             try:
@@ -29,13 +30,8 @@ class MySQLHealthCheckMonitor:
                     db_record.get_health_info
                 )
                 success, health_info = result
-                if not success:
-                    print(f"[{db_id}] Health check failed, will check later")
-                else:
+                if success:
                     db_record.kv.put(db_record.kv_cluster_node_status_key, health_info.SerializeToString())
-            except Exception as e:
-                print(f"[{db_id}] Health check failed for unknown reason: {e}")
-                traceback.print_exc()
             finally:
                 end = time.time()
                 elapsed_ms = int((end - start)*1000)

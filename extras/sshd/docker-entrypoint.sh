@@ -47,6 +47,10 @@ RUN_DIR="/tmp/sshd_run"
 mkdir -p "$RUN_DIR"
 chown "$USER_UID:$USER_GID" "$RUN_DIR"
 
+# Allow custom user to use sudo rsync
+echo "$USER_NAME ALL=(ALL) NOPASSWD: /usr/bin/rsync" > /etc/sudoers.d/rsync_user
+chmod 440 /etc/sudoers.d/rsync_user
+
 # Lock root user
 passwd -l root
 

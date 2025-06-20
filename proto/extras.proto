@@ -56,5 +56,7 @@ message ClusterConfig {
   int64 last_failover_timestamp = 8;
   map<string, ClusterNodeConfig> nodes = 9;
   optional ClusterProxyConfig proxy = 10;
-  string shared_token = 11;
+  string replication_user = 11;
+  string replication_password = 12;
+  string shared_token = 13;
 }

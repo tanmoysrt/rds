@@ -1,11 +1,15 @@
+import contextlib
 import hashlib
+import logging
 import os
 import random
 import secrets
 import socket
 import string
+import time
 from pathlib import Path
 
+import paramiko
 from jinja2 import Template
 
 
@@ -56,3 +60,63 @@ def generate_mysql_password_hash(password:str, append_asterisk:bool=True) -> str
         """
         actual_hash = '*' + actual_hash
     return actual_hash
+
+def _is_port_open(ip: str, port: int, timeout_sec: float = 1.0) -> bool:
+    """Fast port connectivity check using raw socket."""
+    try:
+        with socket.create_connection((ip, port), timeout=timeout_sec):
+            return True
+    except (socket.timeout, OSError):
+        return False
+
+paramiko_fake_logger = logging.getLogger("paramiko_fake_logger")
+paramiko_fake_logger.disabled = True
+
+
+def wait_for_ssh_daemon(ip: str, port: int, username: str, password: str, timeout: int):
+    """
+    Waits for the SSH daemon to become active by attempting to connect repeatedly
+    until a successful connection is made or the timeout is reached.
+    """
+    ssh_connection_active = False
+    start_time = time.time()
+
+    while time.time() - start_time < timeout:
+        if _is_port_open(ip, port, timeout_sec=0.5):
+            break
+        time.sleep(0.5)
+    else:
+        raise Exception(f"Port {port} did not open within {timeout} seconds")
+
+    ssh = paramiko.SSHClient()
+    ssh.set_log_channel(paramiko_fake_logger.name)
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    while time.time() - start_time < timeout:
+        try:
+            ssh.connect(
+                hostname=ip,
+                port=port,
+                username=username,
+                password=password,
+                timeout=1,
+                auth_timeout=1,
+                banner_timeout=1,
+                look_for_keys=False,
+                allow_agent=False,
+                key_filename=None
+            )
+            ssh.close()
+            ssh_connection_active = True
+            break
+        except Exception:
+            time.sleep(0.2)  # Retry after 1 second
+            print(f"Failed to connect to {ip}:{port}")
+        finally:
+            if 'sock' in locals():
+                with contextlib.suppress(Exception):
+                    sock.close()
+
+    if not ssh_connection_active:
+        raise Exception(f"SSH daemon did not become active within {timeout} seconds")
+

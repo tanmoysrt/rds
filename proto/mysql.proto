@@ -13,6 +13,8 @@ service MySQLService {
   rpc Restart(MySQLIdRequest) returns (MySQLStatusResponse);
   rpc Delete(MySQLIdRequest) returns (MySQLDeleteResponse);
   rpc Upgrade(MySQLUpgradeRequest) returns (MySQLInfoResponse);
+  rpc SetupReplica(MySQLIdRequest) returns (MySQLInfoResponse);
+  rpc SyncReplicationUser(MySQLIdRequest) returns (EmptyResponseWithMeta);
 }
 
 message MySQLIdRequest {

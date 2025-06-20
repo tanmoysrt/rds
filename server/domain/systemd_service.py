@@ -124,17 +124,17 @@ class SystemdService:
     @property
     def cluster_config(self) -> ClusterConfig:
         value = self.kv.get(self.kv_cluster_config_key)
-        if not value:
+        if not value or len(value) == 0:
             raise ValueError(f"Cluster config not found for key: {self.kv_cluster_config_key}")
         config = ClusterConfig()
-        config.ParseFromString(value)
+        config.ParseFromString(value[0])
         return config
 
     def get_agent_for_node(self, node_id:str) -> Agent:
         config = self.cluster_config
         if node_id not in config.nodes:
             raise ValueError(f"Node with id {node_id} not found in cluster config")
-        
+
         node = config.nodes[node_id]
         return Agent(
             host=node.ip,
@@ -144,7 +144,7 @@ class SystemdService:
             com_type="cluster",
             cluster_id=self.model.cluster_id
         )
-    
+
 
     def _deploy(self):
         # Create the service file

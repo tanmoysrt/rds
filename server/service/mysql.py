@@ -1,3 +1,5 @@
+
+from generated.common_pb2 import EmptyResponseWithMeta
 from generated.mysql_pb2 import (
     MySQLCreateRequest,
     MySQLDeleteResponse,
@@ -85,3 +87,13 @@ class MySQLService(MySQLServiceServicer):
         mysql = MySQL(request.id)
         mysql.update_version(image=request.image, tag=request.tag)
         return to_grpc_mysql_info(MySQL(request.id))
+
+    def SetupReplica(self, request:MySQLIdRequest, context)-> MySQLInfoResponse:
+        mysql = MySQL(request.id)
+        mysql.setup_replica()
+        return to_grpc_mysql_info(MySQL(request.id))
+
+    def SyncReplicationUser(self, request:MySQLIdRequest, context):
+        mysql = MySQL(request.id)
+        mysql.sync_replica_user()
+        return EmptyResponseWithMeta()
