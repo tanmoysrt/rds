@@ -8,9 +8,16 @@ import socket
 import string
 import time
 from pathlib import Path
+from typing import Literal
 
 import paramiko
+from etcd3.events import Event as ETcd3Event
 from jinja2 import Template
+
+from generated.extras_pb2 import ClusterConfig, DBHealthStatus
+from server import ServerConfig
+from server.internal.db.models import SystemdServiceModel
+from server.internal.etcd_client import Etcd3Client
 
 
 def render_template(template:str, payload:dict) -> str:
@@ -120,3 +127,93 @@ def wait_for_ssh_daemon(ip: str, port: int, username: str, password: str, timeou
     if not ssh_connection_active:
         raise Exception(f"SSH daemon did not become active within {timeout} seconds")
 
+
+def is_cluster_in_use(cluster_id:str) -> bool:
+    return SystemdServiceModel.select(SystemdServiceModel.id).where(SystemdServiceModel.cluster_id != cluster_id).exists()
+
+def get_working_etcd_cred_of_cluster(cluster_id: str) -> tuple[str, str]:
+    """
+    Retrieves the etcd username and password for a given cluster ID.
+    Returns a tuple of (username, password).
+    """
+
+    credentials = SystemdServiceModel.select(SystemdServiceModel.etcd_username, SystemdServiceModel.etcd_password).where(SystemdServiceModel.cluster_id == cluster_id).tuples()
+    if not credentials:
+        raise ValueError(f"No etcd credentials found for cluster ID: {cluster_id}")
+
+    server_config = ServerConfig()
+
+    # Now, try each one until we find a working one
+    def is_etcd_cred_working(cred_username: str, cred_password: str) -> bool:
+        try:
+            # Attempt to connect to etcd with the provided credentials
+            with Etcd3Client(
+                addresses=[f"{server_config.etcd_host}:{server_config.etcd_port}"],
+                user=cred_username,
+                password=password,
+                timeout=2,
+            ) as client:
+                status = client.status()
+                assert(status.version is not None), "Failed to get etcd status"
+                assert(status.leader is not None), "Failed to get etcd leader"
+                return True
+        except Exception:
+            return False
+
+    for username, password in credentials:
+        if is_etcd_cred_working(username, password):
+            return username, password
+
+    raise ValueError(f"No working etcd credentials found for cluster ID: {cluster_id}")
+
+
+class KVEvent:
+    def __init__(self, action:Literal["update", "delete"], cluster_id:str):
+        self.action = action
+        self.cluster_id = cluster_id
+        self.event_type = None # type: Literal["config", "state", "status"] | None
+        self.data: ClusterConfig|DBHealthStatus|None= None
+        self.node_id: str|None = None
+
+    def __repr__(self):
+        return f"""
+KVEvent - {self.action} - {self.event_type}
+Cluster : {self.cluster_id}
+Node : {self.node_id}
+Data : {self.data}
+"""
+
+
+def parse_etcd_watch_event(event:ETcd3Event) -> KVEvent|None:
+    try:
+        key:str = event.key.decode('utf-8')
+        key_parts = key.split('/')
+        if len(key_parts) < 4:
+            return None
+
+        cluster_id = key_parts[2]
+        subject = key_parts[3]
+
+        e = KVEvent(
+            action="update" if event.__class__.__name__ == "PutEvent" else "delete",
+            cluster_id=cluster_id,
+        )
+
+        if subject == "config":
+            e.event_type = "config"
+            config = ClusterConfig()
+            config.ParseFromString(event.value)
+            e.data = config
+            return e
+
+        if subject == "nodes" and len(key_parts) == 6:
+            e.node_id = key_parts[4]
+            e.event_type = key_parts[5]
+            if e.event_type == "status":
+                status = DBHealthStatus()
+                status.ParseFromString(event.value)
+                e.data = status
+            return e
+    except Exception as e:
+        print(f"Failed to parse watch event: {e}")
+        return None

@@ -1,5 +1,6 @@
 import json
 import os
+import tempfile
 
 from filelock import FileLock
 
@@ -25,6 +26,7 @@ class ServerConfig:
     # pubsub channels
     job_update_stream_redis_channel:str = "job_update_stream"
     mysql_monitor_commands_redis_channel:str = "mysql_monitor_commands"
+    etcd_monitor_commands_redis_channel:str = "etcd_monitor_commands"
 
     db_healthcheck_interval_ms:int = 250 # Healthcheck interval in milliseconds
     db_healthcheck_minimum_interval_ms:int = 100
@@ -40,11 +42,12 @@ class ServerConfig:
     cluster_shared_token:dict = {} # cluster_id -> token mapping
 
     # kv keys
-    kv_cluster_config_key:str = "/cluster/{cluster_id}/config"
-    kv_cluster_current_master_key:str = "/cluster/{cluster_id}/master"
-    kv_cluster_election_lock_key:str = "/cluster/{cluster_id}/election/lock"
-    kv_cluster_node_status_key:str = "/cluster/{cluster_id}/node/{node_id}/status"
-    kv_cluster_node_cluster_state_key:str = "/cluster/{cluster_id}/node/{node_id}/state"
+    kv_cluster_prefix:str = "/clusters/{cluster_id}"
+    kv_cluster_config_key:str = "/clusters/{cluster_id}/config"
+    kv_cluster_current_master_key:str = "/clusters/{cluster_id}/master"
+    kv_cluster_election_lock_key:str = "/clusters/{cluster_id}/election/lock"
+    kv_cluster_node_status_key:str = "/clusters/{cluster_id}/nodes/{node_id}/status"
+    kv_cluster_node_cluster_state_key:str = "/clusters/{cluster_id}/nodes/{node_id}/state"
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -67,18 +70,24 @@ class ServerConfig:
 
         # Apply loaded config to attributes
         for k, v in self._config.items():
-            setattr(self, k, v)
+            self.__setattr__(k, v, store_in_file=False)
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key, value, store_in_file=True):
         if key.startswith('_'):
+            super().__setattr__(key, value)
+            return
+
+        if not store_in_file:
             super().__setattr__(key, value)
             return
 
         with FileLock(self._config_file_lock):
             self._config[key] = value
             super().__setattr__(key, value)
-            with open(self._config_file, 'w') as f:
+            with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
                 json.dump(self._config, f, indent=4)
+                f.flush()
+                os.replace(f.name, self._config_file)
 
     def __delattr__(self, item):
         if item.startswith('_'):
@@ -89,3 +98,4 @@ class ServerConfig:
             super().__delattr__(item)
             with open(self._config_file, 'w') as f:
                 json.dump(self._config, f, indent=4)
+

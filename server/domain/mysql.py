@@ -99,7 +99,9 @@ class MySQL(SystemdService):
         with contextlib.suppress(Exception):
             # Publish the command to pubsub to notify monitoring services to start monitoring this MySQL instance
             redis = get_redis_client()
-            redis.publish(ServerConfig().mysql_monitor_commands_redis_channel, f"add {record.model.id}")
+            server_config = ServerConfig()
+            redis.publish(server_config.mysql_monitor_commands_redis_channel, f"add {record.model.id}")
+            redis.publish(server_config.etcd_monitor_commands_redis_channel, f"add {record.model.id}")
 
         return record
 
@@ -289,7 +291,9 @@ class MySQL(SystemdService):
         with contextlib.suppress(Exception):
             # Publish the command to pubsub to notify monitoring services to stop monitoring this MySQL instance
             redis = get_redis_client()
-            redis.publish(ServerConfig().mysql_monitor_commands_redis_channel, f"remove {self.model.id}")
+            server_config = ServerConfig()
+            redis.publish(server_config.mysql_monitor_commands_redis_channel, f"remove {self.model.id}")
+            redis.publish(server_config.etcd_monitor_commands_redis_channel, f"remove {self.model.id}")
 
     @override
     def get_health_info(self) -> (bool, DBHealthStatus | None):
