@@ -42,6 +42,7 @@ class EtcdStateMonitor:
             # 1: Auto sync backend servers for all proxies
             if event.action == "update" and event.event_type == "config" and event.data:
                 Proxy.sync_backend_servers_for_all_proxies(cluster_id=cluster_id, config=event.data)
+                MySQL.sync_replication_config_for_all_servers(cluster_id=cluster_id, config=event.data)
             # 2: Track health status of nodes
             if event.action == "update" and event.event_type == "status" and event.data:
                 self.dead_node_detector.update(event.node_id, event.data)

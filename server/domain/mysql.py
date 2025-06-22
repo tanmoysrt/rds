@@ -2,6 +2,7 @@ import contextlib
 import random
 import subprocess
 import time
+import traceback
 from pathlib import Path
 from typing import override
 
@@ -87,9 +88,8 @@ class MySQL(SystemdService):
                 }))
 
         mysql_config_path = config_dir_path / "rds.cnf"
-        if not mysql_config_path.exists():
-            with open(mysql_config_path, "w") as f:
-                f.write(render_template("mysql/config/rds.cnf", metadata))
+        with open(mysql_config_path, "w") as f:
+            f.write(render_template("mysql/config/rds.cnf", metadata))
 
         # Create the service
         record = super().create(
@@ -217,7 +217,7 @@ class MySQL(SystemdService):
 
             self.start()
             self.wait_for_db(timeout=180)
-            self.start_replication()
+            self.configure_as_replica()
         finally:
             revoke_rsync_access()
 
@@ -240,30 +240,71 @@ class MySQL(SystemdService):
         if not db_active:
             raise Exception("Failed to connect to the MySQL database after waiting")
 
-    def start_replication(self, master_node_id:str|None=None):
-        if not master_node_id:
-            if len(self.cluster_config.online_master_node_ids) == 0:
-                raise Exception("No online master node found in the cluster configuration for replication.")
-            master_node_id = self.cluster_config.online_master_node_ids[0]
+    def configure_as_replica(self):
+        if len(self.cluster_config.online_master_node_ids) == 0:
+            raise Exception("No online master node found in the cluster configuration for replication.")
 
+        master_node_id = self.cluster_config.online_master_node_ids[0]
         master_node_config = self.cluster_config.get_node(master_node_id)
 
-        self.stop_replication()
-        conn = self.db_conn
-        conn.query("RESET SLAVE ALL")  # Reset any previous slave configuration
-        conn.query(
-            """CHANGE MASTER TO
-                            MASTER_HOST = %s,
-                            MASTER_PORT = %s,
-                            MASTER_USER = %s,
-                            MASTER_PASSWORD = %s, 
-                            MASTER_USE_GTID = slave_pos""",
-            (master_node_config.ip, master_node_config.db_port, self.cluster_config.replication_user, self.cluster_config.replication_password),
-        )
-        conn.query("START SLAVE")
+        with self.db_conn as conn:
+            conn.query("STOP SLAVE")
+            conn.query("RESET SLAVE ALL")
+            conn.query(
+                """CHANGE MASTER TO
+                                MASTER_HOST = %s,
+                                MASTER_PORT = %s,
+                                MASTER_USER = %s,
+                                MASTER_PASSWORD = %s, 
+                                MASTER_USE_GTID = slave_pos""",
+                (master_node_config.ip, master_node_config.db_port, self.cluster_config.replication_user, self.cluster_config.replication_password),
+            )
+            self.set_read_only_mode(True)
+            conn.query("START SLAVE")
 
-    def stop_replication(self):
-        self.db_conn.query("STOP SLAVE")
+    def configure_as_master(self):
+        if self.model.id not in self.cluster_config.online_master_node_ids:
+            raise Exception(f"Node {self.model.id} is not an online master node in the cluster configuration.")
+
+        with self.db_conn as conn:
+            conn.query("STOP SLAVE")
+            conn.query("RESET SLAVE ALL")
+            self.set_read_only_mode(False)
+
+    def sync_replication_config(self, cluster_config:ClusterConfig=None):
+        """
+        This will verify whether the nodes replication configuration is in sync with the cluster configuration.
+        If there is any change in cluster configuration, it should be act like that
+
+        1. If master has changed, then stop replication and reconfigure it, then start
+        2. If current node become new master, then stop replication and reconfigure it to act as master
+        """
+        if not cluster_config:
+            cluster_config = self.cluster_config
+        # Current State
+        with self.db_conn as conn:
+            slave_info = conn.query("SHOW SLAVE STATUS", as_dict=True)
+            is_current_node_master = len(slave_info) == 0
+            master_host = None
+            master_port = None
+            if not is_current_node_master:
+                info = slave_info[0]
+                master_host = info.get("Master_Host", None)
+                master_port = int(info.get("Master_Port", "0"))
+
+        # Expected State
+        is_current_node_should_be_master = self.model.id in cluster_config.online_master_node_ids
+        expected_master_node = cluster_config.get_node(cluster_config.online_master_node_ids[0]) if cluster_config.online_master_node_ids else None
+        expected_master_host = expected_master_node.ip if expected_master_node else None
+        expected_master_port = expected_master_node.db_port if expected_master_node else None
+
+        if is_current_node_should_be_master != is_current_node_master or \
+           (not is_current_node_should_be_master and (master_host != expected_master_host or master_port != expected_master_port)):
+            # If current node should be master but it's not, or if current node is not master but the master has changed
+            if is_current_node_should_be_master:
+                self.configure_as_master()
+            else:
+                self.configure_as_replica()
 
     def sync_replica_user(self):
         config = self.cluster_config
@@ -286,6 +327,27 @@ class MySQL(SystemdService):
         conn.query("GRANT REPLICATION SLAVE, REPLICATION CLIENT, RELOAD ON *.* TO %s@'%%'", (config.replication_user,))
         conn.query("GRANT SELECT ON mysql.user TO %s@'%%'", (config.replication_user,))
         conn.query("FLUSH PRIVILEGES")
+
+    def set_read_only_mode(self, read_only:bool):
+        """
+        Update the read-only mode of the MySQL instance.
+        """
+        conn = self.db_conn
+
+        # Persist changes in config
+        mysql_config_path = Path(self.config_path) / "rds.cnf"
+        with open(mysql_config_path, "w") as f:
+            f.write(render_template("mysql/config/rds.cnf", {
+                **self.model.metadata_json,
+                "read_only": read_only,
+            }))
+
+        # Change in runtime
+        if read_only:
+            conn.query("SET GLOBAL read_only = ON;")
+        else:
+            conn.query("SET GLOBAL read_only = OFF;")
+
 
     @override
     def delete(self):
@@ -318,9 +380,26 @@ class MySQL(SystemdService):
         except:
             return False, None
 
+
+    @staticmethod
+    def sync_replication_config_for_all_servers(cluster_id:str|None=None, config:ClusterConfig=None):
+        if cluster_id is None and config is not None:
+            raise Exception("if config is provided, cluster_id must be provided as well")
+
+        # Fetch all available ProxySQL instances
+        server_ids = MySQL.get_all(cluster_id=cluster_id)
+        for server_id in server_ids:
+            try:
+                db = MySQL(server_id)
+                db.sync_replication_config(cluster_config=config)
+            except Exception as e:
+                print(f"Failed to sync servers for ProxySQL {server_id}: {e}")
+                traceback.print_exc()
+
+
     @staticmethod
     def get_all(**kwargs) -> list[str]:
-        return SystemdService.get_all(["mariadb", "mysql"])
+        return SystemdService.get_all(["mariadb", "mysql"],  **kwargs)
 
     @override
     @property
