@@ -324,6 +324,7 @@ class Proxy(SystemdService):
         for proxy_id in proxies:
             try:
                 proxy = Proxy(proxy_id)
+                proxy.sync_servers()
             except Exception as e:
                 print(f"Failed to sync servers for ProxySQL {proxy_id}: {e}")
                 traceback.print_exc()
