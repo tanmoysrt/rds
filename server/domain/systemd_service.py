@@ -21,7 +21,7 @@ class ServiceStatus(enum.Enum):
 
 class SystemdService:
     @classmethod
-    def create(cls, image:str, tag:str, environment_variables:dict[str, str], mounts:dict[str,str], podman_args:list[str], cluster_id:str, service_id:str|None=None, service:str="", metadata:dict[str, str]|None=None, etcd_username:str|None=None, etcd_password:str|None=None):
+    def create(cls, image:str, tag:str, environment_variables:dict[str, str], command:str|None, mounts:dict[str,str], podman_args:list[str], cluster_id:str, service_id:str|None=None, service:str="", metadata:dict[str, str]|None=None, etcd_username:str|None=None, etcd_password:str|None=None):
         if not isinstance(environment_variables, dict):
             raise ValueError("environment_variables must be a dictionary")
         if not isinstance(mounts, dict):
@@ -34,6 +34,7 @@ class SystemdService:
             service=service,
             image=image,
             tag=tag,
+            command=command,
             environment_variables_json=environment_variables,
             mounts_json=mounts,
             podman_args_json=podman_args,
@@ -163,10 +164,11 @@ class SystemdService:
 
     @property
     def service_file_content(self):
-        return  render_template("quadlet.container", payload={
+        return render_template("quadlet.container", payload={
             "id": self.model.id,
             "image": self.model.image,
             "tag": self.model.tag if self.model.tag else "latest",
+            "command": self.model.command if self.model.command else "",
             "mounts": [{
                 "source": i[0],
                 "target": i[1]

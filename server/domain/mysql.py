@@ -80,6 +80,7 @@ class MySQL(SystemdService):
             service=service,
             image=image,
             tag=tag,
+            command=None,
             environment_variables={
                 "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "1",
                 "MYSQL_ALLOW_EMPTY_PASSWORD": "1",

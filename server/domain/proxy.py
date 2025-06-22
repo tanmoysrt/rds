@@ -58,6 +58,7 @@ class Proxy(SystemdService):
             service="proxysql",
             image=image,
             tag=tag,
+            command="proxysql -f --idle-threads -D /var/lib/proxysql --no-monitor",
             environment_variables={},
             mounts={
                 str(metadata["data_path"]): "/var/lib/proxysql",

@@ -109,6 +109,7 @@ class SystemdServiceModel(Model):
     service = TextField(null=True, default="")
     image = TextField(null=True, default="")
     tag = TextField(null=True, default="")
+    command = TextField(null=True, default="")
     environment_variables = TextField(null=True, default="{}")
     mounts = TextField(null=True, default="{}")
     podman_args = TextField(null=True, default="[]")

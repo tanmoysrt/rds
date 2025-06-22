@@ -5,6 +5,11 @@ After=local-fs.target
 [Container]
 Image={{ image }}:{{ tag }}
 ContainerName={{ id }}
+
+{% if command %}
+Exec={{ command }}
+{% endif %}
+
 Network=host
 
 {% for mount in mounts %}
