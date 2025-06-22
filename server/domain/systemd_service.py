@@ -21,7 +21,7 @@ class ServiceStatus(enum.Enum):
 
 class SystemdService:
     @classmethod
-    def create(cls, image:str, tag:str, environment_variables:dict[str, str], command:str|None, mounts:dict[str,str], podman_args:list[str], cluster_id:str, service_id:str|None=None, service:str="", metadata:dict[str, str]|None=None, etcd_username:str|None=None, etcd_password:str|None=None):
+    def create(cls, image:str, tag:str, environment_variables:dict[str, str], command:str|None, mounts:dict[str,str], podman_args:list[str], cluster_id:str, etcd_username:str, etcd_password:str, service_id:str|None=None, service:str="", metadata:dict[str, str]|None=None):
         if not isinstance(environment_variables, dict):
             raise ValueError("environment_variables must be a dictionary")
         if not isinstance(mounts, dict):

@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 from typing import override
 
-from generated.extras_pb2 import ClusterNodeType, DBHealthStatus, DBType
+from generated.extras_pb2 import ClusterConfig, ClusterNodeType, DBHealthStatus, DBType
 from generated.inter_agent_pb2 import (
     RequestRsyncAccessRequest,
     RequestRsyncAccessResponse,
@@ -21,12 +21,13 @@ from server.helpers import (
     wait_for_ssh_daemon,
 )
 from server.internal.db_client import DatabaseClient
+from server.internal.etcd_client import Etcd3Client
 from server.internal.utils import get_redis_client
 
 
 class MySQL(SystemdService):
     @classmethod
-    def create(cls, service_id:str, base_path:str, image:str, tag:str, cluster_id:str, root_password:str, server_id:int|None=None, db_port:int|None=None, service:str="mariadb", etcd_username:str|None=None, etcd_password:str|None=None, **kwargs):
+    def create(cls, service_id:str, base_path:str, image:str, tag:str, cluster_id:str, root_password:str,etcd_username:str, etcd_password:str, server_id:int|None=None, db_port:int|None=None, service:str="mariadb", **kwargs):
         if service not in ("mariadb", "mysql"):
             raise ValueError(f"Unknown service {service}")
 
@@ -63,11 +64,32 @@ class MySQL(SystemdService):
             "init_path": str(init_dir_path),
         }
 
+        # Fetch cluster configuration
+        server_config = ServerConfig()
+        etcd_client = Etcd3Client(
+            addresses=[f"{server_config.etcd_host}:{server_config.etcd_port}"],
+            user=etcd_username,
+            password=etcd_password,
+        )
+        cluster_config = ClusterConfig()
+        value = etcd_client.get(server_config.kv_cluster_config_key.format(cluster_id=cluster_id))
+        if not value:
+            raise ValueError(f"Cluster with ID {cluster_id} does not exist or is not configured properly.")
+        cluster_config.ParseFromString(value[0])
+        if not cluster_config:
+            raise ValueError(f"Cluster with ID {cluster_id} is corrupted or not configured properly.")
+        if not cluster_config.proxy:
+            raise ValueError("Cluster with ID {cluster_id} does not have a proxy configured. Please configure a proxy for the cluster before creating MySQL instances.")
+
         # Generate script and initial configuration files
         init_script_path = init_dir_path / "01-secure-mysql-root-user.sql"
         if not init_script_path.exists():
             with open(init_script_path, "w") as f:
-                f.write(render_template("mysql/init_scripts/01-secure-mysql-root-user.sql", metadata))
+                f.write(render_template("mysql/init_scripts/01-secure-mysql-root-user.sql", {
+                    **metadata,
+                    "replication_user": cluster_config.replication_user,
+                    "replication_password": cluster_config.replication_password,
+                }))
 
         mysql_config_path = config_dir_path / "rds.cnf"
         if not mysql_config_path.exists():

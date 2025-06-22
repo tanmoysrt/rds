@@ -16,7 +16,7 @@ from server.internal.db_client import DatabaseClient
 
 class Proxy(SystemdService):
     @classmethod
-    def create(cls, service_id:str, base_path:str, image:str, tag:str, cluster_id:str, db_readwrite_port:int|None=None, db_readonly_port:int|None=None, etcd_username:str|None=None, etcd_password:str|None=None, **kwargs):
+    def create(cls, service_id:str, base_path:str, image:str, tag:str, cluster_id:str, etcd_username:str, etcd_password:str, db_readwrite_port:int|None=None, db_readonly_port:int|None=None, **kwargs):
         # Create the base path if it doesn't exist
         path = Path(base_path)
         path.mkdir(parents=True, exist_ok=True)

@@ -28,9 +28,12 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'::1' WITH GRANT OPTION;
 -- Flush again to apply grants
 FLUSH PRIVILEGES;
 
--- NOW safely remove any other root@host combinations
-# DELETE FROM mysql.user
-# WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+-- Create Replication User & Grant Permissions
+{% if replication_user and replication_password %}
+CREATE USER IF NOT EXISTS '{{ replication_user }}'@'%' IDENTIFIED BY '{{ replication_password }}';
+GRANT REPLICATION SLAVE, REPLICATION CLIENT, RELOAD ON *.* TO '{{ replication_user }}'@'%';
+GRANT SELECT ON mysql.user TO '{{ replication_user }}'@'%';
+{% endif %}
 
 -- Final flush
-# FLUSH PRIVILEGES;
+FLUSH PRIVILEGES;
