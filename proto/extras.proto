@@ -29,12 +29,20 @@ enum ClusterNodeType {
   STANDBY = 4;
 }
 
+enum ClusterNodeStatus {
+  UNKNOWN_CLUSTER_NODE_STATUS = 0;
+  ONLINE = 1;
+  OFFLINE = 2;
+  MAINTENANCE = 3;
+}
+
 message ClusterNodeConfig {
   ClusterNodeType type = 1;
-  string ip = 2;
-  int32 agent_port = 3;
-  int32 db_port = 4;
-  int32 weight = 5;
+  ClusterNodeStatus status = 2;
+  string ip = 3;
+  int32 agent_port = 4;
+  int32 db_port = 5;
+  int32 weight = 6;
 }
 
 message ClusterProxyConfig {

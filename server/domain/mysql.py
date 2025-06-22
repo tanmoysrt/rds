@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 from typing import override
 
-from generated.extras_pb2 import ClusterConfig, ClusterNodeType, DBHealthStatus, DBType
+from generated.extras_pb2 import ClusterConfig, ClusterNodeStatus, ClusterNodeType, DBHealthStatus, DBType
 from generated.inter_agent_pb2 import (
     RequestRsyncAccessRequest,
     RequestRsyncAccessResponse,
@@ -154,7 +154,7 @@ class MySQL(SystemdService):
         master_node_config = None
 
         for node_id in config.nodes:
-            if node_id != self.model.id and config.nodes[node_id].type == ClusterNodeType.MASTER:
+            if node_id != self.model.id and config.nodes[node_id].type == ClusterNodeType.MASTER and config.nodes[node_id].status == ClusterNodeStatus.ONLINE:
                 master_node_id = node_id
                 master_node_config = config.nodes[node_id]
                 break
@@ -263,7 +263,7 @@ class MySQL(SystemdService):
         else:
             # Pick a random master node from the cluster configuration
             for node_id in config.nodes:
-                if node_id != self.model.id and config.nodes[node_id].type == ClusterNodeType.MASTER:
+                if node_id != self.model.id and config.nodes[node_id].type == ClusterNodeType.MASTER and config.nodes[node_id].status == ClusterNodeStatus.ONLINE:
                     master_node_config = config.nodes[node_id]
                     break
 

@@ -3,7 +3,7 @@ import traceback
 from pathlib import Path
 from typing import override
 
-from generated.extras_pb2 import ClusterConfig, ClusterNodeType
+from generated.extras_pb2 import ClusterConfig, ClusterNodeStatus, ClusterNodeType
 from server.domain.systemd_service import SystemdService
 from server.helpers import (
     find_available_port,
@@ -111,6 +111,8 @@ class Proxy(SystemdService):
         desired_servers = []
         for node_id in cluster_config.nodes:
             node = cluster_config.nodes[node_id]
+            if node.status != ClusterNodeStatus.ONLINE:
+                continue
             if node.type == ClusterNodeType.MASTER:
                 desired_servers.append(("1", node.ip, str(node.db_port), str(node.weight)))
             elif node.type == ClusterNodeType.REPLICA or node.type == ClusterNodeType.READ_ONLY:
@@ -136,6 +138,8 @@ class Proxy(SystemdService):
         queries = ["DELETE FROM mysql_servers"]
         for node_id in cluster_config.nodes:
             node = cluster_config.nodes[node_id]
+            if node.status != ClusterNodeStatus.ONLINE:
+                continue
             if node.type == ClusterNodeType.MASTER:
                 queries.append(f"INSERT INTO mysql_servers (hostgroup_id, hostname, port, status, weight) "
                                f"VALUES (1, '{node.ip}', {node.db_port}, 'ONLINE', {node.weight})")
@@ -186,7 +190,7 @@ class Proxy(SystemdService):
         db_client:DatabaseClient|None = None
         for node_id in config.nodes:
             node = config.nodes[node_id]
-            if node.type != ClusterNodeType.MASTER:
+            if node.type not in [ClusterNodeType.MASTER, ClusterNodeType.REPLICA] or node.status != ClusterNodeStatus.ONLINE:
                 continue
             with contextlib.suppress(Exception):
                 db_client = DatabaseClient(

@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x65xtras.proto\x12\x03rds\"b\n\x0e\x44\x42HealthStatus\x12\x1c\n\x07\x64\x62_type\x18\x01 \x01(\x0e\x32\x0b.rds.DBType\x12\x13\n\x0breported_at\x18\x02 \x01(\x03\x12\x1d\n\x15global_transaction_id\x18\x03 \x01(\t\"x\n\x11\x43lusterNodeConfig\x12\"\n\x04type\x18\x01 \x01(\x0e\x32\x14.rds.ClusterNodeType\x12\n\n\x02ip\x18\x02 \x01(\t\x12\x12\n\nagent_port\x18\x03 \x01(\x05\x12\x0f\n\x07\x64\x62_port\x18\x04 \x01(\x05\x12\x0e\n\x06weight\x18\x05 \x01(\x05\"4\n\x12\x43lusterProxyConfig\x12\n\n\x02ip\x18\x01 \x01(\t\x12\x12\n\nagent_port\x18\x02 \x01(\x05\"\xf8\x02\n\rClusterConfig\x12\x0f\n\x07version\x18\x01 \x01(\x05\x12\x1e\n\x16max_replication_lag_ms\x18\x02 \x01(\x05\x12\x1c\n\x14\x66\x61ilover_cooldown_ms\x18\x03 \x01(\x05\x12\x1f\n\x17last_failover_timestamp\x18\x04 \x01(\x03\x12,\n\x05nodes\x18\x05 \x03(\x0b\x32\x1d.rds.ClusterConfig.NodesEntry\x12+\n\x05proxy\x18\x06 \x01(\x0b\x32\x17.rds.ClusterProxyConfigH\x00\x88\x01\x01\x12\x18\n\x10replication_user\x18\x07 \x01(\t\x12\x1c\n\x14replication_password\x18\x08 \x01(\t\x12\x14\n\x0cshared_token\x18\t \x01(\t\x1a\x44\n\nNodesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.rds.ClusterNodeConfig:\x02\x38\x01\x42\x08\n\x06_proxy*5\n\x06\x44\x42Type\x12\x13\n\x0fUNKNOWN_DB_TYPE\x10\x00\x12\t\n\x05MYSQL\x10\x01\x12\x0b\n\x07MARIADB\x10\x02*e\n\x0f\x43lusterNodeType\x12\x1d\n\x19UNKNOWN_CLUSTER_NODE_TYPE\x10\x00\x12\n\n\x06MASTER\x10\x01\x12\x0b\n\x07REPLICA\x10\x02\x12\r\n\tREAD_ONLY\x10\x03\x12\x0b\n\x07STANDBY\x10\x04\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x65xtras.proto\x12\x03rds\"b\n\x0e\x44\x42HealthStatus\x12\x1c\n\x07\x64\x62_type\x18\x01 \x01(\x0e\x32\x0b.rds.DBType\x12\x13\n\x0breported_at\x18\x02 \x01(\x03\x12\x1d\n\x15global_transaction_id\x18\x03 \x01(\t\"\xa0\x01\n\x11\x43lusterNodeConfig\x12\"\n\x04type\x18\x01 \x01(\x0e\x32\x14.rds.ClusterNodeType\x12&\n\x06status\x18\x02 \x01(\x0e\x32\x16.rds.ClusterNodeStatus\x12\n\n\x02ip\x18\x03 \x01(\t\x12\x12\n\nagent_port\x18\x04 \x01(\x05\x12\x0f\n\x07\x64\x62_port\x18\x05 \x01(\x05\x12\x0e\n\x06weight\x18\x06 \x01(\x05\"4\n\x12\x43lusterProxyConfig\x12\n\n\x02ip\x18\x01 \x01(\t\x12\x12\n\nagent_port\x18\x02 \x01(\x05\"\xf8\x02\n\rClusterConfig\x12\x0f\n\x07version\x18\x01 \x01(\x05\x12\x1e\n\x16max_replication_lag_ms\x18\x02 \x01(\x05\x12\x1c\n\x14\x66\x61ilover_cooldown_ms\x18\x03 \x01(\x05\x12\x1f\n\x17last_failover_timestamp\x18\x04 \x01(\x03\x12,\n\x05nodes\x18\x05 \x03(\x0b\x32\x1d.rds.ClusterConfig.NodesEntry\x12+\n\x05proxy\x18\x06 \x01(\x0b\x32\x17.rds.ClusterProxyConfigH\x00\x88\x01\x01\x12\x18\n\x10replication_user\x18\x07 \x01(\t\x12\x1c\n\x14replication_password\x18\x08 \x01(\t\x12\x14\n\x0cshared_token\x18\t \x01(\t\x1a\x44\n\nNodesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.rds.ClusterNodeConfig:\x02\x38\x01\x42\x08\n\x06_proxy*5\n\x06\x44\x42Type\x12\x13\n\x0fUNKNOWN_DB_TYPE\x10\x00\x12\t\n\x05MYSQL\x10\x01\x12\x0b\n\x07MARIADB\x10\x02*e\n\x0f\x43lusterNodeType\x12\x1d\n\x19UNKNOWN_CLUSTER_NODE_TYPE\x10\x00\x12\n\n\x06MASTER\x10\x01\x12\x0b\n\x07REPLICA\x10\x02\x12\r\n\tREAD_ONLY\x10\x03\x12\x0b\n\x07STANDBY\x10\x04*^\n\x11\x43lusterNodeStatus\x12\x1f\n\x1bUNKNOWN_CLUSTER_NODE_STATUS\x10\x00\x12\n\n\x06ONLINE\x10\x01\x12\x0b\n\x07OFFLINE\x10\x02\x12\x0f\n\x0bMAINTENANCE\x10\x03\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,18 +33,20 @@ if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_CLUSTERCONFIG_NODESENTRY']._loaded_options = None
   _globals['_CLUSTERCONFIG_NODESENTRY']._serialized_options = b'8\001'
-  _globals['_DBTYPE']._serialized_start=676
-  _globals['_DBTYPE']._serialized_end=729
-  _globals['_CLUSTERNODETYPE']._serialized_start=731
-  _globals['_CLUSTERNODETYPE']._serialized_end=832
+  _globals['_DBTYPE']._serialized_start=717
+  _globals['_DBTYPE']._serialized_end=770
+  _globals['_CLUSTERNODETYPE']._serialized_start=772
+  _globals['_CLUSTERNODETYPE']._serialized_end=873
+  _globals['_CLUSTERNODESTATUS']._serialized_start=875
+  _globals['_CLUSTERNODESTATUS']._serialized_end=969
   _globals['_DBHEALTHSTATUS']._serialized_start=21
   _globals['_DBHEALTHSTATUS']._serialized_end=119
-  _globals['_CLUSTERNODECONFIG']._serialized_start=121
-  _globals['_CLUSTERNODECONFIG']._serialized_end=241
-  _globals['_CLUSTERPROXYCONFIG']._serialized_start=243
-  _globals['_CLUSTERPROXYCONFIG']._serialized_end=295
-  _globals['_CLUSTERCONFIG']._serialized_start=298
-  _globals['_CLUSTERCONFIG']._serialized_end=674
-  _globals['_CLUSTERCONFIG_NODESENTRY']._serialized_start=596
-  _globals['_CLUSTERCONFIG_NODESENTRY']._serialized_end=664
+  _globals['_CLUSTERNODECONFIG']._serialized_start=122
+  _globals['_CLUSTERNODECONFIG']._serialized_end=282
+  _globals['_CLUSTERPROXYCONFIG']._serialized_start=284
+  _globals['_CLUSTERPROXYCONFIG']._serialized_end=336
+  _globals['_CLUSTERCONFIG']._serialized_start=339
+  _globals['_CLUSTERCONFIG']._serialized_end=715
+  _globals['_CLUSTERCONFIG_NODESENTRY']._serialized_start=637
+  _globals['_CLUSTERCONFIG_NODESENTRY']._serialized_end=705
 # @@protoc_insertion_point(module_scope)

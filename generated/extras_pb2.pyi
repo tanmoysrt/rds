@@ -20,6 +20,13 @@ class ClusterNodeType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     REPLICA: _ClassVar[ClusterNodeType]
     READ_ONLY: _ClassVar[ClusterNodeType]
     STANDBY: _ClassVar[ClusterNodeType]
+
+class ClusterNodeStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    UNKNOWN_CLUSTER_NODE_STATUS: _ClassVar[ClusterNodeStatus]
+    ONLINE: _ClassVar[ClusterNodeStatus]
+    OFFLINE: _ClassVar[ClusterNodeStatus]
+    MAINTENANCE: _ClassVar[ClusterNodeStatus]
 UNKNOWN_DB_TYPE: DBType
 MYSQL: DBType
 MARIADB: DBType
@@ -28,6 +35,10 @@ MASTER: ClusterNodeType
 REPLICA: ClusterNodeType
 READ_ONLY: ClusterNodeType
 STANDBY: ClusterNodeType
+UNKNOWN_CLUSTER_NODE_STATUS: ClusterNodeStatus
+ONLINE: ClusterNodeStatus
+OFFLINE: ClusterNodeStatus
+MAINTENANCE: ClusterNodeStatus
 
 class DBHealthStatus(_message.Message):
     __slots__ = ("db_type", "reported_at", "global_transaction_id")
@@ -40,18 +51,20 @@ class DBHealthStatus(_message.Message):
     def __init__(self, db_type: _Optional[_Union[DBType, str]] = ..., reported_at: _Optional[int] = ..., global_transaction_id: _Optional[str] = ...) -> None: ...
 
 class ClusterNodeConfig(_message.Message):
-    __slots__ = ("type", "ip", "agent_port", "db_port", "weight")
+    __slots__ = ("type", "status", "ip", "agent_port", "db_port", "weight")
     TYPE_FIELD_NUMBER: _ClassVar[int]
+    STATUS_FIELD_NUMBER: _ClassVar[int]
     IP_FIELD_NUMBER: _ClassVar[int]
     AGENT_PORT_FIELD_NUMBER: _ClassVar[int]
     DB_PORT_FIELD_NUMBER: _ClassVar[int]
     WEIGHT_FIELD_NUMBER: _ClassVar[int]
     type: ClusterNodeType
+    status: ClusterNodeStatus
     ip: str
     agent_port: int
     db_port: int
     weight: int
-    def __init__(self, type: _Optional[_Union[ClusterNodeType, str]] = ..., ip: _Optional[str] = ..., agent_port: _Optional[int] = ..., db_port: _Optional[int] = ..., weight: _Optional[int] = ...) -> None: ...
+    def __init__(self, type: _Optional[_Union[ClusterNodeType, str]] = ..., status: _Optional[_Union[ClusterNodeStatus, str]] = ..., ip: _Optional[str] = ..., agent_port: _Optional[int] = ..., db_port: _Optional[int] = ..., weight: _Optional[int] = ...) -> None: ...
 
 class ClusterProxyConfig(_message.Message):
     __slots__ = ("ip", "agent_port")
