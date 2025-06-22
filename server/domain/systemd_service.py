@@ -51,7 +51,7 @@ class SystemdService:
 
     def __init__(self, record_id:str):
         try:
-            self.model: SystemdServiceModel = SystemdServiceModel.get_by_id(record_id)
+            self.model: SystemdServiceModel = SystemdServiceModel.get(SystemdServiceModel.id == record_id)
         except SystemdServiceModel.DoesNotExist:
             raise ValueError(f"Service with id {record_id} does not exist")
         except Exception as e:
@@ -131,6 +131,20 @@ class SystemdService:
         return Agent(
             host=node.ip,
             port=node.agent_port,
+            trusted_ca_path=ServerConfig().grpc_ca_path,
+            token=self.cluster_config.shared_token,
+            com_type="cluster",
+            cluster_id=self.model.cluster_id
+        )
+
+    def get_agent_for_proxy(self) -> Agent:
+        if not self.cluster_config.proxy:
+            raise Exception("Proxy is not configured")
+
+        proxy = self.cluster_config.proxy
+        return Agent(
+            host=proxy.ip,
+            port=proxy.agent_port,
             trusted_ca_path=ServerConfig().grpc_ca_path,
             token=self.cluster_config.shared_token,
             com_type="cluster",
@@ -225,3 +239,10 @@ class SystemdService:
         if cluster_id is not None:
             query = query.where(SystemdServiceModel.cluster_id == cluster_id)
         return [i[0] for i in query.tuples()]
+
+    @staticmethod
+    def get_all_cluster_ids() -> list[str]:
+        """
+        Returns all cluster ids for which systemd services are present.
+        """
+        return [x[0] for x in SystemdServiceModel.select(SystemdServiceModel.cluster_id).distinct().tuples()]

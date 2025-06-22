@@ -17,6 +17,7 @@ from server.helpers import (
 from server.internal.etcd_client import Etcd3Client
 from server.internal.scheduler import RQScheduler
 from server.internal.utils import get_redis_client
+from server.monitor.dead_node_detector import DeadNodeDetector
 
 
 class EtcdStateMonitor:
@@ -31,15 +32,19 @@ class EtcdStateMonitor:
     def __init__(self):
         self.config = ServerConfig()
         self.redis = get_redis_client(async_client=True)
-        self.sync_db_ids_lock = asyncio.Lock()
+        self.sync_cluster_ids_lock = asyncio.Lock()
         self.stop_events: dict[str, threading.Event] = {}
         self.watch_threads: dict[str, threading.Thread] = {}
+        self.dead_node_detector:DeadNodeDetector = DeadNodeDetector(timeout_seconds=3)
 
     def act_on_kv_event(self, cluster_id:str, event:KVEvent):
         try:
             # 1: Auto sync backend servers for all proxies
             if event.action == "update" and event.event_type == "config" and event.data:
                 Proxy.sync_backend_servers_for_all_proxies(cluster_id=cluster_id, config=event.data)
+            # 2: Track health status of nodes
+            if event.action == "update" and event.event_type == "status" and event.data:
+                self.dead_node_detector.update(event.node_id, event.data)
         except:
             print(f"Error while acting on config change for cluster {cluster_id}: {event}")
             traceback.print_exc()
@@ -104,6 +109,9 @@ class EtcdStateMonitor:
         thread.start()
 
     def remove_cluster_from_monitoring(self, cluster_id:str):
+        if is_cluster_in_use(cluster_id):
+            return
+
         event = self.stop_events.pop(cluster_id, None)
         thread = self.watch_threads.pop(cluster_id, None)
 
@@ -111,19 +119,6 @@ class EtcdStateMonitor:
             event.set()
         if thread:
             thread.join(timeout=5)
-
-    def add_service_to_monitoring(self, db_id:str):
-        db = MySQL(db_id)
-        self.add_cluster_to_monitoring(db.model.cluster_id)
-
-    def remove_service_from_monitoring(self, db_id:str):
-        # Check if we have any other services in the same cluster
-        db = MySQL(db_id)
-        if is_cluster_in_use(db.model.cluster_id):
-            # Other service can still use the cluster
-            # If there is no other service, then we can remove the cluster from monitoring
-            return
-        self.remove_cluster_from_monitoring(db.model.cluster_id)
 
     async def process_requested_changes_in_monitoring(self):
         while True:
@@ -135,19 +130,19 @@ class EtcdStateMonitor:
                         continue
 
                     try:
-                        async with self.sync_db_ids_lock:
+                        async with self.sync_cluster_ids_lock:
                             cmd_parts = msg["data"].decode().strip().split(maxsplit=2)
                             if len(cmd_parts) != 2:
                                 continue
 
                             cmd = cmd_parts[0]
-                            db_id = cmd_parts[1]
+                            cluster_id = cmd_parts[1]
 
-                            if cmd in ["remove", "reload"]:
-                                self.remove_service_from_monitoring(db_id)
+                            if cmd == "remove":
+                                self.remove_cluster_from_monitoring(cluster_id)
 
-                            if cmd in ["add", "reload"]:
-                                self.add_service_to_monitoring(db_id)
+                            elif cmd == "add":
+                                self.add_cluster_to_monitoring(cluster_id)
                     except Exception as e:
                         print("Command handling error:", e)
                         traceback.print_exc()
@@ -156,38 +151,36 @@ class EtcdStateMonitor:
                 traceback.print_exc()
                 await asyncio.sleep(5)
 
-    async def sync_monitored_db_ids_periodically(self):
+    async def sync_monitored_cluster_ids_periodically(self):
         while True:
             try:
-                # Try to acquire the lock to prevent concurrent modifications
-                # by the watch_commands method
-                async with self.sync_db_ids_lock:
-                    db_ids = set(MySQL.get_all())
+                async with self.sync_cluster_ids_lock:
+                    cluster_ids = set(MySQL.get_all_cluster_ids())
                     current_monitoring = set(self.watch_threads.keys())
 
-                    to_add = db_ids - current_monitoring
-                    to_remove = current_monitoring - db_ids
+                    to_add = cluster_ids - current_monitoring
+                    to_remove = current_monitoring - cluster_ids
 
-                    for db_id in to_add:
+                    for cluster_id in to_add:
                         await self.redis.publish(
-                            self.config.etcd_monitor_commands_redis_channel, f"add {db_id}"
+                            self.config.etcd_monitor_commands_redis_channel, f"add {cluster_id}"
                         )
 
-                    for db_id in to_remove:
+                    for cluster_id in to_remove:
                         await self.redis.publish(
-                            self.config.etcd_monitor_commands_redis_channel, f"remove {db_id}"
+                            self.config.etcd_monitor_commands_redis_channel, f"remove {cluster_id}"
                         )
 
                 await asyncio.sleep(300)  # Reconcile every 5 minutes
             except Exception as e:
-                print("Failed while syncing db ids to monitor from local db : ", e)
+                print("Failed while syncing cluster ids to monitor from local db : ", e)
                 traceback.print_exc()
 
 
     async def run(self):
         await asyncio.gather(
             self.process_requested_changes_in_monitoring(),
-            self.sync_monitored_db_ids_periodically()
+            self.sync_monitored_cluster_ids_periodically()
         )
 
     def schedule_auto_sync_proxysql_users(self):

@@ -117,6 +117,7 @@ class ClusterConfig:
         self.cluster_id = cluster_id
         self.etcd_client = etcd_client
         self._proto:ClusterConfigProtobufMessage = ClusterConfigProtobufMessage()
+        self.version = None
         if self.etcd_client:
             self._load()
 
@@ -206,6 +207,13 @@ class ClusterConfig:
         """Returns a list of offline standby node IDs."""
         return self._filter_nodes(ClusterNodeType.STANDBY, ClusterNodeStatus.OFFLINE)
 
+    def copy_and_mark_node_as_failed(self, node_id:str) -> ClusterConfigProtobufMessage:
+        msg = ClusterConfigProtobufMessage()
+        msg.CopyFrom(self._proto)
+        msg.nodes[node_id].status = ClusterNodeStatus.OFFLINE
+        return msg
+
+
     @cache
     def _filter_nodes(self, node_type:ClusterNodeType, status:ClusterNodeStatus) -> list[str]:
         """
@@ -227,7 +235,9 @@ class ClusterConfig:
         value = self.etcd_client.get(self.kv_cluster_config_key)
         if not value:
             raise ValueError(f"Cluster config not found for cluster_id: {self.cluster_id}")
-        self._proto.ParseFromString(value[0])
+        data, meta = value
+        self._proto.ParseFromString(data)
+        self.version = meta.version
 
     @cached_property
     def kv_cluster_config_key(self) -> str:

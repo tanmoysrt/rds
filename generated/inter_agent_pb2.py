@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11inter_agent.proto\x12\x03rds\x1a\x1bgoogle/protobuf/empty.proto\"@\n\x19RequestRsyncAccessRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x0f\n\x07node_id\x18\x02 \x01(\t\"u\n\x1aRequestRsyncAccessResponse\x12\x13\n\x0binstance_id\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\x05\x12\x10\n\x08username\x18\x03 \x01(\t\x12\x10\n\x08password\x18\x04 \x01(\t\x12\x10\n\x08src_path\x18\x05 \x01(\t\"C\n\x18RevokeRsyncAccessRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x13\n\x0binstance_id\x18\x02 \x01(\t\"A\n\x1aSyncReplicationUserRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x0f\n\x07node_id\x18\x02 \x01(\t2\x86\x02\n\x11InterAgentService\x12U\n\x12RequestRsyncAccess\x12\x1e.rds.RequestRsyncAccessRequest\x1a\x1f.rds.RequestRsyncAccessResponse\x12J\n\x11RevokeRsyncAccess\x12\x1d.rds.RevokeRsyncAccessRequest\x1a\x16.google.protobuf.Empty\x12N\n\x13SyncReplicationUser\x12\x1f.rds.SyncReplicationUserRequest\x1a\x16.google.protobuf.Emptyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11inter_agent.proto\x12\x03rds\x1a\x1bgoogle/protobuf/empty.proto\"@\n\x19RequestRsyncAccessRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x0f\n\x07node_id\x18\x02 \x01(\t\"u\n\x1aRequestRsyncAccessResponse\x12\x13\n\x0binstance_id\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\x05\x12\x10\n\x08username\x18\x03 \x01(\t\x12\x10\n\x08password\x18\x04 \x01(\t\x12\x10\n\x08src_path\x18\x05 \x01(\t\"C\n\x18RevokeRsyncAccessRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x13\n\x0binstance_id\x18\x02 \x01(\t\"A\n\x1aSyncReplicationUserRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x0f\n\x07node_id\x18\x02 \x01(\t\"G\n CheckDatabaseReachabilityRequest\x12\x12\n\ncluster_id\x18\x01 \x01(\t\x12\x0f\n\x07node_id\x18\x02 \x01(\t\"6\n!CheckDatabaseReachabilityResponse\x12\x11\n\treachable\x18\x01 \x01(\x08\x32\xf2\x02\n\x11InterAgentService\x12U\n\x12RequestRsyncAccess\x12\x1e.rds.RequestRsyncAccessRequest\x1a\x1f.rds.RequestRsyncAccessResponse\x12J\n\x11RevokeRsyncAccess\x12\x1d.rds.RevokeRsyncAccessRequest\x1a\x16.google.protobuf.Empty\x12N\n\x13SyncReplicationUser\x12\x1f.rds.SyncReplicationUserRequest\x1a\x16.google.protobuf.Empty\x12j\n\x19\x43heckDatabaseReachability\x12%.rds.CheckDatabaseReachabilityRequest\x1a&.rds.CheckDatabaseReachabilityResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -40,6 +40,10 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_REVOKERSYNCACCESSREQUEST']._serialized_end=307
   _globals['_SYNCREPLICATIONUSERREQUEST']._serialized_start=309
   _globals['_SYNCREPLICATIONUSERREQUEST']._serialized_end=374
-  _globals['_INTERAGENTSERVICE']._serialized_start=377
-  _globals['_INTERAGENTSERVICE']._serialized_end=639
+  _globals['_CHECKDATABASEREACHABILITYREQUEST']._serialized_start=376
+  _globals['_CHECKDATABASEREACHABILITYREQUEST']._serialized_end=447
+  _globals['_CHECKDATABASEREACHABILITYRESPONSE']._serialized_start=449
+  _globals['_CHECKDATABASEREACHABILITYRESPONSE']._serialized_end=503
+  _globals['_INTERAGENTSERVICE']._serialized_start=506
+  _globals['_INTERAGENTSERVICE']._serialized_end=876
 # @@protoc_insertion_point(module_scope)

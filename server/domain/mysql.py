@@ -119,7 +119,7 @@ class MySQL(SystemdService):
             redis = get_redis_client()
             server_config = ServerConfig()
             redis.publish(server_config.mysql_monitor_commands_redis_channel, f"add {record.model.id}")
-            redis.publish(server_config.etcd_monitor_commands_redis_channel, f"add {record.model.id}")
+            redis.publish(server_config.etcd_monitor_commands_redis_channel, f"add {record.model.cluster_id}")
 
         return record
 
@@ -295,7 +295,7 @@ class MySQL(SystemdService):
             redis = get_redis_client()
             server_config = ServerConfig()
             redis.publish(server_config.mysql_monitor_commands_redis_channel, f"remove {self.model.id}")
-            redis.publish(server_config.etcd_monitor_commands_redis_channel, f"remove {self.model.id}")
+            redis.publish(server_config.etcd_monitor_commands_redis_channel, f"remove {self.model.cluster_id}")
 
     @override
     def get_health_info(self) -> (bool, DBHealthStatus | None):

@@ -42,3 +42,17 @@ class SyncReplicationUserRequest(_message.Message):
     cluster_id: str
     node_id: str
     def __init__(self, cluster_id: _Optional[str] = ..., node_id: _Optional[str] = ...) -> None: ...
+
+class CheckDatabaseReachabilityRequest(_message.Message):
+    __slots__ = ("cluster_id", "node_id")
+    CLUSTER_ID_FIELD_NUMBER: _ClassVar[int]
+    NODE_ID_FIELD_NUMBER: _ClassVar[int]
+    cluster_id: str
+    node_id: str
+    def __init__(self, cluster_id: _Optional[str] = ..., node_id: _Optional[str] = ...) -> None: ...
+
+class CheckDatabaseReachabilityResponse(_message.Message):
+    __slots__ = ("reachable",)
+    REACHABLE_FIELD_NUMBER: _ClassVar[int]
+    reachable: bool
+    def __init__(self, reachable: bool = ...) -> None: ...

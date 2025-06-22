@@ -18,6 +18,7 @@ from generated.extras_pb2 import DBHealthStatus
 from server import ServerConfig
 from server.internal.config import ClusterConfig
 from server.internal.db.models import SystemdServiceModel
+from server.internal.db_client import DatabaseClient
 from server.internal.etcd_client import Etcd3Client
 
 
@@ -172,7 +173,7 @@ class KVEvent:
     def __init__(self, action:Literal["update", "delete"], cluster_id:str):
         self.action = action # type: Literal["update", "delete"]
         self.cluster_id = cluster_id
-        self.event_type = None # type: Literal["config", "state", "status"] | None
+        self.event_type = None # type: Literal["config", "status"] | None
         self.data: ClusterConfig|DBHealthStatus|None= None
         self.node_id: str|None = None
 
@@ -216,3 +217,21 @@ def parse_etcd_watch_event(event:ETcd3Event) -> KVEvent|None:
     except Exception as e:
         print(f"Failed to parse watch event: {e}")
         return None
+
+
+def get_db_client_from_cluster_config(
+    cluster_config:ClusterConfig, node_id:str, timeout:int=5, autocommit:bool=False
+) -> DatabaseClient:
+    """
+    Returns a database client for the given node_id and db_type.
+    If the node_id is not found in the cluster config, raises ValueError.
+    """
+    node = cluster_config.get_node(node_id)
+    return DatabaseClient(
+        db_type="mysql", # TODO: cluster config need to have the type
+        autocommit=autocommit,
+        host=node.ip,
+        port=node.db_port,
+        user=cluster_config.replication_user,
+        password=cluster_config.replication_password,
+    )

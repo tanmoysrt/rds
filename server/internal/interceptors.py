@@ -51,7 +51,7 @@ class AsyncJobInterceptor(grpc.ServerInterceptor):
                         response_message_type,
                         ref=metadata.ref if metadata.HasField("ref") else None,
                         scheduled_at=metadata.scheduled_at.ToDatetime() if metadata.HasField("scheduled_at") else None,
-                        timeout=metadata.timeout if metadata.HasField("timeout") else None,
+                        timeout=metadata.timeout_seconds if metadata.HasField("timeout") else None,
                     )
                     return job.grpc_response
 

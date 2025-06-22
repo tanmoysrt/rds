@@ -63,6 +63,11 @@ class InterAgentServiceStub(object):
                 request_serializer=inter__agent__pb2.SyncReplicationUserRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
+        self.CheckDatabaseReachability = channel.unary_unary(
+                '/rds.InterAgentService/CheckDatabaseReachability',
+                request_serializer=inter__agent__pb2.CheckDatabaseReachabilityRequest.SerializeToString,
+                response_deserializer=inter__agent__pb2.CheckDatabaseReachabilityResponse.FromString,
+                _registered_method=True)
 
 
 class InterAgentServiceServicer(object):
@@ -99,6 +104,12 @@ class InterAgentServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CheckDatabaseReachability(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_InterAgentServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -116,6 +127,11 @@ def add_InterAgentServiceServicer_to_server(servicer, server):
                     servicer.SyncReplicationUser,
                     request_deserializer=inter__agent__pb2.SyncReplicationUserRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'CheckDatabaseReachability': grpc.unary_unary_rpc_method_handler(
+                    servicer.CheckDatabaseReachability,
+                    request_deserializer=inter__agent__pb2.CheckDatabaseReachabilityRequest.FromString,
+                    response_serializer=inter__agent__pb2.CheckDatabaseReachabilityResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -212,6 +228,33 @@ class InterAgentService(object):
             '/rds.InterAgentService/SyncReplicationUser',
             inter__agent__pb2.SyncReplicationUserRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CheckDatabaseReachability(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/rds.InterAgentService/CheckDatabaseReachability',
+            inter__agent__pb2.CheckDatabaseReachabilityRequest.SerializeToString,
+            inter__agent__pb2.CheckDatabaseReachabilityResponse.FromString,
             options,
             channel_credentials,
             insecure,

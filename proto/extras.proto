@@ -51,13 +51,12 @@ message ClusterProxyConfig {
 }
 
 message ClusterConfig {
-  int32 version = 1;
-  int32 max_replication_lag_ms = 2;
-  int32 failover_cooldown_ms = 3;
-  int64 last_failover_timestamp = 4;
-  map<string, ClusterNodeConfig> nodes = 5;
-  optional ClusterProxyConfig proxy = 6;
-  string replication_user = 7;
-  string replication_password = 8;
-  string shared_token = 9;
+  int32 max_replication_lag_ms = 1;
+  int32 failover_cooldown_ms = 2;
+  int64 last_failover_timestamp = 3;
+  map<string, ClusterNodeConfig> nodes = 4;
+  optional ClusterProxyConfig proxy = 5;
+  string replication_user = 6;
+  string replication_password = 7;
+  string shared_token = 8;
 }

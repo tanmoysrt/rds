@@ -155,7 +155,8 @@ class Proxy(SystemdService):
 
         # Open db connection to proxy
         proxy_client = self.db_conn
-        proxy_client.query("SELECT 1")  # check connection
+        if not proxy_client.is_reachable():
+            raise RuntimeError("Proxy Admin Database Connection is not working")
         # Execute the queries
         for query in queries:
             try:
@@ -202,15 +203,16 @@ class Proxy(SystemdService):
                     password=config.replication_password,
                     schema=""
                 )
-                db_client.query("SELECT 1")  # Simple query to check connection
-                break
+                if db_client.is_reachable():
+                    break
 
         if not db_client:
             raise RuntimeError("No database node is reachable to sync")
 
         # Open db connection to proxy
         proxy_client = self.db_conn
-        proxy_client.query("SELECT 1")  # check connection
+        if not proxy_client.is_reachable():
+            raise RuntimeError("Proxy Admin Connection is not working")
 
         # Fetch all users from the database
         placeholders = ", ".join(["%s"] * len(exclude_users))

@@ -23,6 +23,7 @@ service InterAgentService {
   rpc RequestRsyncAccess(RequestRsyncAccessRequest) returns (RequestRsyncAccessResponse);
   rpc RevokeRsyncAccess(RevokeRsyncAccessRequest) returns (google.protobuf.Empty);
   rpc SyncReplicationUser(SyncReplicationUserRequest) returns (google.protobuf.Empty);
+  rpc CheckDatabaseReachability(CheckDatabaseReachabilityRequest) returns (CheckDatabaseReachabilityResponse);
 }
 
 message RequestRsyncAccessRequest {
@@ -46,4 +47,13 @@ message RevokeRsyncAccessRequest {
 message SyncReplicationUserRequest {
   string cluster_id = 1;
   string node_id = 2;
+}
+
+message CheckDatabaseReachabilityRequest {
+  string cluster_id = 1;
+  string node_id = 2;
+}
+
+message CheckDatabaseReachabilityResponse {
+  bool reachable = 1;
 }

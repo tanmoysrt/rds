@@ -7,7 +7,7 @@ from MySQLdb.connections import Connection
 
 
 class DatabaseClient:
-    def __init__(self, db_type:Literal["mysql", "mariadb", "proxysql"], host:str, port:int|str, user:str, password:str, schema:str="", autocommit:bool=False):
+    def __init__(self, db_type:Literal["mysql", "mariadb", "proxysql"], host:str, port:int|str, user:str, password:str, schema:str="", autocommit:bool=False, connect_timeout:int=5):
         if db_type not in ("mysql", "mariadb", "proxysql"):
             raise ValueError(f"Unsupported database type: {db_type}")
         self.host = host
@@ -16,6 +16,7 @@ class DatabaseClient:
         self.password = password
         self.schema = schema
         self.autocommit = autocommit
+        self.connect_timeout = connect_timeout
 
         self._connection_instance: Connection | None = None
 
@@ -29,7 +30,7 @@ class DatabaseClient:
                 user=self.user,
                 passwd=self.password,
                 db=self.schema,
-                connect_timeout=5,
+                connect_timeout=self.connect_timeout,
                 autocommit=self.autocommit,
             )
         return self._connection_instance
@@ -71,3 +72,16 @@ class DatabaseClient:
         except Exception as e:
             self.close()
             raise e
+
+    def is_reachable(self) -> bool:
+        """
+        Check if the database is reachable.
+        Returns:
+            True if the database is reachable, False otherwise.
+        """
+        try:
+            with self._connection.cursor() as cursor:
+                cursor.execute("SELECT 1")
+                return True
+        except Exception:
+            return False

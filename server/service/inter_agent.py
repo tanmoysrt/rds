@@ -6,6 +6,8 @@ from google.protobuf.empty_pb2 import Empty
 from podman import PodmanClient
 
 from generated.inter_agent_pb2 import (
+    CheckDatabaseReachabilityRequest,
+    CheckDatabaseReachabilityResponse,
     RequestRsyncAccessRequest,
     RequestRsyncAccessResponse,
     RevokeRsyncAccessRequest,
@@ -14,7 +16,14 @@ from generated.inter_agent_pb2 import (
 from generated.inter_agent_pb2_grpc import InterAgentServiceServicer
 from server import ServerConfig
 from server.domain.mysql import MySQL
-from server.helpers import find_available_port, generate_random_string
+from server.helpers import (
+    find_available_port,
+    generate_random_string,
+    get_db_client_from_cluster_config,
+    get_working_etcd_cred_of_cluster,
+)
+from server.internal.config import ClusterConfig
+from server.internal.etcd_client import Etcd3Client
 
 
 class InterAgentService(InterAgentServiceServicer):
@@ -63,7 +72,7 @@ class InterAgentService(InterAgentServiceServicer):
                 password=password,
                 src_path="/data"
             )
-        except Exception as e:
+        except Exception:
             traceback.print_exc()
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details("Failed to create rsync container.")
@@ -100,3 +109,28 @@ class InterAgentService(InterAgentServiceServicer):
             return Empty()
         mysql.sync_replica_user()
         return Empty()
+
+    def CheckDatabaseReachability(self, request:CheckDatabaseReachabilityRequest, context) -> CheckDatabaseReachabilityResponse:
+        server_config = ServerConfig()
+        try:
+            username, password = get_working_etcd_cred_of_cluster(request.cluster_id)
+            config = ClusterConfig(etcd_client=Etcd3Client(
+                addresses=[f"{server_config.etcd_host}:{server_config.etcd_port}"],
+                user=username,
+                password=password,
+                timeout=2
+            ), cluster_id=request.cluster_id)
+
+            # Check if node_id exists in the cluster
+            if request.node_id not in config.node_ids:
+                context.set_code(grpc.StatusCode.NOT_FOUND)
+                context.set_details(f"Node ID {request.node_id} not found in cluster {request.cluster_id}.")
+                return CheckDatabaseReachabilityResponse(reachable=False)
+
+            # Try to connect to the database
+            db_client = get_db_client_from_cluster_config(config, request.node_id, timeout=5)
+            return CheckDatabaseReachabilityResponse(reachable=db_client.is_reachable())
+        except Exception as e:
+            context.set_code(grpc.StatusCode.INTERNAL)
+            context.set_details(f"Failed to check database reachability: {e!s}")
+            return CheckDatabaseReachabilityResponse(reachable=False)
