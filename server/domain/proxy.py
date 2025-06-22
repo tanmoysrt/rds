@@ -106,15 +106,21 @@ class Proxy(SystemdService):
 
         # Fetch current servers from ProxySQL
         current_servers = self.db_conn.query("SELECT hostgroup_id, hostname, port, weight FROM mysql_servers", as_dict=False)[1:] or []
+        writer_nodes = cluster_config.online_master_node_ids
+        reader_nodes = cluster_config.online_replica_node_ids + cluster_config.online_read_only_node_ids
+        if not reader_nodes:
+            # If no reader nodes are available, use writer nodes as readers
+            reader_nodes = writer_nodes
+
 
         # Build desired server list from cluster_config
         desired_servers = []
         # Add online master node
-        for node_id in cluster_config.online_master_node_ids:
+        for node_id in writer_nodes:
             node = cluster_config.get_node(node_id)
             desired_servers.append(("1", node.ip, str(node.db_port), str(node.weight)))
 
-        for node_id in (cluster_config.online_replica_node_ids + cluster_config.online_standby_node_ids):
+        for node_id in reader_nodes:
             node = cluster_config.get_node(node_id)
             desired_servers.append(("2", node.ip, str(node.db_port), str(node.weight)))
 
@@ -136,14 +142,15 @@ class Proxy(SystemdService):
         the changes doesn't load into the runtime and no changes are made to the ProxySQL runtime.
         """
         queries = ["DELETE FROM mysql_servers"]
-        for node_id in cluster_config.online_master_node_ids:
+
+        for node_id in writer_nodes:
             node = cluster_config.get_node(node_id)
             queries.append(
                 f"INSERT INTO mysql_servers (hostgroup_id, hostname, port, status, weight) "
                 f"VALUES (1, '{node.ip}', {node.db_port}, 'ONLINE', {node.weight})"
             )
 
-        for node_id in (cluster_config.online_replica_node_ids + cluster_config.online_standby_node_ids):
+        for node_id in reader_nodes:
             node = cluster_config.get_node(node_id)
             queries.append(
                 f"INSERT INTO mysql_servers (hostgroup_id, hostname, port, status, weight) "
