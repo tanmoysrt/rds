@@ -1,7 +1,8 @@
 import common_pb2 as _common_pb2
+from google.protobuf.internal import containers as _containers
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from collections.abc import Mapping as _Mapping
+from collections.abc import Iterable as _Iterable, Mapping as _Mapping
 from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
@@ -97,3 +98,27 @@ class ProxyDeleteResponse(_message.Message):
     meta: _common_pb2.ResponseMetadata
     deleted: bool
     def __init__(self, meta: _Optional[_Union[_common_pb2.ResponseMetadata, _Mapping]] = ..., deleted: bool = ...) -> None: ...
+
+class ProxySyncUsersRequest(_message.Message):
+    __slots__ = ("meta", "id", "exclude_users", "users_to_sync")
+    META_FIELD_NUMBER: _ClassVar[int]
+    ID_FIELD_NUMBER: _ClassVar[int]
+    EXCLUDE_USERS_FIELD_NUMBER: _ClassVar[int]
+    USERS_TO_SYNC_FIELD_NUMBER: _ClassVar[int]
+    meta: _common_pb2.RequestMetadata
+    id: str
+    exclude_users: _containers.RepeatedScalarFieldContainer[str]
+    users_to_sync: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, meta: _Optional[_Union[_common_pb2.RequestMetadata, _Mapping]] = ..., id: _Optional[str] = ..., exclude_users: _Optional[_Iterable[str]] = ..., users_to_sync: _Optional[_Iterable[str]] = ...) -> None: ...
+
+class ProxySyncUsersResponse(_message.Message):
+    __slots__ = ("meta", "added_users", "removed_users", "updated_users")
+    META_FIELD_NUMBER: _ClassVar[int]
+    ADDED_USERS_FIELD_NUMBER: _ClassVar[int]
+    REMOVED_USERS_FIELD_NUMBER: _ClassVar[int]
+    UPDATED_USERS_FIELD_NUMBER: _ClassVar[int]
+    meta: _common_pb2.ResponseMetadata
+    added_users: _containers.RepeatedScalarFieldContainer[str]
+    removed_users: _containers.RepeatedScalarFieldContainer[str]
+    updated_users: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, meta: _Optional[_Union[_common_pb2.ResponseMetadata, _Mapping]] = ..., added_users: _Optional[_Iterable[str]] = ..., removed_users: _Optional[_Iterable[str]] = ..., updated_users: _Optional[_Iterable[str]] = ...) -> None: ...

@@ -284,7 +284,7 @@ class MySQL(SystemdService):
             conn.query("CREATE USER IF NOT EXISTS %s@'%%' IDENTIFIED BY %s", (config.replication_user, config.replication_password))
 
         conn.query("GRANT REPLICATION SLAVE, REPLICATION CLIENT, RELOAD ON *.* TO %s@'%%'", (config.replication_user,))
-        conn.query("GRANT SHOW DATABASES, SELECT ON mysql.user TO %s@'%%'", (config.replication_user,))
+        conn.query("GRANT SELECT ON mysql.user TO %s@'%%'", (config.replication_user,))
         conn.query("FLUSH PRIVILEGES")
 
     @override

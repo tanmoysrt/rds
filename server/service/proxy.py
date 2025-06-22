@@ -6,6 +6,8 @@ from generated.proxy_pb2 import (
     ProxyInfoResponse,
     ProxyMonitorCredentialResponse,
     ProxyStatusResponse,
+    ProxySyncUsersRequest,
+    ProxySyncUsersResponse,
     ProxyUpgradeRequest,
 )
 from generated.proxy_pb2_grpc import ProxyServiceServicer
@@ -85,3 +87,12 @@ class ProxyService(ProxyServiceServicer):
         proxy = Proxy(request.id)
         proxy.update_version(image=request.image, tag=request.tag)
         return to_grpc_proxy_info(proxy)
+
+    def SyncUsers(self, request:ProxySyncUsersRequest, context) -> ProxySyncUsersResponse:
+        proxy = Proxy(request.id)
+        added_users, removed_users, updated_users = proxy.sync_users()
+        return ProxySyncUsersResponse(
+            added_users=added_users,
+            removed_users=removed_users,
+            updated_users=updated_users
+        )

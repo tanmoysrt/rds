@@ -14,6 +14,7 @@ service ProxyService {
   rpc Delete(ProxyIdRequest) returns (ProxyDeleteResponse);
   rpc GetMonitorCredential(ProxyIdRequest) returns (ProxyMonitorCredentialResponse);
   rpc Upgrade(ProxyUpgradeRequest) returns (ProxyInfoResponse);
+  rpc SyncUsers(ProxySyncUsersRequest) returns (ProxySyncUsersResponse);
 }
 
 message ProxyIdRequest {
@@ -67,4 +68,20 @@ message ProxyMonitorCredentialResponse {
 message ProxyDeleteResponse {
   ResponseMetadata meta = 1;
   bool deleted = 2;
+}
+
+message ProxySyncUsersRequest {
+  RequestMetadata meta = 1;
+  string id = 2;
+  repeated string exclude_users = 3;
+  // If this field is set, it will only sync the users in this list
+  // Else it will sync all users except the ones in `exclude_users`
+  repeated string users_to_sync = 4;
+}
+
+message ProxySyncUsersResponse {
+  ResponseMetadata meta = 1;
+  repeated string added_users = 2;
+  repeated string removed_users = 3;
+  repeated string updated_users = 4;
 }
