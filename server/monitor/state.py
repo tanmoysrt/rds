@@ -39,7 +39,7 @@ class EtcdStateMonitor:
         try:
             # 1: Auto sync backend servers for all proxies
             if event.action == "update" and event.event_type == "config" and event.data:
-                print(Proxy.sync_backend_servers_for_all_proxies(cluster_id=cluster_id, config=event.data))
+                Proxy.sync_backend_servers_for_all_proxies(cluster_id=cluster_id, config=event.data)
         except:
             print(f"Error while acting on config change for cluster {cluster_id}: {event}")
             traceback.print_exc()
