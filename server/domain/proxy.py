@@ -1,8 +1,9 @@
 import contextlib
+import traceback
 from pathlib import Path
 from typing import override
 
-from generated.extras_pb2 import ClusterNodeType
+from generated.extras_pb2 import ClusterConfig, ClusterNodeType
 from server.domain.systemd_service import SystemdService
 from server.helpers import (
     find_available_port,
@@ -88,6 +89,76 @@ class Proxy(SystemdService):
     def update_version(self, image:str, tag:str):
         return self.update(image=image, tag=tag)
 
+    def sync_servers(self, cluster_config: ClusterConfig | None = None) -> bool:
+        """
+        Sync the MySQL servers from the cluster configuration to ProxySQL.
+        
+        :param cluster_config: optional ClusterConfig to use for syncing servers.
+        If not provided, it will fetch the current cluster configuration from the etcd.
+        :return:
+            True if the servers were successfully synced, False if no changes were required.
+        """
+        if not cluster_config:
+            cluster_config = self.cluster_config
+
+        if not cluster_config:
+            raise RuntimeError("Cluster configuration is not found")
+
+        # Fetch current servers from ProxySQL
+        current_servers = self.db_conn.query("SELECT hostgroup_id, hostname, port, weight FROM mysql_servers", as_dict=False)[1:] or []
+
+        # Build desired server list from cluster_config
+        desired_servers = []
+        for node_id in cluster_config.nodes:
+            node = cluster_config.nodes[node_id]
+            if node.type == ClusterNodeType.MASTER:
+                desired_servers.append(("1", node.ip, str(node.db_port), str(node.weight)))
+            elif node.type == ClusterNodeType.REPLICA or node.type == ClusterNodeType.READ_ONLY:
+                desired_servers.append(("2", node.ip, str(node.db_port), str(node.weight)))
+
+        # Check if anything has changed (order-insensitive)
+        is_changed = False
+        if len(current_servers) != len(desired_servers):
+            is_changed = True
+        else:
+            # Compare as sets for order-insensitive comparison
+            if set(tuple(row) for row in current_servers) != set(tuple(row) for row in desired_servers):
+                is_changed = True
+
+        if not is_changed:
+            return False # No update required
+
+        """
+        It's safe to delete all existing servers and re-insert them,
+        Because until unless the "LOAD MYSQL SERVERS TO RUNTIME" command is executed,
+        the changes doesn't load into the runtime and no changes are made to the ProxySQL runtime.
+        """
+        queries = ["DELETE FROM mysql_servers"]
+        for node_id in cluster_config.nodes:
+            node = cluster_config.nodes[node_id]
+            if node.type == ClusterNodeType.MASTER:
+                queries.append(f"INSERT INTO mysql_servers (hostgroup_id, hostname, port, status, weight) "
+                               f"VALUES (1, '{node.ip}', {node.db_port}, 'ONLINE', {node.weight})")
+            elif node.type == ClusterNodeType.REPLICA or node.type == ClusterNodeType.READ_ONLY:
+                queries.append(f"INSERT INTO mysql_servers (hostgroup_id, hostname, port, status, weight) "
+                               f"VALUES (2, '{node.ip}', {node.db_port}, 'ONLINE', {node.weight})")
+
+        queries.append("LOAD MYSQL SERVERS TO RUNTIME")
+        queries.append("SAVE MYSQL SERVERS TO DISK")
+
+        # Open db connection to proxy
+        proxy_client = self.db_conn
+        proxy_client.query("SELECT 1")  # check connection
+        # Execute the queries
+        for query in queries:
+            try:
+                proxy_client.query(query)
+            except Exception as e:
+                raise RuntimeError(f"Failed to execute query: {e}")
+
+        return True
+
+
     def sync_users(self, users_to_sync:list[str]|None=None, exclude_users:list[str]|None=None) -> tuple[list[str], list[str], list[str]]:
         """
         Sync users from the MySQL database to ProxySQL.
@@ -111,7 +182,7 @@ class Proxy(SystemdService):
         # Try to find a working master
         if not config.nodes:
             return [], [], []
-        
+
         db_client:DatabaseClient|None = None
         for node_id in config.nodes:
             node = config.nodes[node_id]
@@ -130,7 +201,7 @@ class Proxy(SystemdService):
                 break
 
         if not db_client:
-            raise RuntimeError(f"No database node is reachable to sync")
+            raise RuntimeError("No database node is reachable to sync")
 
         # Open db connection to proxy
         proxy_client = self.db_conn
@@ -208,7 +279,7 @@ class Proxy(SystemdService):
                 proxy_client.query(query)
             except Exception as e:
                 raise RuntimeError(f"Failed to execute query: {e}")
-    
+
         return [user[0] for user in users_to_add], \
                 [user[0] for user in users_to_remove], \
                 [user[0] for user in users_to_update]
@@ -216,7 +287,7 @@ class Proxy(SystemdService):
 
     @staticmethod
     def get_all(**kwargs) -> list[str]:
-        return super().get_all(["proxysql"])
+        return SystemdService.get_all(services=["proxysql"], **kwargs)
 
     @override
     @property
@@ -230,3 +301,30 @@ class Proxy(SystemdService):
             schema=""
         )
 
+
+    @staticmethod
+    def sync_users_for_all_proxies():
+        # Fetch all available ProxySQL instances
+        proxies = Proxy.get_all()
+        for proxy_id in proxies:
+            try:
+                proxy = Proxy(proxy_id)
+                proxy.sync_users()
+            except Exception as e:
+                print(f"Failed to sync users for ProxySQL {proxy_id}: {e}")
+                traceback.print_exc()
+
+    @staticmethod
+    def sync_backend_servers_for_all_proxies(cluster_id:str|None=None, config:ClusterConfig=None):
+        if cluster_id is None and config is not None:
+            raise Exception("if config is provided, cluster_id must be provided as well")
+
+        # Fetch all available ProxySQL instances
+        proxies = Proxy.get_all(cluster_id=cluster_id)
+        for proxy_id in proxies:
+            try:
+                proxy = Proxy(proxy_id)
+                print(proxy.sync_servers(config))
+            except Exception as e:
+                print(f"Failed to sync servers for ProxySQL {proxy_id}: {e}")
+                traceback.print_exc()

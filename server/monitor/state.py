@@ -1,12 +1,21 @@
 import asyncio
+import contextlib
+import datetime
 import threading
 import time
 import traceback
 
 from server import ServerConfig
 from server.domain.mysql import MySQL
-from server.helpers import get_working_etcd_cred_of_cluster, is_cluster_in_use, parse_etcd_watch_event
+from server.domain.proxy import Proxy
+from server.helpers import (
+    KVEvent,
+    get_working_etcd_cred_of_cluster,
+    is_cluster_in_use,
+    parse_etcd_watch_event,
+)
 from server.internal.etcd_client import Etcd3Client
+from server.internal.scheduler import RQScheduler
 from server.internal.utils import get_redis_client
 
 
@@ -25,6 +34,15 @@ class EtcdStateMonitor:
         self.sync_db_ids_lock = asyncio.Lock()
         self.stop_events: dict[str, threading.Event] = {}
         self.watch_threads: dict[str, threading.Thread] = {}
+
+    def act_on_kv_event(self, cluster_id:str, event:KVEvent):
+        try:
+            # 1: Auto sync backend servers for all proxies
+            if event.action == "update" and event.event_type == "config" and event.data:
+                print(Proxy.sync_backend_servers_for_all_proxies(cluster_id=cluster_id, config=event.data))
+        except:
+            print(f"Error while acting on config change for cluster {cluster_id}: {event}")
+            traceback.print_exc()
 
     def monitor_cluster_state(self, cluster_id:str):
 
@@ -63,7 +81,8 @@ class EtcdStateMonitor:
                             break
 
                         parsed_event = parse_etcd_watch_event(event)
-                        print(parsed_event) # TODO: implement event handling logic
+                        # Blocking call
+                        self.act_on_kv_event(cluster_id, parsed_event)
             except Exception as e:
                 print(f"[{cluster_id}] watch error: {e}")
                 username = None
@@ -169,7 +188,40 @@ class EtcdStateMonitor:
             self.sync_monitored_db_ids_periodically()
         )
 
+    def schedule_auto_sync_proxysql_users(self):
+        job_id = "auto_sync_proxies_users"
+        # Remove the job if it already exists
+        with contextlib.suppress(Exception):
+            RQScheduler.cancel(job_id)
+        # Schedule the job to sync users for all proxies
+        RQScheduler.schedule(
+            scheduled_time=datetime.datetime.now(datetime.timezone.utc),
+            func=Proxy.sync_users_for_all_proxies,
+            interval=300, # Sync every 5 minutes
+            repeat=None, # Repeat indefinitely
+            id=job_id,
+        )
+
+    def schedule_auto_sync_proxysql_backend_servers(self):
+        job_id = "auto_sync_proxies_backend_servers"
+        # Remove the job if it already exists
+        with contextlib.suppress(Exception):
+            RQScheduler.cancel(job_id)
+        # Schedule the job to sync backend servers for all proxies
+        RQScheduler.schedule(
+            scheduled_time=datetime.datetime.now(datetime.timezone.utc),
+            func=Proxy.sync_backend_servers_for_all_proxies,
+            interval=1800, # Sync every 30 minutes
+            repeat=None, # Repeat indefinitely
+            id=job_id,
+        )
+
+
 
 if __name__ == "__main__":
     monitor = EtcdStateMonitor()
+    # Schedule periodic tasks
+    monitor.schedule_auto_sync_proxysql_backend_servers()
+    monitor.schedule_auto_sync_proxysql_users()
+    # Run the monitor
     asyncio.run(monitor.run())

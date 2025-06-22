@@ -169,7 +169,7 @@ def get_working_etcd_cred_of_cluster(cluster_id: str) -> tuple[str, str]:
 
 class KVEvent:
     def __init__(self, action:Literal["update", "delete"], cluster_id:str):
-        self.action = action
+        self.action = action # type: Literal["update", "delete"]
         self.cluster_id = cluster_id
         self.event_type = None # type: Literal["config", "state", "status"] | None
         self.data: ClusterConfig|DBHealthStatus|None= None

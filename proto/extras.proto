@@ -34,6 +34,7 @@ message ClusterNodeConfig {
   string ip = 2;
   int32 agent_port = 3;
   int32 db_port = 4;
+  int32 weight = 5;
 }
 
 message ClusterProxyConfig {
@@ -43,16 +44,12 @@ message ClusterProxyConfig {
 
 message ClusterConfig {
   int32 version = 1;
-  string current_master = 2;
-  string desired_master = 3;
-  string promoted_by = 4;
-  int32 replica_count = 5;
-  int32 min_replication_lag_ms = 6;
-  int32 failover_cooldown_ms = 7;
-  int64 last_failover_timestamp = 8;
-  map<string, ClusterNodeConfig> nodes = 9;
-  optional ClusterProxyConfig proxy = 10;
-  string replication_user = 11;
-  string replication_password = 12;
-  string shared_token = 13;
+  int32 max_replication_lag_ms = 2;
+  int32 failover_cooldown_ms = 3;
+  int64 last_failover_timestamp = 4;
+  map<string, ClusterNodeConfig> nodes = 5;
+  optional ClusterProxyConfig proxy = 6;
+  string replication_user = 7;
+  string replication_password = 8;
+  string shared_token = 9;
 }

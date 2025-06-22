@@ -227,8 +227,10 @@ class SystemdService:
 
 
     @staticmethod
-    def get_all(services:list[str]|None=None) -> list[str]:
+    def get_all(services:list[str]|None=None, cluster_id:str|None=None) -> list[str]:
         query = SystemdServiceModel.select(SystemdServiceModel.id)
         if services is not None:
             query = query.where(SystemdServiceModel.service.in_(services))
+        if cluster_id is not None:
+            query = query.where(SystemdServiceModel.cluster_id == cluster_id)
         return [i[0] for i in query.tuples()]
