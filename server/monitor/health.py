@@ -3,7 +3,7 @@ import time
 import traceback
 from concurrent.futures.thread import ThreadPoolExecutor
 
-from generated.extras_pb2 import DBHealthStatus
+from generated.extras_pb2 import ClusterNodeStatus, DBHealthStatus
 from server import ServerConfig
 from server.domain.mysql import MySQL
 from server.internal.utils import get_redis_client
@@ -17,6 +17,7 @@ class MySQLHealthCheckMonitor:
         self.executor = ThreadPoolExecutor(max_workers=50)
         self.redis = get_redis_client(async_client=True)
         self.sync_db_ids_lock = asyncio.Lock()
+        self.last_sync_in_cluster_config: dict[str, float] = {}
 
     async def monitor_db_health(self, db_id:str):
         loop = asyncio.get_running_loop()
@@ -32,12 +33,56 @@ class MySQLHealthCheckMonitor:
                 success, health_info = result
                 if success:
                     db_record.kv.put(db_record.kv_cluster_node_status_key, health_info.SerializeToString())
+                    if db_id not in self.last_sync_in_cluster_config or \
+                            time.time() - self.last_sync_in_cluster_config[db_id] > 600: # 10 minutes
+                        self.mark_db_as_online_in_config(db_record)
+                else:
+                    # Remove the db_id from last_sync_in_cluster_config
+                    # So that it can quickly marked as online again once we get a successful health check
+                    if db_id in self.last_sync_in_cluster_config:
+                        del self.last_sync_in_cluster_config[db_id]
             finally:
                 end = time.time()
                 elapsed_ms = int((end - start)*1000)
                 wait_time = max(0, (self.config.db_healthcheck_interval_ms - elapsed_ms))
                 wait_time = max(wait_time, self.config.db_healthcheck_minimum_interval_ms)
                 await asyncio.sleep(wait_time/1000)  # Convert ms to seconds
+
+    def mark_db_as_online_in_config(self, db_record: MySQL):
+        """
+        If DB is online but marked as offline in cluster config, mark it as online.
+        Do this operation every 10 minute.
+
+        :return:
+        """
+        try:
+            db_record.cluster_config.reload()
+            if db_record.cluster_config.get_node(db_record.model.id).status != ClusterNodeStatus.OFFLINE:
+                # If node is already marked as online / in maintenance, do nothing
+                return
+
+            old_version = db_record.cluster_config.version
+            etcd_client = db_record.kv
+            txn_success, _  = etcd_client.transaction(
+                compare=[
+                    etcd_client.transactions.version(db_record.cluster_config.kv_cluster_config_key) == old_version
+                ],
+                success=[
+                    etcd_client.transactions.put(
+                        db_record.cluster_config.kv_cluster_config_key,
+                        db_record.cluster_config.copy_and_mark_node_as_online(db_record.model.id).SerializeToString()
+                    )
+                ],
+                failure=[]
+            )
+            if txn_success:
+                print("Marked db as online in cluster config:", db_record.model.id)
+                self.last_sync_in_cluster_config[db_record.model.id] = time.time()
+            else:
+                print("Failed to mark db as online in cluster config, config updated in-between. Will be retried later")
+
+        except Exception as e:
+            print("Failed to reload cluster config for db:", db_record.model.id, e)
 
     async def add_db_to_monitoring(self, db_id:str):
         async with self.tasks_lock:

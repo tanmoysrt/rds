@@ -69,7 +69,7 @@ def handle_dead_node(node_id:str):
             success=[
                 etcd_client.transactions.put(
                     cluster_config.kv_cluster_config_key,
-                    cluster_config.copy_and_mark_node_as_failed(node_id).SerializeToString()
+                    cluster_config.copy_and_mark_node_as_offline(node_id).SerializeToString()
                 )
             ],
             failure=[]

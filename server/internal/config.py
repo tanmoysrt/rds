@@ -207,10 +207,22 @@ class ClusterConfig:
         """Returns a list of offline standby node IDs."""
         return self._filter_nodes(ClusterNodeType.STANDBY, ClusterNodeStatus.OFFLINE)
 
-    def copy_and_mark_node_as_failed(self, node_id:str) -> ClusterConfigProtobufMessage:
+    def copy_and_mark_node_as_offline(self, node_id:str) -> ClusterConfigProtobufMessage:
         msg = ClusterConfigProtobufMessage()
         msg.CopyFrom(self._proto)
         msg.nodes[node_id].status = ClusterNodeStatus.OFFLINE
+        return msg
+
+    def copy_and_mark_node_as_online(self, node_id:str) -> ClusterConfigProtobufMessage:
+        """
+        Creates a copy of the current configuration and marks the specified node as online.
+        :param node_id: The ID of the node to mark as online.
+        :return: A new ClusterConfigProtobufMessage with the updated status.
+        """
+        msg = ClusterConfigProtobufMessage()
+        msg.CopyFrom(self._proto)
+        if node_id in msg.nodes:
+            msg.nodes[node_id].status = ClusterNodeStatus.ONLINE
         return msg
 
 
