@@ -3,7 +3,6 @@ import traceback
 from pathlib import Path
 from typing import override
 
-from generated.extras_pb2 import ClusterConfig, ClusterNodeStatus, ClusterNodeType
 from server.domain.systemd_service import SystemdService
 from server.helpers import (
     find_available_port,
@@ -11,6 +10,7 @@ from server.helpers import (
     is_port_available,
     render_template,
 )
+from server.internal.config import ClusterConfig
 from server.internal.db_client import DatabaseClient
 
 
@@ -109,14 +109,14 @@ class Proxy(SystemdService):
 
         # Build desired server list from cluster_config
         desired_servers = []
-        for node_id in cluster_config.nodes:
-            node = cluster_config.nodes[node_id]
-            if node.status != ClusterNodeStatus.ONLINE:
-                continue
-            if node.type == ClusterNodeType.MASTER:
-                desired_servers.append(("1", node.ip, str(node.db_port), str(node.weight)))
-            elif node.type == ClusterNodeType.REPLICA or node.type == ClusterNodeType.READ_ONLY:
-                desired_servers.append(("2", node.ip, str(node.db_port), str(node.weight)))
+        # Add online master node
+        for node_id in cluster_config.online_master_node_ids:
+            node = cluster_config.get_node(node_id)
+            desired_servers.append(("1", node.ip, str(node.db_port), str(node.weight)))
+
+        for node_id in (cluster_config.online_replica_node_ids + cluster_config.online_standby_node_ids):
+            node = cluster_config.get_node(node_id)
+            desired_servers.append(("2", node.ip, str(node.db_port), str(node.weight)))
 
         # Check if anything has changed (order-insensitive)
         is_changed = False
@@ -136,16 +136,19 @@ class Proxy(SystemdService):
         the changes doesn't load into the runtime and no changes are made to the ProxySQL runtime.
         """
         queries = ["DELETE FROM mysql_servers"]
-        for node_id in cluster_config.nodes:
-            node = cluster_config.nodes[node_id]
-            if node.status != ClusterNodeStatus.ONLINE:
-                continue
-            if node.type == ClusterNodeType.MASTER:
-                queries.append(f"INSERT INTO mysql_servers (hostgroup_id, hostname, port, status, weight) "
-                               f"VALUES (1, '{node.ip}', {node.db_port}, 'ONLINE', {node.weight})")
-            elif node.type == ClusterNodeType.REPLICA or node.type == ClusterNodeType.READ_ONLY:
-                queries.append(f"INSERT INTO mysql_servers (hostgroup_id, hostname, port, status, weight) "
-                               f"VALUES (2, '{node.ip}', {node.db_port}, 'ONLINE', {node.weight})")
+        for node_id in cluster_config.online_master_node_ids:
+            node = cluster_config.get_node(node_id)
+            queries.append(
+                f"INSERT INTO mysql_servers (hostgroup_id, hostname, port, status, weight) "
+                f"VALUES (1, '{node.ip}', {node.db_port}, 'ONLINE', {node.weight})"
+            )
+
+        for node_id in (cluster_config.online_replica_node_ids + cluster_config.online_standby_node_ids):
+            node = cluster_config.get_node(node_id)
+            queries.append(
+                f"INSERT INTO mysql_servers (hostgroup_id, hostname, port, status, weight) "
+                f"VALUES (2, '{node.ip}', {node.db_port}, 'ONLINE', {node.weight})"
+            )
 
         queries.append("LOAD MYSQL SERVERS TO RUNTIME")
         queries.append("SAVE MYSQL SERVERS TO DISK")
@@ -188,10 +191,8 @@ class Proxy(SystemdService):
             return [], [], []
 
         db_client:DatabaseClient|None = None
-        for node_id in config.nodes:
-            node = config.nodes[node_id]
-            if node.type not in [ClusterNodeType.MASTER, ClusterNodeType.REPLICA] or node.status != ClusterNodeStatus.ONLINE:
-                continue
+        for node_id in (config.online_master_node_ids + config.online_replica_node_ids):
+            node = config.get_node(node_id)
             with contextlib.suppress(Exception):
                 db_client = DatabaseClient(
                     db_type="mysql",
@@ -328,7 +329,7 @@ class Proxy(SystemdService):
         for proxy_id in proxies:
             try:
                 proxy = Proxy(proxy_id)
-                proxy.sync_servers()
+                proxy.sync_servers(cluster_config=config)
             except Exception as e:
                 print(f"Failed to sync servers for ProxySQL {proxy_id}: {e}")
                 traceback.print_exc()

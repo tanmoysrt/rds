@@ -81,6 +81,8 @@ class EtcdStateMonitor:
                             break
 
                         parsed_event = parse_etcd_watch_event(event)
+                        if not parsed_event:
+                            continue
                         # Blocking call
                         self.act_on_kv_event(cluster_id, parsed_event)
             except Exception as e:

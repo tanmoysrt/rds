@@ -1,8 +1,15 @@
+import contextlib
 import json
 import os
 import tempfile
+from functools import cache
 
+from cryptography.utils import cached_property
 from filelock import FileLock
+
+from generated.extras_pb2 import ClusterConfig as ClusterConfigProtobufMessage
+from generated.extras_pb2 import ClusterNodeConfig, ClusterNodeStatus, ClusterNodeType
+from server.internal.etcd_client import Etcd3Client
 
 
 class ServerConfig:
@@ -99,3 +106,133 @@ class ServerConfig:
             with open(self._config_file, 'w') as f:
                 json.dump(self._config, f, indent=4)
 
+
+
+class ClusterConfig:
+    """
+    It's a wrapper around ClusterConfig Protobuf Message
+    To add additional functionality
+    """
+    def __init__(self, etcd_client:Etcd3Client|None, cluster_id:str):
+        self.cluster_id = cluster_id
+        self.etcd_client = etcd_client
+        self._proto:ClusterConfigProtobufMessage = ClusterConfigProtobufMessage()
+        if self.etcd_client:
+            self._load()
+
+    def __getattr__(self, name):
+        # Delegate attribute access to the protobuf instance
+        return getattr(self._proto, name)
+
+    def __dir__(self):
+        # Combine ClusterConfig and protobuf attributes for better autocomplete
+        return list(set(list(super().__dir__()) + list(dir(self._proto))))
+
+    @classmethod
+    def from_base(cls, base_obj: ClusterConfigProtobufMessage, cluster_id:str) -> 'ClusterConfig':
+        """
+        Creates a ClusterConfig instance from a base protobuf object.
+        :param base_obj: The base protobuf object to copy from.
+        :param cluster_id: The cluster ID for this configuration.
+        :return: A new ClusterConfig instance.
+        """
+        obj = cls(etcd_client=None, cluster_id=cluster_id)
+        obj._proto = base_obj
+        return obj
+
+    @classmethod
+    def from_serialized_string(cls, serialized_str: bytes, cluster_id:str) -> 'ClusterConfig':
+        """
+        Creates a ClusterConfig instance from a serialized string.
+        :param serialized_str: The serialized protobuf string.
+        :param cluster_id: The cluster ID for this configuration.
+        :return: A new ClusterConfig instance.
+        """
+        obj = cls(etcd_client=None, cluster_id=cluster_id)
+        obj._proto.ParseFromString(serialized_str)
+        return obj
+
+
+    def reload(self):
+        """Reloads the cluster configuration from etcd."""
+        self._load()
+        self._filter_nodes.cache_clear()
+
+    def get_node(self, node_id:str) -> ClusterNodeConfig:
+        if node_id not in self.nodes:
+            raise ValueError(f"Node with id {node_id} not found in cluster config")
+        return self.nodes[node_id]
+
+    @property
+    def node_ids(self) -> list[str]:
+        return list(self.nodes.keys())
+
+    @property
+    def online_master_node_ids(self) -> list[str]:
+        """Returns a list of online master node IDs."""
+        return self._filter_nodes(ClusterNodeType.MASTER, ClusterNodeStatus.ONLINE)
+
+    @property
+    def offline_master_node_ids(self) -> list[str]:
+        """Returns a list of offline master node IDs."""
+        return self._filter_nodes(ClusterNodeType.MASTER, ClusterNodeStatus.OFFLINE)
+
+    @property
+    def online_replica_node_ids(self) -> list[str]:
+        """Returns a list of online replica node IDs."""
+        return self._filter_nodes(ClusterNodeType.REPLICA, ClusterNodeStatus.ONLINE)
+
+    @property
+    def offline_replica_node_ids(self) -> list[str]:
+        return self._filter_nodes(ClusterNodeType.REPLICA, ClusterNodeStatus.OFFLINE)
+
+    @property
+    def online_read_only_node_ids(self) -> list[str]:
+        """Returns a list of online read-only node IDs."""
+        return self._filter_nodes(ClusterNodeType.READ_ONLY, ClusterNodeStatus.ONLINE)
+
+    @property
+    def offline_read_only_node_ids(self) -> list[str]:
+        """Returns a list of offline read-only node IDs."""
+        return self._filter_nodes(ClusterNodeType.READ_ONLY, ClusterNodeStatus.OFFLINE)
+
+    @property
+    def online_standby_node_ids(self) -> list[str]:
+        """Returns a list of online standby node IDs."""
+        return self._filter_nodes(ClusterNodeType.STANDBY, ClusterNodeStatus.ONLINE)
+
+    @property
+    def offline_standby_node_ids(self) -> list[str]:
+        """Returns a list of offline standby node IDs."""
+        return self._filter_nodes(ClusterNodeType.STANDBY, ClusterNodeStatus.OFFLINE)
+
+    @cache
+    def _filter_nodes(self, node_type:ClusterNodeType, status:ClusterNodeStatus) -> list[str]:
+        """
+        Returns a list of node IDs filtered by type and status.
+        :param node_type: The type of the node (MASTER or REPLICA).
+        :param status: The status of the node (ONLINE or OFFLINE).
+        :return: List of node IDs matching the criteria.
+        """
+        return [
+            node_id for node_id in self.nodes if
+            self.nodes[node_id].type == node_type and
+            self.nodes[node_id].status == status
+        ]
+
+    def _load(self):
+        if not self.etcd_client:
+            raise ValueError("Failed To load.\nEtcd client is not initialized.\nPossible Reason - Instance created from ClusterConfigProtobufMessage object")
+
+        value = self.etcd_client.get(self.kv_cluster_config_key)
+        if not value:
+            raise ValueError(f"Cluster config not found for cluster_id: {self.cluster_id}")
+        self._proto.ParseFromString(value[0])
+
+    @cached_property
+    def kv_cluster_config_key(self) -> str:
+        return ServerConfig().kv_cluster_config_key.format(cluster_id=self.cluster_id)
+
+    def __del__(self):
+        with contextlib.suppress(Exception):
+            self.etcd_client.close()

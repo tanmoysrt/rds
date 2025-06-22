@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 from typing import override
 
-from generated.extras_pb2 import ClusterConfig, ClusterNodeStatus, ClusterNodeType, DBHealthStatus, DBType
+from generated.extras_pb2 import DBHealthStatus, DBType
 from generated.inter_agent_pb2 import (
     RequestRsyncAccessRequest,
     RequestRsyncAccessResponse,
@@ -20,6 +20,7 @@ from server.helpers import (
     render_template,
     wait_for_ssh_daemon,
 )
+from server.internal.config import ClusterConfig
 from server.internal.db_client import DatabaseClient
 from server.internal.etcd_client import Etcd3Client
 from server.internal.utils import get_redis_client
@@ -71,13 +72,7 @@ class MySQL(SystemdService):
             user=etcd_username,
             password=etcd_password,
         )
-        cluster_config = ClusterConfig()
-        value = etcd_client.get(server_config.kv_cluster_config_key.format(cluster_id=cluster_id))
-        if not value:
-            raise ValueError(f"Cluster with ID {cluster_id} does not exist or is not configured properly.")
-        cluster_config.ParseFromString(value[0])
-        if not cluster_config:
-            raise ValueError(f"Cluster with ID {cluster_id} is corrupted or not configured properly.")
+        cluster_config = ClusterConfig(etcd_client=etcd_client, cluster_id=cluster_id)
         if not cluster_config.proxy:
             raise ValueError("Cluster with ID {cluster_id} does not have a proxy configured. Please configure a proxy for the cluster before creating MySQL instances.")
 
@@ -149,18 +144,11 @@ class MySQL(SystemdService):
         """
         Replicate this MySQL instance from the one master node.
         """
-        config = self.cluster_config
-        master_node_id = None
-        master_node_config = None
+        if len(self.cluster_config.online_master_node_ids) == 0:
+            raise Exception("No online master node found in the cluster configuration for replication.")
 
-        for node_id in config.nodes:
-            if node_id != self.model.id and config.nodes[node_id].type == ClusterNodeType.MASTER and config.nodes[node_id].status == ClusterNodeStatus.ONLINE:
-                master_node_id = node_id
-                master_node_config = config.nodes[node_id]
-                break
-
-        if not master_node_id or not master_node_config:
-            raise Exception("In the cluster no valid master node found for replication.")
+        master_node_id = self.cluster_config.online_master_node_ids[1]
+        master_node_config = self.cluster_config.get_node(master_node_id)
 
         # Ensure that MySQL node is stopped before making changes
         self.stop()
@@ -216,8 +204,8 @@ class MySQL(SystemdService):
                 db_type=self.model.service,
                 host=master_node_config.ip,
                 port=master_node_config.db_port,
-                user=config.replication_user,
-                password=config.replication_password,
+                user=self.cluster_config.replication_user,
+                password=self.cluster_config.replication_password,
             ) as master_db_conn:
                 # Phase 2 : Take read lock on the master database and rsync the data directory
                 # to ensure that we have a consistent snapshot of the database.
@@ -253,22 +241,12 @@ class MySQL(SystemdService):
             raise Exception("Failed to connect to the MySQL database after waiting")
 
     def start_replication(self, master_node_id:str|None=None):
-        config = self.cluster_config
-        # Pick the master node
-        master_node_config = None
-        if master_node_id:
-            if master_node_id not in config.nodes:
-                raise ValueError("Invalid master node ID provided for replication.")
-            master_node_config = config.nodes[master_node_id]
-        else:
-            # Pick a random master node from the cluster configuration
-            for node_id in config.nodes:
-                if node_id != self.model.id and config.nodes[node_id].type == ClusterNodeType.MASTER and config.nodes[node_id].status == ClusterNodeStatus.ONLINE:
-                    master_node_config = config.nodes[node_id]
-                    break
+        if not master_node_id:
+            if len(self.cluster_config.online_master_node_ids) == 0:
+                raise Exception("No online master node found in the cluster configuration for replication.")
+            master_node_id = self.cluster_config.online_master_node_ids[0]
 
-        if not master_node_config:
-            raise Exception("In cluster configuration, no master node found")
+        master_node_config = self.cluster_config.get_node(master_node_id)
 
         self.stop_replication()
         conn = self.db_conn
@@ -280,7 +258,7 @@ class MySQL(SystemdService):
                             MASTER_USER = %s,
                             MASTER_PASSWORD = %s, 
                             MASTER_USE_GTID = slave_pos""",
-            (master_node_config.ip, master_node_config.db_port, config.replication_user, config.replication_password),
+            (master_node_config.ip, master_node_config.db_port, self.cluster_config.replication_user, self.cluster_config.replication_password),
         )
         conn.query("START SLAVE")
 

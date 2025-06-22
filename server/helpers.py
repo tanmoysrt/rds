@@ -14,8 +14,9 @@ import paramiko
 from etcd3.events import Event as ETcd3Event
 from jinja2 import Template
 
-from generated.extras_pb2 import ClusterConfig, DBHealthStatus
+from generated.extras_pb2 import DBHealthStatus
 from server import ServerConfig
+from server.internal.config import ClusterConfig
 from server.internal.db.models import SystemdServiceModel
 from server.internal.etcd_client import Etcd3Client
 
@@ -201,9 +202,7 @@ def parse_etcd_watch_event(event:ETcd3Event) -> KVEvent|None:
 
         if subject == "config":
             e.event_type = "config"
-            config = ClusterConfig()
-            config.ParseFromString(event.value)
-            e.data = config
+            e.data = ClusterConfig.from_serialized_string(event.value, cluster_id)
             return e
 
         if subject == "nodes" and len(key_parts) == 6:
