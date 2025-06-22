@@ -25,6 +25,8 @@ def execute_job(job_id: int):
     # Update job status to RUNNING
     try:
         job.status = JobStatus.RUNNING.value
+        if not job.enqueued_at:
+            job.enqueued_at = datetime.now()
         job.started_at = datetime.now()
         job.save()
     except:

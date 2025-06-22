@@ -5,6 +5,7 @@ from rq.job import Job as RQJob
 
 from server.internal.bg_job.job import execute_job, queue
 from server.internal.db.models import JobModel, JobStatus
+from server.internal.scheduler import RQScheduler
 from server.internal.utils import get_redis_client
 
 
@@ -45,6 +46,9 @@ def schedule_job(job: JobModel) -> JobStatus:
     try:
         if job.scheduled_at:
             job.status = JobStatus.SCHEDULED.value
+            if job.scheduled_at < datetime.now():
+                job.scheduled_at = datetime.now()
+                job.status = JobStatus.QUEUED.value
         else:
             job.scheduled_at = datetime.now()
             job.status = JobStatus.QUEUED.value
@@ -58,6 +62,15 @@ def schedule_job(job: JobModel) -> JobStatus:
                 timeout=job.timeout,
                 job_id=str(job.id),
                 result_ttl=48 * 3600
+            )
+        elif job.status == JobStatus.SCHEDULED.value:
+            RQScheduler.enqueue_at(
+                job.scheduled_at,
+                execute_job,
+                job.id,
+                timeout=job.timeout,
+                job_id=str(job.id),
+                job_result_ttl=48 * 3600,
             )
 
     except Exception:
