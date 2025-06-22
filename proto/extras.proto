@@ -39,10 +39,6 @@ message ClusterNodeConfig {
 message ClusterProxyConfig {
   string ip = 1;
   int32 agent_port = 2;
-  int32 read_port = 3;
-  int32 read_write_port = 4;
-  string monitor_user = 5;
-  string monitor_password_hash = 6;
 }
 
 message ClusterConfig {

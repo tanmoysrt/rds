@@ -52,20 +52,12 @@ class ClusterNodeConfig(_message.Message):
     def __init__(self, type: _Optional[_Union[ClusterNodeType, str]] = ..., ip: _Optional[str] = ..., agent_port: _Optional[int] = ..., db_port: _Optional[int] = ...) -> None: ...
 
 class ClusterProxyConfig(_message.Message):
-    __slots__ = ("ip", "agent_port", "read_port", "read_write_port", "monitor_user", "monitor_password_hash")
+    __slots__ = ("ip", "agent_port")
     IP_FIELD_NUMBER: _ClassVar[int]
     AGENT_PORT_FIELD_NUMBER: _ClassVar[int]
-    READ_PORT_FIELD_NUMBER: _ClassVar[int]
-    READ_WRITE_PORT_FIELD_NUMBER: _ClassVar[int]
-    MONITOR_USER_FIELD_NUMBER: _ClassVar[int]
-    MONITOR_PASSWORD_HASH_FIELD_NUMBER: _ClassVar[int]
     ip: str
     agent_port: int
-    read_port: int
-    read_write_port: int
-    monitor_user: str
-    monitor_password_hash: str
-    def __init__(self, ip: _Optional[str] = ..., agent_port: _Optional[int] = ..., read_port: _Optional[int] = ..., read_write_port: _Optional[int] = ..., monitor_user: _Optional[str] = ..., monitor_password_hash: _Optional[str] = ...) -> None: ...
+    def __init__(self, ip: _Optional[str] = ..., agent_port: _Optional[int] = ...) -> None: ...
 
 class ClusterConfig(_message.Message):
     __slots__ = ("version", "current_master", "desired_master", "promoted_by", "replica_count", "min_replication_lag_ms", "failover_cooldown_ms", "last_failover_timestamp", "nodes", "proxy", "replication_user", "replication_password", "shared_token")
