@@ -18,6 +18,7 @@ from server.internal.etcd_client import Etcd3Client
 from server.internal.scheduler import RQScheduler
 from server.internal.utils import get_redis_client
 from server.monitor.dead_node_detector import DeadNodeDetector
+from server.monitor.election import NodeElection
 
 
 class EtcdStateMonitor:
@@ -36,6 +37,7 @@ class EtcdStateMonitor:
         self.stop_events: dict[str, threading.Event] = {}
         self.watch_threads: dict[str, threading.Thread] = {}
         self.dead_node_detector:DeadNodeDetector = DeadNodeDetector(timeout_seconds=3)
+        self.node_election:NodeElection = NodeElection()
 
     def act_on_kv_event(self, cluster_id:str, event:KVEvent):
         try:
@@ -43,6 +45,7 @@ class EtcdStateMonitor:
             if event.action == "update" and event.event_type == "config" and event.data:
                 Proxy.sync_backend_servers_for_all_proxies(cluster_id=cluster_id, config=event.data)
                 MySQL.sync_replication_config_for_all_servers(cluster_id=cluster_id, config=event.data)
+                self.node_election.elect_new_master_if_required(cluster_id=cluster_id, config=event.data)
             # 2: Track health status of nodes
             if event.action == "update" and event.event_type == "status" and event.data:
                 self.dead_node_detector.update(event.node_id, event.data)

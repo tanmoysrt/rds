@@ -2,7 +2,6 @@ import contextlib
 import random
 import subprocess
 import time
-import traceback
 from pathlib import Path
 from typing import override
 
@@ -389,12 +388,13 @@ class MySQL(SystemdService):
         # Fetch all available ProxySQL instances
         server_ids = MySQL.get_all(cluster_id=cluster_id)
         for server_id in server_ids:
+            if server_id in (config.offline_replica_node_ids + config.offline_standby_node_ids + config.offline_master_node_ids + config.offline_read_only_node_ids):
+                continue
             try:
                 db = MySQL(server_id)
                 db.sync_replication_config(cluster_config=config)
             except Exception as e:
-                print(f"Failed to sync servers for ProxySQL {server_id}: {e}")
-                traceback.print_exc()
+                print(f"Failed to sync replication config for server {server_id}: {e}")
 
 
     @staticmethod

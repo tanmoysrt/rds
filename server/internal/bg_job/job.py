@@ -14,8 +14,8 @@ from server.internal.proto_utils import (
 from server.internal.utils import get_redis_client
 
 
-def queue():
-    return Queue("default", connection=get_redis_client())
+def queue(name:str="default"):
+    return Queue(name, connection=get_redis_client())
 
 def execute_job(job_id: int):
     job : JobModel = JobModel.get_by_id(job_id)

@@ -225,6 +225,22 @@ class ClusterConfig:
             msg.nodes[node_id].status = ClusterNodeStatus.ONLINE
         return msg
 
+    def copy_and_switch_master_replica(self, new_master:str, new_replica:str) -> ClusterConfigProtobufMessage:
+        """
+        Creates a copy of the current configuration and switches the roles of the specified nodes.
+        :param new_master: The ID of the node to be promoted to master.
+        :param new_replica: The ID of the node to be demoted to replica.
+        :return: A new ClusterConfigProtobufMessage with the updated roles.
+        """
+        msg = ClusterConfigProtobufMessage()
+        msg.CopyFrom(self._proto)
+        if new_master in msg.nodes:
+            msg.nodes[new_master].type = ClusterNodeType.MASTER
+        if new_master in msg.nodes:
+            msg.nodes[new_replica].type = ClusterNodeType.REPLICA
+        return msg
+
+
 
     @cache
     def _filter_nodes(self, node_type:ClusterNodeType, status:ClusterNodeStatus) -> list[str]:
