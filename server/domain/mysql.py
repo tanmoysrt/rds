@@ -146,7 +146,7 @@ class MySQL(SystemdService):
         if len(self.cluster_config.online_master_node_ids) == 0:
             raise Exception("No online master node found in the cluster configuration for replication.")
 
-        master_node_id = self.cluster_config.online_master_node_ids[1]
+        master_node_id = self.cluster_config.online_master_node_ids[0]
         master_node_config = self.cluster_config.get_node(master_node_id)
 
         # Ensure that MySQL node is stopped before making changes
