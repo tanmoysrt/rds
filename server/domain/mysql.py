@@ -156,7 +156,7 @@ class MySQL(SystemdService):
         src_node_agent = self.get_agent_for_node(master_node_id)
         rsync_access: RequestRsyncAccessResponse = src_node_agent.inter_agent_service.RequestRsyncAccess(RequestRsyncAccessRequest(
             cluster_id=self.model.cluster_id,
-            node_id=self.model.id,
+            node_id=master_node_id
         ))
 
         def revoke_rsync_access():
@@ -184,6 +184,10 @@ class MySQL(SystemdService):
                 "--exclude", "mariadb-bin.index",
                 "--exclude", "galera.*",
                 "--exclude", "ib_logfile*",
+                "--exclude", "ibtmp1",
+                "--exclude", "mysqld-relay-bin.*",
+                "--exclude", "relay-log.info",
+                "--exclude", "mysql-error.log",
                 "--inplace", # To avoid creating temporary files, for large ibd files it's useful
                 "-e", f"ssh -p {rsync_access.port} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null",
                 f"{rsync_access.username}@{master_node_config.ip}:/data/", self.data_path
@@ -208,15 +212,22 @@ class MySQL(SystemdService):
             ) as master_db_conn:
                 # Phase 2 : Take read lock on the master database and rsync the data directory
                 # to ensure that we have a consistent snapshot of the database.
+                master_db_conn.query("FLUSH LOGS")
                 master_db_conn.query("FLUSH TABLES WITH READ LOCK")
+
+                # Final copy
                 subprocess.run(command, check=True)
+
+                # Record the current GTID position
+                slave_pos_res = master_db_conn.query("SELECT @@GLOBAL.gtid_current_pos")
+                slave_pos = slave_pos_res[0].get("@@GLOBAL.gtid_current_pos","") if len(slave_pos_res) >= 1 else ""
 
                 # Release the read lock
                 master_db_conn.query("UNLOCK TABLES")
 
             self.start()
             self.wait_for_db(timeout=180)
-            self.configure_as_replica()
+            self.configure_as_replica(slave_pos=slave_pos)
         finally:
             revoke_rsync_access()
 
@@ -239,7 +250,7 @@ class MySQL(SystemdService):
         if not db_active:
             raise Exception("Failed to connect to the MySQL database after waiting")
 
-    def configure_as_replica(self):
+    def configure_as_replica(self, slave_pos:str|None=None):
         if len(self.cluster_config.online_master_node_ids) == 0:
             raise Exception("No online master node found in the cluster configuration for replication.")
 
@@ -249,13 +260,17 @@ class MySQL(SystemdService):
         with self.db_conn as conn:
             conn.query("STOP SLAVE")
             conn.query("RESET SLAVE ALL")
+            # Set the slave_pos if provided, otherwise use the current GTID position
+            if slave_pos:
+                conn.query("SET GLOBAL gtid_slave_pos = %s", (slave_pos,))
+
             conn.query(
-                """CHANGE MASTER TO
+                f"""CHANGE MASTER TO
                                 MASTER_HOST = %s,
                                 MASTER_PORT = %s,
                                 MASTER_USER = %s,
                                 MASTER_PASSWORD = %s, 
-                                MASTER_USE_GTID = slave_pos""",
+                                MASTER_USE_GTID = {"current_pos" if slave_pos else "slave_pos"}""",
                 (master_node_config.ip, master_node_config.db_port, self.cluster_config.replication_user, self.cluster_config.replication_password),
             )
             self.set_read_only_mode(True)
@@ -323,7 +338,7 @@ class MySQL(SystemdService):
         else:
             conn.query("CREATE USER IF NOT EXISTS %s@'%%' IDENTIFIED BY %s", (config.replication_user, config.replication_password))
 
-        conn.query("GRANT REPLICATION SLAVE, REPLICATION CLIENT, RELOAD ON *.* TO %s@'%%'", (config.replication_user,))
+        conn.query("GRANT REPLICATION SLAVE, REPLICATION CLIENT, RELOAD, READ_ONLY ADMIN ON *.* TO %s@'%%'", (config.replication_user,))
         conn.query("GRANT SELECT ON mysql.user TO %s@'%%'", (config.replication_user,))
         conn.query("FLUSH PRIVILEGES")
 
