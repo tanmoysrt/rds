@@ -345,6 +345,9 @@ class MySQL(SystemdService):
     def set_read_only_mode(self, read_only:bool):
         """
         Update the read-only mode of the MySQL instance.
+
+        NOTE: Users with `SUPER` privilege can still write to the database even in read-only mode.
+        So be cautious while granting `SUPER` privilege to users + avoid syncing them on ProxySQL.
         """
         conn = self.db_conn
 

@@ -1,5 +1,6 @@
 anyio==4.9.0
 bcrypt==4.3.0
+blinker==1.9.0
 certifi==2025.6.15
 cffi==1.17.1
 charset-normalizer==3.4.2
@@ -8,12 +9,14 @@ crontab==1.0.4
 cryptography==45.0.4
 etcd3 @ git+https://github.com/kragniz/python-etcd3.git@e58a899579ba416449c4e225b61f039457c8072a
 filelock==3.18.0
+Flask==3.1.1
 freezegun==1.5.2
 future==1.0.0
 grpcio==1.73.0
 grpcio-tools==1.73.0
 honcho==2.0.0
 idna==3.10
+itsdangerous==2.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.2
 mysqlclient==2.2.7
@@ -39,3 +42,4 @@ types-protobuf==6.30.2.20250516
 typing_extensions==4.14.0
 urllib3==2.5.0
 watchfiles==1.1.0
+Werkzeug==3.1.3

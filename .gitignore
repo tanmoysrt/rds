@@ -11,3 +11,4 @@ client/test.py
 certs
 server/__init__.py
 visualizer
+Dockerfile
