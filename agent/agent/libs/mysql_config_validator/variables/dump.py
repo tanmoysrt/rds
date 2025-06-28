@@ -1,10 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 class DatabaseType(Enum):
     MYSQL = "mysql"
@@ -41,6 +38,21 @@ class VariableDefinition:
             "is_global": self.is_global,
             "is_session": self.is_session
         }
+
+    @staticmethod
+    def from_dict(d: Dict[str, Any]) -> "VariableDefinition":
+        return VariableDefinition(
+            name=d.get("name", ""),
+            type=VariableType(d["type"]),
+            default=d.get("default"),
+            min_value=d.get("min"),
+            max_value=d.get("max"),
+            allowed_values=d.get("allowed_values"),
+            is_dynamic=d.get("is_dynamic", False),
+            is_global=d.get("is_global", False),
+            is_session=d.get("is_session", False),
+            platform_specific=d.get("platform_specific")
+        )
 
 class VariableDumper:
     def __init__(self, db_type: DatabaseType, version: str = "latest"):
