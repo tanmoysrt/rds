@@ -13,7 +13,7 @@ class DatabaseClient:
         self.host = host
         self.port:int = int(port) if isinstance(port, str) else port
         self.user = user
-        self.password = password
+        self.password = password or ""
         self.schema = schema
         self.autocommit = autocommit
         self.connect_timeout = connect_timeout

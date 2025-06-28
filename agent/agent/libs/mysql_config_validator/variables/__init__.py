@@ -1,0 +1,1 @@
+from agent.libs.mysql_config_validator.variables.dump import VariableDefinition

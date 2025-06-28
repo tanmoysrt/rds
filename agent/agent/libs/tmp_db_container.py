@@ -12,7 +12,7 @@ class TmpDBContainer:
         self._docker_client: DockerClient|None = docker.from_env()
         self._id = None
         self._db_type:str = db_type
-        self._image: str = f"docker.io/{db_type}"
+        self._image: str = db_type
         self._tag: str = tag
         self._ip: str|None = None
         self._port: int|None = None
@@ -21,7 +21,7 @@ class TmpDBContainer:
         self.db_password: str = db_password
         if auto_start:
             self.start()
-            self.wait_for_log("ready for connections", timeout=60)
+            self.wait_for_db_ready(timeout=60)
 
     @property
     def environment(self) -> dict[str, str]:
@@ -63,6 +63,15 @@ class TmpDBContainer:
             time.sleep(1)
         raise TimeoutError(f"Log message '{log_message}' not found within {timeout} seconds.")
 
+    def wait_for_db_ready(self, timeout:int=60):
+        end_time = time.time() + timeout
+        db_client = self.get_db()
+        while time.time() < end_time:
+            if db_client.is_reachable():
+                return True
+            time.sleep(1)
+        raise TimeoutError(f"Database not ready within {timeout} seconds.")
+
     def get_logs(self):
         if not self._docker_client or not self._id:
             raise RuntimeError("Container is not running or has not been started.")
@@ -95,8 +104,8 @@ class TmpDBContainer:
             schema=schema
         )
 
-    def __enter__(self):
-        self.start()
+    def __enter__(self) -> "TmpDBContainer":
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.cleanup()

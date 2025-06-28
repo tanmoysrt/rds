@@ -1,0 +1,7721 @@
+{
+    "binlog_gtid_index_page_size": {
+        "type": "int",
+        "default": 4096,
+        "min": 64,
+        "max": 16777216,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_tc_size": {
+        "type": "int",
+        "default": 24576,
+        "min": 12288,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "sql_mode": {
+        "type": "set",
+        "default": [
+            "STRICT_TRANS_TABLES",
+            "ERROR_FOR_DIVISION_BY_ZERO",
+            "NO_AUTO_CREATE_USER",
+            "NO_ENGINE_SUBSTITUTION"
+        ],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "REAL_AS_FLOAT",
+            "PIPES_AS_CONCAT",
+            "ANSI_QUOTES",
+            "IGNORE_SPACE",
+            "IGNORE_BAD_TABLE_OPTIONS",
+            "ONLY_FULL_GROUP_BY",
+            "NO_UNSIGNED_SUBTRACTION",
+            "NO_DIR_IN_CREATE",
+            "POSTGRESQL",
+            "ORACLE",
+            "MSSQL",
+            "DB2",
+            "MAXDB",
+            "NO_KEY_OPTIONS",
+            "NO_TABLE_OPTIONS",
+            "NO_FIELD_OPTIONS",
+            "MYSQL323",
+            "MYSQL40",
+            "ANSI",
+            "NO_AUTO_VALUE_ON_ZERO",
+            "NO_BACKSLASH_ESCAPES",
+            "STRICT_TRANS_TABLES",
+            "STRICT_ALL_TABLES",
+            "NO_ZERO_IN_DATE",
+            "NO_ZERO_DATE",
+            "ALLOW_INVALID_DATES",
+            "ERROR_FOR_DIVISION_BY_ZERO",
+            "TRADITIONAL",
+            "NO_AUTO_CREATE_USER",
+            "HIGH_NOT_PRECEDENCE",
+            "NO_ENGINE_SUBSTITUTION",
+            "PAD_CHAR_TO_FULL_LENGTH",
+            "EMPTY_STRING_IS_NULL",
+            "SIMULTANEOUS_ASSIGNMENT",
+            "TIME_ROUND_FRACTIONAL"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "binlog_format": {
+        "type": "text",
+        "default": "MIXED",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "MIXED",
+            "STATEMENT",
+            "ROW"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "binlog_space_limit": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_events_waits_history_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1024,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "automatic_sp_privileges": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_cond_classes": {
+        "type": "int",
+        "default": 90,
+        "min": 0,
+        "max": 256,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "read_only": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_cond_instances": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_flush_log_at_timeout": {
+        "type": "int",
+        "default": 1,
+        "min": 0,
+        "max": 2700,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_rwlock_instances": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 104857600,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_encrypt_temporary_tables": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_prepared_statements_instances": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "disconnect_on_expired_password": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_events_waits_history_long_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "gtid_binlog_pos": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_mutex_instances": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 104857600,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_disabled_statements": {
+        "type": "set",
+        "default": [
+            "sp"
+        ],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "slave",
+            "sp"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "time_zone": {
+        "type": "text",
+        "default": "SYSTEM",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_stats_transient_sample_pages": {
+        "type": "int",
+        "default": 8,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "have_crypt": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "slow_launch_time": {
+        "type": "int",
+        "default": 2,
+        "min": 0,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_rwlock_classes": {
+        "type": "int",
+        "default": 50,
+        "min": 0,
+        "max": 256,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_slow_max_warnings": {
+        "type": "int",
+        "default": 10,
+        "min": 0,
+        "max": 1000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_max_socket_classes": {
+        "type": "int",
+        "default": 10,
+        "min": 0,
+        "max": 256,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_adaptive_hash_index_parts": {
+        "type": "int",
+        "default": 8,
+        "min": 1,
+        "max": 512,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_accounts_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "thread_pool_oversubscribe": {
+        "type": "int",
+        "default": 3,
+        "min": 1,
+        "max": 1000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "concurrent_insert": {
+        "type": "text",
+        "default": "AUTO",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NEVER",
+            "AUTO",
+            "ALWAYS"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "gtid_strict_mode": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_ignore_apply_errors": {
+        "type": "int",
+        "default": 7,
+        "min": 0,
+        "max": 7,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_ft_num_word_optimize": {
+        "type": "int",
+        "default": 2000,
+        "min": 1000,
+        "max": 10000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_index_stat": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_drupal_282555_workaround": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_mutex_classes": {
+        "type": "int",
+        "default": 210,
+        "min": 0,
+        "max": 256,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "tmp_memory_table_size": {
+        "type": "int",
+        "default": 16777216,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_patch_version": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "report_host": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_events_stages_history_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1024,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_sort_buffer_size": {
+        "type": "int",
+        "default": 1048576,
+        "min": 65536,
+        "max": 67108864,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_stage_classes": {
+        "type": "int",
+        "default": 160,
+        "min": 0,
+        "max": 256,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_slow_min_examined_row_limit": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_data_home_dir": {
+        "type": "text",
+        "default": "/var/lib/mysql/",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "large_files_support": {
+        "type": "bool",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_events_transactions_history_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1024,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "default_master_connection": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_max_sql_text_length": {
+        "type": "int",
+        "default": 1024,
+        "min": 0,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_auto_increment_control": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "bind_address": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "back_log": {
+        "type": "int",
+        "default": 150,
+        "min": 0,
+        "max": 65535,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "have_ssl": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "group_concat_max_len": {
+        "type": "int",
+        "default": 1048576,
+        "min": 4,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "binlog_file_cache_size": {
+        "type": "int",
+        "default": 16384,
+        "min": 8192,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "range_alloc_block_size": {
+        "type": "int",
+        "default": 4096,
+        "min": 4096,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_setup_objects_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_write_lock_count": {
+        "type": "int",
+        "default": 4294967295,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_error": {
+        "type": "text",
+        "default": "0",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_tmpdir": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_events_transactions_history_long_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_encryption_threads": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 255,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "character_set_results": {
+        "type": "text",
+        "default": "utf8mb4",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "myisam_recover_options": {
+        "type": "set",
+        "default": [
+            "BACKUP",
+            "QUICK"
+        ],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "DEFAULT",
+            "BACKUP",
+            "FORCE",
+            "QUICK",
+            "BACKUP_ALL",
+            "OFF"
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_setup_actors_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1024,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "rpl_semi_sync_master_timeout": {
+        "type": "int",
+        "default": 10000,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "system_versioning_alter_history": {
+        "type": "text",
+        "default": "ERROR",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "ERROR",
+            "KEEP"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "low_priority_updates": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "collation_connection": {
+        "type": "text",
+        "default": "utf8mb4_uca1400_ai_ci",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "report_password": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_program_instances": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_dbug_option": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_thread_instances": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "sql_big_selects": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "rpl_semi_sync_slave_kill_conn_timeout": {
+        "type": "int",
+        "default": 5,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "transaction_alloc_block_size": {
+        "type": "int",
+        "default": 8192,
+        "min": 1024,
+        "max": 134217728,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "lc_messages_dir": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_flushing_avg_loops": {
+        "type": "int",
+        "default": 30,
+        "min": 1,
+        "max": 1000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "connect_timeout": {
+        "type": "int",
+        "default": 10,
+        "min": 2,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "sync_frm": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "character_set_connection": {
+        "type": "text",
+        "default": "utf8mb4",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "binlog_row_metadata": {
+        "type": "text",
+        "default": "NO_LOG",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NO_LOG",
+            "MINIMAL",
+            "FULL"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_prune_level": {
+        "type": "int",
+        "default": 2,
+        "min": 0,
+        "max": 2,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "aria_page_checksum": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "key_cache_division_limit": {
+        "type": "int",
+        "default": 100,
+        "min": 1,
+        "max": 100,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_io_capacity_max": {
+        "type": "int",
+        "default": 4294967295,
+        "min": 100,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_key_next_find_cost": {
+        "type": "float",
+        "default": 0.082347,
+        "min": 0.0,
+        "max": 1000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_io_capacity": {
+        "type": "int",
+        "default": 200,
+        "min": 100,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "large_pages": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_cluster_address": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "event_scheduler": {
+        "type": "text",
+        "default": "OFF",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "OFF",
+            "ON",
+            "DISABLED",
+            "ORIGINAL"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_group_commit": {
+        "type": "text",
+        "default": "none",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "none",
+            "hard",
+            "soft"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_row_event_max_size": {
+        "type": "int",
+        "default": 8192,
+        "min": 256,
+        "max": 4294967040,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_metadata_locks": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 104857600,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_open_files": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 9223372036854775807,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_compression_default": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "column_compression_zlib_level": {
+        "type": "int",
+        "default": 6,
+        "min": 0,
+        "max": 9,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_autoextend_increment": {
+        "type": "int",
+        "default": 64,
+        "min": 1,
+        "max": 1000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_parallel_threads": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 16383,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "myisam_data_pointer_size": {
+        "type": "int",
+        "default": 6,
+        "min": 2,
+        "max": 7,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "core_file": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "rpl_semi_sync_slave_delay_master": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "delay_key_write": {
+        "type": "text",
+        "default": "ON",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "OFF",
+            "ON",
+            "ALL"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "sql_auto_is_null": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_digests_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_used_for_temp_tables": {
+        "type": "bool",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "ft_query_expansion_limit": {
+        "type": "int",
+        "default": 20,
+        "min": 0,
+        "max": 1000,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "sql_safe_updates": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "version_comment": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_retry_autocommit": {
+        "type": "int",
+        "default": 1,
+        "min": 0,
+        "max": 10000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "delayed_insert_limit": {
+        "type": "int",
+        "default": 100,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_status_output_locks": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "explicit_defaults_for_timestamp": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "query_prealloc_size": {
+        "type": "int",
+        "default": 32768,
+        "min": 1024,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "key_cache_file_hash_size": {
+        "type": "int",
+        "default": 512,
+        "min": 128,
+        "max": 16384,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "sort_buffer_size": {
+        "type": "int",
+        "default": 2097152,
+        "min": 1024,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "optimizer_disk_read_cost": {
+        "type": "float",
+        "default": 10.24,
+        "min": 0.0,
+        "max": 10000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_rollback_on_timeout": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_connections_needed_for_purge": {
+        "type": "int",
+        "default": 1,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "standard_compliant_cte": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "auto_increment_offset": {
+        "type": "int",
+        "default": 1,
+        "min": 1,
+        "max": 65535,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "aria_repair_threads": {
+        "type": "int",
+        "default": 1,
+        "min": 1,
+        "max": 128,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "log_queries_not_using_indexes": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "join_buffer_space_limit": {
+        "type": "int",
+        "default": 2097152,
+        "min": 2048,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "join_buffer_size": {
+        "type": "int",
+        "default": 262144,
+        "min": 128,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_buffer_pool_load_abort": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "key_buffer_size": {
+        "type": "int",
+        "default": 134217728,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "progress_report_time": {
+        "type": "int",
+        "default": 5,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_statement_time": {
+        "type": "float",
+        "default": 0.0,
+        "min": 0.0,
+        "max": 31536000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "replicate_wild_do_table": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_statement_stack": {
+        "type": "int",
+        "default": 10,
+        "min": 1,
+        "max": 256,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "identity": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "log_slow_query_time": {
+        "type": "float",
+        "default": 10.0,
+        "min": 0.0,
+        "max": 31536000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "character_set_server": {
+        "type": "text",
+        "default": "utf8mb4",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_binlog_size": {
+        "type": "int",
+        "default": 1073741824,
+        "min": 4096,
+        "max": 1073741824,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "rand_seed1": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "column_compression_zlib_wrap": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_log_write_ahead_size": {
+        "type": "int",
+        "default": 512,
+        "min": 512,
+        "max": 4096,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "character_set_system": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_read_only_compressed": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_max_allowed_packet": {
+        "type": "int",
+        "default": 1073741824,
+        "min": 1024,
+        "max": 1073741824,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_direct_non_transactional_updates": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_connect_errors": {
+        "type": "int",
+        "default": 100,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_strict_mode": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "character_sets_dir": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_force_start_after_recovery_failures": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 255,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_certify_nonpk": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_reject_queries": {
+        "type": "text",
+        "default": "NONE",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NONE",
+            "ALL",
+            "ALL_KILL"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_connections": {
+        "type": "int",
+        "default": 151,
+        "min": 10,
+        "max": 100000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "replicate_wild_ignore_table": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "completion_type": {
+        "type": "text",
+        "default": "NO_CHAIN",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NO_CHAIN",
+            "CHAIN",
+            "RELEASE"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "log_slow_verbosity": {
+        "type": "set",
+        "default": [],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "innodb",
+            "query_plan",
+            "explain",
+            "engine",
+            "warnings",
+            "full"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_session_connect_attrs_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "thread_pool_idle_timeout": {
+        "type": "int",
+        "default": 60,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "ft_stopword_file": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_transaction_retry_interval": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 3600,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_heap_table_size": {
+        "type": "int",
+        "default": 16777216,
+        "min": 16384,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_max_table_lock_stat": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "delayed_queue_size": {
+        "type": "int",
+        "default": 1000,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_key_copy_cost": {
+        "type": "float",
+        "default": 0.015685,
+        "min": 0.0,
+        "max": 1000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "column_compression_zlib_strategy": {
+        "type": "text",
+        "default": "DEFAULT_STRATEGY",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "DEFAULT_STRATEGY",
+            "FILTERED",
+            "HUFFMAN_ONLY",
+            "RLE",
+            "FIXED"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "myisam_repair_threads": {
+        "type": "int",
+        "default": 1,
+        "min": 1,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_digest_length": {
+        "type": "int",
+        "default": 1024,
+        "min": 0,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_table_locks": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "lower_case_file_system": {
+        "type": "bool",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "lc_messages": {
+        "type": "text",
+        "default": "en_US",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_insert_delayed_threads": {
+        "type": "int",
+        "default": 20,
+        "min": 0,
+        "max": 16384,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_max_purge_lag_wait": {
+        "type": "int",
+        "default": 4294967295,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_slave_threads": {
+        "type": "int",
+        "default": 1,
+        "min": 1,
+        "max": 512,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_buffer_pool_filename": {
+        "type": "text",
+        "default": "ib_buffer_pool",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "system_versioning_asof": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_max_purge_lag_delay": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 10000000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_memory_classes": {
+        "type": "int",
+        "default": 320,
+        "min": 0,
+        "max": 1024,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_buffer_pool_dump_now": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "net_read_timeout": {
+        "type": "int",
+        "default": 30,
+        "min": 1,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "rand_seed2": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "binlog_alter_two_phase": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_status_output": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_events_statements_history_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1024,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_undo_log_truncate": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_ft_cache_size": {
+        "type": "int",
+        "default": 8000000,
+        "min": 1600000,
+        "max": 1099511627776,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_adaptive_hash_index": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "old": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_encrypt_log": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "character_set_filesystem": {
+        "type": "text",
+        "default": "binary",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "optimizer_key_compare_cost": {
+        "type": "float",
+        "default": 0.011361,
+        "min": 0.0,
+        "max": 1000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_password_errors": {
+        "type": "int",
+        "default": 4294967295,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "stored_program_cache": {
+        "type": "int",
+        "default": 256,
+        "min": 0,
+        "max": 524288,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "character_set_database": {
+        "type": "text",
+        "default": "utf8mb4",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "ssl_crl": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_deadlock_report": {
+        "type": "text",
+        "default": "full",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "off",
+            "basic",
+            "full"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_checkpoint_interval": {
+        "type": "int",
+        "default": 30,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_session_mem_used": {
+        "type": "int",
+        "default": 9223372036854775807,
+        "min": 8192,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "pseudo_thread_id": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "system_versioning_insert_history": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "long_query_time": {
+        "type": "float",
+        "default": 10.0,
+        "min": 0.0,
+        "max": 31536000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_force_recovery": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 6,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_user_connections": {
+        "type": "int",
+        "default": 0,
+        "min": -1,
+        "max": 2147483647,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_disable_sort_file_cache": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "character_set_collations": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_encryption_rotation_iops": {
+        "type": "int",
+        "default": 100,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "skip_networking": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "have_dynamic_loading": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_file_classes": {
+        "type": "int",
+        "default": 80,
+        "min": 0,
+        "max": 256,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_sst_method": {
+        "type": "text",
+        "default": "rsync",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_adjust_secondary_key_costs": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 2,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_print_all_deadlocks": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "ssl_key": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_stats_traditional": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "rpl_semi_sync_master_wait_point": {
+        "type": "text",
+        "default": "AFTER_COMMIT",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "AFTER_SYNC",
+            "AFTER_COMMIT"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_slow_disabled_statements": {
+        "type": "set",
+        "default": [
+            "sp"
+        ],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "admin",
+            "call",
+            "slave",
+            "sp"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "slave_type_conversions": {
+        "type": "set",
+        "default": [],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "ALL_LOSSY",
+            "ALL_NON_LOSSY"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_max_dirty_pages_pct": {
+        "type": "float",
+        "default": 90.0,
+        "min": 0.0,
+        "max": 99.999,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "proxy_user": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": false,
+        "is_session": true
+    },
+    "log_slow_query": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "query_cache_limit": {
+        "type": "int",
+        "default": 1048576,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "skip_grant_tables": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_warnings": {
+        "type": "int",
+        "default": 2,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_instant_alter_column_allowed": {
+        "type": "text",
+        "default": "add_drop_reorder",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "never",
+            "add_last",
+            "add_drop_reorder"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_statement_classes": {
+        "type": "int",
+        "default": 222,
+        "min": 0,
+        "max": 256,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_rowid_compare_cost": {
+        "type": "float",
+        "default": 0.002653,
+        "min": 0.0,
+        "max": 1000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "sync_relay_log": {
+        "type": "int",
+        "default": 10000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_use_condition_selectivity": {
+        "type": "int",
+        "default": 4,
+        "min": 1,
+        "max": 5,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_join_size": {
+        "type": "int",
+        "default": 18446744073709551615,
+        "min": 1,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_default_encryption_key_id": {
+        "type": "int",
+        "default": 1,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "net_write_timeout": {
+        "type": "int",
+        "default": 60,
+        "min": 1,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_max_undo_log_size": {
+        "type": "int",
+        "default": 10485760,
+        "min": 10485760,
+        "max": 281474976710656,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_sort_length": {
+        "type": "int",
+        "default": 1024,
+        "min": 64,
+        "max": 8388608,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_rowid_filter_size": {
+        "type": "int",
+        "default": 131072,
+        "min": 1024,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "datadir": {
+        "type": "text",
+        "default": "/var/lib/mysql/",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_net_timeout": {
+        "type": "int",
+        "default": 60,
+        "min": 1,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_flush_sync": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "plugin_dir": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_users_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_key_lookup_cost": {
+        "type": "float",
+        "default": 0.435777,
+        "min": 0.0,
+        "max": 1000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_delayed_threads": {
+        "type": "int",
+        "default": 20,
+        "min": 0,
+        "max": 16384,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_buffer_pool_size_auto_min": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073701163008,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "lock_wait_timeout": {
+        "type": "int",
+        "default": 86400,
+        "min": 0,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_adaptive_flushing_lwm": {
+        "type": "float",
+        "default": 10.0,
+        "min": 0.0,
+        "max": 70.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_slow_admin_statements": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_sst_receive_address": {
+        "type": "text",
+        "default": "AUTO",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "min_examined_row_limit": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "sql_warnings": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_max_file_instances": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "strict_password_validation": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "sync_relay_log_info": {
+        "type": "int",
+        "default": 10000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "relay_log_recovery": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "expire_logs_days": {
+        "type": "float",
+        "default": 0.0,
+        "min": 0.0,
+        "max": 99.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_gtid_domain_id": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "replicate_do_table": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "thread_pool_stall_limit": {
+        "type": "int",
+        "default": 500,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "timestamp": {
+        "type": "float",
+        "default": 0.0,
+        "min": 0.0,
+        "max": 2147483647.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_max_socket_instances": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "query_cache_size": {
+        "type": "int",
+        "default": 1048576,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "tx_read_only": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "basedir": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_random_read_ahead": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_bin": {
+        "type": "bool",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "tcp_keepalive_probes": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 2147483,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "metadata_locks_hash_instances": {
+        "type": "int",
+        "default": 8,
+        "min": 1,
+        "max": 1024,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "port": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 65535,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_commit_wait_usec": {
+        "type": "int",
+        "default": 100000,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "replicate_rewrite_db": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "read_buffer_size": {
+        "type": "int",
+        "default": 131072,
+        "min": 8192,
+        "max": 2147483647,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "log_bin_trust_function_creators": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "div_precision_increment": {
+        "type": "int",
+        "default": 4,
+        "min": 0,
+        "max": 38,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_monitor_disable": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "pid_file": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "myisam_block_size": {
+        "type": "int",
+        "default": 1024,
+        "min": 1024,
+        "max": 16384,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "tls_version": {
+        "type": "set",
+        "default": [
+            "TLSv1.2",
+            "TLSv1.3"
+        ],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "TLSv1.0",
+            "TLSv1.1",
+            "TLSv1.2",
+            "TLSv1.3"
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_binlog_stmt_cache_size": {
+        "type": "int",
+        "default": 18446744073709547520,
+        "min": 4096,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "last_insert_id": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "encrypt_tmp_files": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "deadlock_timeout_short": {
+        "type": "int",
+        "default": 10000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_spin_wait_delay": {
+        "type": "int",
+        "default": 4,
+        "min": 0,
+        "max": 6000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "flush_time": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_stats_include_delete_marked": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "insert_id": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "default_storage_engine": {
+        "type": "text",
+        "default": "InnoDB",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "rpl_semi_sync_master_trace_level": {
+        "type": "int",
+        "default": 32,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_lock_wait_timeout": {
+        "type": "int",
+        "default": 50,
+        "min": 0,
+        "max": 100000000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "thread_pool_max_threads": {
+        "type": "int",
+        "default": 65536,
+        "min": 1,
+        "max": 65536,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_old_blocks_time": {
+        "type": "int",
+        "default": 1000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_events_stages_history_long_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_gtid_seq_no": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_max_table_instances": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_allowlist": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "net_retry_count": {
+        "type": "int",
+        "default": 10,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_compression_failure_threshold_pct": {
+        "type": "int",
+        "default": 5,
+        "min": 0,
+        "max": 100,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "big_tables": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "locked_in_memory": {
+        "type": "bool",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "init_connect": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_lru_flush_size": {
+        "type": "int",
+        "default": 32,
+        "min": 1,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "rpl_semi_sync_master_enabled": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_mysql_replication_bundle": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 1000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "ssl_capath": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_prefix_index_cluster_optimization": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_parallel_workers": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 16383,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "key_cache_age_threshold": {
+        "type": "int",
+        "default": 300,
+        "min": 100,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "rpl_semi_sync_master_wait_no_slave": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_log_file_buffering": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "hostname": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_buffer_pool_dump_pct": {
+        "type": "int",
+        "default": 25,
+        "min": 1,
+        "max": 100,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "thread_pool_dedicated_listener": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_encrypt_tables": {
+        "type": "text",
+        "default": "OFF",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "OFF",
+            "ON",
+            "FORCE"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_extra_pruning_depth": {
+        "type": "int",
+        "default": 8,
+        "min": 0,
+        "max": 62,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "collation_database": {
+        "type": "text",
+        "default": "utf8mb4_uca1400_ai_ci",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "log_bin_compress": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_monitor_enable": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "gtid_ignore_duplicates": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_log_buffer_size": {
+        "type": "int",
+        "default": 16777216,
+        "min": 2097152,
+        "max": 2147479552,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_ddl_exec_mode": {
+        "type": "text",
+        "default": "IDEMPOTENT",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "STRICT",
+            "IDEMPOTENT"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "host_cache_size": {
+        "type": "int",
+        "default": 128,
+        "min": 0,
+        "max": 65536,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "gtid_current_pos": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_max_purge_lag": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "have_openssl": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "myisam_max_sort_file_size": {
+        "type": "int",
+        "default": 9223372036853727232,
+        "min": 0,
+        "max": 9223372036854775807,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "version_compile_machine": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_lru_scan_depth": {
+        "type": "int",
+        "default": 1536,
+        "min": 100,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "check_constraint_checks": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_log_conflicts": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_stmt_cache_size": {
+        "type": "int",
+        "default": 32768,
+        "min": 4096,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "old_mode": {
+        "type": "set",
+        "default": [
+            "UTF8_IS_UTF8MB3"
+        ],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NO_DUP_KEY_WARNINGS_WITH_IGNORE",
+            "NO_PROGRESS_INFO",
+            "ZERO_DATE_TIME_CAST",
+            "UTF8_IS_UTF8MB3",
+            "IGNORE_INDEX_ONLY_FOR_JOIN",
+            "COMPAT_5_1_CHECKSUM",
+            "NO_NULL_COLLATION_IDS",
+            "LOCK_ALTER_TABLE_COPY"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "query_alloc_block_size": {
+        "type": "int",
+        "default": 32768,
+        "min": 1024,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "default_regex_flags": {
+        "type": "set",
+        "default": [],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "DOTALL",
+            "DUPNAMES",
+            "EXTENDED",
+            "EXTENDED_MORE",
+            "EXTRA",
+            "MULTILINE",
+            "UNGREEDY"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "bulk_insert_buffer_size": {
+        "type": "int",
+        "default": 8388608,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "histogram_type": {
+        "type": "text",
+        "default": "JSON_HB",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "SINGLE_PREC_HB",
+            "DOUBLE_PREC_HB",
+            "JSON_HB"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "tmp_table_size": {
+        "type": "int",
+        "default": 16777216,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_data_file_write_through": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "thread_handling": {
+        "type": "text",
+        "default": "one-thread-per-connection",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "one-thread-per-connection",
+            "no-threads",
+            "pool-of-threads"
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_use_atomic_writes": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "query_cache_type": {
+        "type": "text",
+        "default": "OFF",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "OFF",
+            "ON",
+            "DEMAND"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "proxy_protocol_networks": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "version_malloc_library": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_doublewrite": {
+        "type": "text",
+        "default": "ON",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "OFF",
+            "ON",
+            "fast"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "gtid_slave_pos": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_stats_persistent": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_sp_recursion_depth": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 255,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "default_week_format": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 7,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "report_port": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_pagecache_file_hash_size": {
+        "type": "int",
+        "default": 512,
+        "min": 128,
+        "max": 16384,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "relay_log": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_default_row_format": {
+        "type": "text",
+        "default": "dynamic",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "redundant",
+            "compact",
+            "dynamic"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "ft_max_word_len": {
+        "type": "int",
+        "default": 84,
+        "min": 10,
+        "max": 84,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_use_native_aio": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_mode": {
+        "type": "set",
+        "default": [],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "STRICT_REPLICATION",
+            "BINLOG_ROW_FORMAT_ONLY",
+            "REQUIRED_PRIMARY_KEY",
+            "REPLICATE_MYISAM",
+            "REPLICATE_ARIA",
+            "DISALLOW_LOCAL_GTID",
+            "BF_ABORT_MARIABACKUP"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_trace_max_mem_size": {
+        "type": "int",
+        "default": 1048576,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "binlog_commit_wait_count": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_undo_tablespaces": {
+        "type": "int",
+        "default": 3,
+        "min": 0,
+        "max": 127,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_expire_logs_seconds": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 8553600,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_buf_dump_status_frequency": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "analyze_sample_percentage": {
+        "type": "float",
+        "default": 100.0,
+        "min": 0.0,
+        "max": 100.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "deadlock_search_depth_short": {
+        "type": "int",
+        "default": 4,
+        "min": 0,
+        "max": 32,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "keep_files_on_create": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_ft_min_token_size": {
+        "type": "int",
+        "default": 3,
+        "min": 0,
+        "max": 16,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "ft_boolean_syntax": {
+        "type": "text",
+        "default": "+ -><()~*:\"\"&|",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_ft_user_stopword_table": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "thread_cache_size": {
+        "type": "int",
+        "default": 256,
+        "min": 0,
+        "max": 16384,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "server_id": {
+        "type": "int",
+        "default": 1,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "gtid_pos_auto_engines": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_max_sort_file_size": {
+        "type": "int",
+        "default": 9223372036853727232,
+        "min": 0,
+        "max": 9223372036854775807,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "have_profiling": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_temp_data_file_path": {
+        "type": "text",
+        "default": "ibtmp1:12M:autoextend",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_debug": {
+        "type": "text",
+        "default": "NONE",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NONE",
+            "SERVER",
+            "TRANSACTION",
+            "STREAMING",
+            "CLIENT"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_where_cost": {
+        "type": "float",
+        "default": 0.032,
+        "min": 0.0,
+        "max": 100000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "preload_buffer_size": {
+        "type": "int",
+        "default": 32768,
+        "min": 1024,
+        "max": 1073741824,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_alter_copy_bulk": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_output": {
+        "type": "set",
+        "default": [
+            "FILE"
+        ],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NONE",
+            "FILE",
+            "TABLE"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_log_file_mmap": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "general_log": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_stats_persistent_sample_pages": {
+        "type": "int",
+        "default": 20,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "character_set_client": {
+        "type": "text",
+        "default": "utf8mb4",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "aria_group_commit_interval": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "init_slave": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "profiling_history_size": {
+        "type": "int",
+        "default": 15,
+        "min": 0,
+        "max": 100,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "binlog_legacy_event_pos": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_ft_aux_table": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "warning_count": {
+        "type": "int",
+        "default": null,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_stats_modified_counter": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "tx_isolation": {
+        "type": "text",
+        "default": "REPEATABLE-READ",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "READ-UNCOMMITTED",
+            "READ-COMMITTED",
+            "REPEATABLE-READ",
+            "SERIALIZABLE"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "binlog_optimize_thread_scheduling": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "have_geometry": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "encrypt_binlog": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_skip_errors": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "sql_select_limit": {
+        "type": "int",
+        "default": 18446744073709551615,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "slow_query_log": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "aria_stats_method": {
+        "type": "text",
+        "default": "nulls_unequal",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "nulls_unequal",
+            "nulls_equal",
+            "nulls_ignored"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_max_thread_classes": {
+        "type": "int",
+        "default": 50,
+        "min": 0,
+        "max": 256,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_compressed_protocol": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_max_sel_arg_weight": {
+        "type": "int",
+        "default": 32000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_compression_algorithm": {
+        "type": "text",
+        "default": "zlib",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "none",
+            "zlib",
+            "lz4",
+            "lzo",
+            "lzma",
+            "bzip2",
+            "snappy"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_purge_batch_size": {
+        "type": "int",
+        "default": 127,
+        "min": 1,
+        "max": 5000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "plugin_maturity": {
+        "type": "text",
+        "default": "gamma",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "unknown",
+            "experimental",
+            "alpha",
+            "beta",
+            "gamma",
+            "stable"
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "transaction_read_only": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_purge_threads": {
+        "type": "int",
+        "default": 4,
+        "min": 1,
+        "max": 32,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_relay_log_size": {
+        "type": "int",
+        "default": 1073741824,
+        "min": 4096,
+        "max": 1073741824,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "profiling": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_recursive_iterations": {
+        "type": "int",
+        "default": 1000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "aria_pagecache_buffer_size": {
+        "type": "int",
+        "default": 134217728,
+        "min": 131072,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "expensive_subquery_limit": {
+        "type": "int",
+        "default": 100,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "optimizer_join_limit_pref_ratio": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_buffer_pool_dump_at_shutdown": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_do_db": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "ssl_crlpath": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_max_statement_time": {
+        "type": "float",
+        "default": 0.0,
+        "min": 0.0,
+        "max": 31536000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "deadlock_search_depth_long": {
+        "type": "int",
+        "default": 15,
+        "min": 0,
+        "max": 33,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "net_buffer_length": {
+        "type": "int",
+        "default": 16384,
+        "min": 1024,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "mrr_buffer_size": {
+        "type": "int",
+        "default": 262144,
+        "min": 8192,
+        "max": 2147483647,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "sync_binlog": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_max_dirty_pages_pct_lwm": {
+        "type": "float",
+        "default": 0.0,
+        "min": 0.0,
+        "max": 99.999,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "table_definition_cache": {
+        "type": "int",
+        "default": 400,
+        "min": 400,
+        "max": 2097152,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_row_next_find_cost": {
+        "type": "float",
+        "default": 0.045916,
+        "min": 0.0,
+        "max": 1000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "socket": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "foreign_key_checks": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "version_ssl_library": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_monitor_reset": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_start_position": {
+        "type": "text",
+        "default": "00000000-0000-0000-0000-000000000000:-1",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_stats_auto_recalc": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_max_ws_rows": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "rowid_merge_buff_size": {
+        "type": "int",
+        "default": 8388608,
+        "min": 0,
+        "max": 9223372036854775807,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wait_timeout": {
+        "type": "int",
+        "default": 28800,
+        "min": 1,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "binlog_gtid_index": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_node_address": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_fatal_semaphore_wait_threshold": {
+        "type": "int",
+        "default": 600,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "ssl_ca": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "thread_stack": {
+        "type": "int",
+        "default": 299008,
+        "min": 131072,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_sst_donor_rejects_queries": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_ft_sort_pll_degree": {
+        "type": "int",
+        "default": 2,
+        "min": 1,
+        "max": 16,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "sql_notes": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "session_track_transaction_info": {
+        "type": "text",
+        "default": "OFF",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "OFF",
+            "STATE",
+            "CHARACTERISTICS"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_max_ws_size": {
+        "type": "int",
+        "default": 2147483647,
+        "min": 1024,
+        "max": 2147483647,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_fill_factor": {
+        "type": "int",
+        "default": 100,
+        "min": 10,
+        "max": 100,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "gtid_seq_no": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_adaptive_flushing": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "sql_buffer_result": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_file_per_table": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_max_digest_length": {
+        "type": "int",
+        "default": 1024,
+        "min": 0,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "extra_port": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 65535,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "transaction_isolation": {
+        "type": "text",
+        "default": "REPEATABLE-READ",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "READ-UNCOMMITTED",
+            "READ-COMMITTED",
+            "REPEATABLE-READ",
+            "SERIALIZABLE"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_log_checkpoint_now": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_cache_size": {
+        "type": "int",
+        "default": 32768,
+        "min": 4096,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "thread_pool_prio_kickup_timer": {
+        "type": "int",
+        "default": 1000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_bin_compress_min_len": {
+        "type": "int",
+        "default": 256,
+        "min": 10,
+        "max": 1024,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_data_home_dir": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_slave_uk_checks": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_read_io_threads": {
+        "type": "int",
+        "default": 4,
+        "min": 1,
+        "max": 64,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_load_data_splitting": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_write_io_threads": {
+        "type": "int",
+        "default": 4,
+        "min": 2,
+        "max": 64,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "flush": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_bin_index": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_slave_fk_checks": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_undo_directory": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_hosts_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_bin_basename": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "relay_log_space_limit": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_ft_result_cache_limit": {
+        "type": "int",
+        "default": 2000000000,
+        "min": 1000000,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "skip_parallel_replication": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_sync_wait": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 15,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_gtid_mode": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_parallel_max_queued": {
+        "type": "int",
+        "default": 131072,
+        "min": 0,
+        "max": 2147483647,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_exec_mode": {
+        "type": "text",
+        "default": "STRICT",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "STRICT",
+            "IDEMPOTENT"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_encryption_rotate_key_age": {
+        "type": "int",
+        "default": 1,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_node_incoming_address": {
+        "type": "text",
+        "default": "AUTO",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "auto_increment_increment": {
+        "type": "int",
+        "default": 1,
+        "min": 1,
+        "max": 65535,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "require_secure_transport": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_ignore_db": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_read_ahead_threshold": {
+        "type": "int",
+        "default": 56,
+        "min": 0,
+        "max": 64,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "replicate_do_db": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_read_only": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_node_name": {
+        "type": "text",
+        "default": "fad6c32fbe9c",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_immediate_scrub_data_uncompressed": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "old_passwords": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_monitor_reset_all": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "note_verbosity": {
+        "type": "set",
+        "default": [
+            "basic",
+            "explain"
+        ],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "basic",
+            "unusable_keys",
+            "explain"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_optimize_fulltext_only": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "rpl_semi_sync_slave_trace_level": {
+        "type": "int",
+        "default": 32,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_stats_method": {
+        "type": "text",
+        "default": "nulls_equal",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "nulls_equal",
+            "nulls_unequal",
+            "nulls_ignored"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "relay_log_basename": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "ssl_cipher": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "join_cache_level": {
+        "type": "int",
+        "default": 2,
+        "min": 0,
+        "max": 8,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "log_slow_rate_limit": {
+        "type": "int",
+        "default": 1,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_restart_slave": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_sort_buffer_size": {
+        "type": "int",
+        "default": 268434432,
+        "min": 16352,
+        "max": 1152921504606846975,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "sql_slave_skip_counter": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_purge_rseg_truncate_frequency": {
+        "type": "int",
+        "default": 128,
+        "min": 1,
+        "max": 128,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "lc_time_names": {
+        "type": "text",
+        "default": "en_US",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_buffer_pool_size": {
+        "type": "int",
+        "default": 134217728,
+        "min": 2097152,
+        "max": 18446744073701163008,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "redirect_url": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_log_spin_wait_delay": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 6000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_notify_cmd": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_buffer_pool_load_now": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_transaction_retry_errors": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "ignore_db_dirs": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "histogram_size": {
+        "type": "int",
+        "default": 254,
+        "min": 0,
+        "max": 255,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "binlog_checksum": {
+        "type": "text",
+        "default": "CRC32",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NONE",
+            "CRC32"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_log_file_write_through": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_page_size": {
+        "type": "int",
+        "default": 16384,
+        "min": 4096,
+        "max": 65536,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "table_open_cache": {
+        "type": "int",
+        "default": 2000,
+        "min": 10,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_encrypt_tables": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "skip_external_locking": {
+        "type": "bool",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "performance_schema_events_statements_history_long_size": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_provider": {
+        "type": "text",
+        "default": "none",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_gtid_index_span_min": {
+        "type": "int",
+        "default": 65536,
+        "min": 1,
+        "max": 1073741824,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "session_track_schema": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "aria_checkpoint_log_activity": {
+        "type": "int",
+        "default": 1048576,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "thread_pool_priority": {
+        "type": "text",
+        "default": "auto",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "high",
+            "low",
+            "auto"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_flush_log_at_trx_commit": {
+        "type": "int",
+        "default": 1,
+        "min": 0,
+        "max": 3,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "init_file": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_provider_options": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_slow_filter": {
+        "type": "set",
+        "default": [
+            "admin",
+            "filesort",
+            "filesort_on_disk",
+            "filesort_priority_queue",
+            "full_join",
+            "full_scan",
+            "query_cache",
+            "query_cache_miss",
+            "tmp_table",
+            "tmp_table_on_disk"
+        ],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "admin",
+            "filesort",
+            "filesort_on_disk",
+            "filesort_priority_queue",
+            "full_join",
+            "full_scan",
+            "not_using_index",
+            "query_cache",
+            "query_cache_miss",
+            "tmp_table",
+            "tmp_table_on_disk"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_prepared_stmt_count": {
+        "type": "int",
+        "default": 16382,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "encrypt_tmp_disk_tables": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_truncate_temporary_tablespace_now": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "allow_suspicious_udfs": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_compression_pad_pct_max": {
+        "type": "int",
+        "default": 50,
+        "min": 0,
+        "max": 75,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "secure_file_priv": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "use_stat_tables": {
+        "type": "text",
+        "default": "PREFERABLY_FOR_QUERIES",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NEVER",
+            "COMPLEMENTARY",
+            "PREFERABLY",
+            "COMPLEMENTARY_FOR_QUERIES",
+            "PREFERABLY_FOR_QUERIES"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "optimizer_rowid_copy_cost": {
+        "type": "float",
+        "default": 0.002653,
+        "min": 0.0,
+        "max": 1000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "skip_replication": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "tcp_keepalive_interval": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 2147483,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "log_slow_query_file": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "collation_server": {
+        "type": "text",
+        "default": "utf8mb4_uca1400_ai_ci",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "delayed_insert_timeout": {
+        "type": "int",
+        "default": 300,
+        "min": 1,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "pseudo_slave_mode": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "optimizer_selectivity_sampling_limit": {
+        "type": "int",
+        "default": 100,
+        "min": 10,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "have_query_cache": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_cmp_per_index_enabled": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_convert_lock_to_trx": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_online_alter_log_max_size": {
+        "type": "int",
+        "default": 134217728,
+        "min": 65536,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "tmp_disk_table_size": {
+        "type": "int",
+        "default": 18446744073709551615,
+        "min": 1024,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "updatable_views_with_limit": {
+        "type": "text",
+        "default": "YES",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NO",
+            "YES"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "license": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "query_cache_wlock_invalidate": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "version_source_revision": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "report_user": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "gtid_binlog_state": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "relay_log_index": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "query_cache_strip_comments": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "sql_quote_show_create": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_trx_fragment_size": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "optimizer_row_copy_cost": {
+        "type": "float",
+        "default": 0.060866,
+        "min": 0.0,
+        "max": 1000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "default_tmp_storage_engine": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_certification_rules": {
+        "type": "text",
+        "default": "strict",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "strict",
+            "optimized"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_annotate_row_events": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_max_table_handles": {
+        "type": "int",
+        "default": -1,
+        "min": -1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "metadata_locks_cache_size": {
+        "type": "int",
+        "default": 1024,
+        "min": 1,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_ft_max_token_size": {
+        "type": "int",
+        "default": 84,
+        "min": 10,
+        "max": 84,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "sql_if_exists": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "system_time_zone": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "ssl_cert": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "myisam_sort_buffer_size": {
+        "type": "int",
+        "default": 134216704,
+        "min": 4096,
+        "max": 1152921504606846975,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "performance_schema_max_file_handles": {
+        "type": "int",
+        "default": 32768,
+        "min": 0,
+        "max": 1048576,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_old_blocks_pct": {
+        "type": "int",
+        "default": 37,
+        "min": 5,
+        "max": 95,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "idle_write_transaction_timeout": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "extra_max_connections": {
+        "type": "int",
+        "default": 1,
+        "min": 1,
+        "max": 100000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "rpl_semi_sync_slave_enabled": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "unique_checks": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "last_gtid": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": false,
+        "is_session": true
+    },
+    "slave_parallel_mode": {
+        "type": "text",
+        "default": "optimistic",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "none",
+            "minimal",
+            "conservative",
+            "optimistic",
+            "aggressive"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "general_log_file": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "skip_show_database": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "have_rtree_keys": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "autocommit": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "error_count": {
+        "type": "int",
+        "default": null,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": false,
+        "is_session": true
+    },
+    "eq_range_index_dive_limit": {
+        "type": "int",
+        "default": 200,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "master_verify_checksum": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_pagecache_division_limit": {
+        "type": "int",
+        "default": 100,
+        "min": 1,
+        "max": 100,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "external_user": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": false,
+        "is_session": true
+    },
+    "in_predicate_conversion_threshold": {
+        "type": "int",
+        "default": 1000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "open_files_limit": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "transaction_prealloc_size": {
+        "type": "int",
+        "default": 4096,
+        "min": 1024,
+        "max": 134217728,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "sql_log_off": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "version_compile_os": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_buffer_pool_chunk_size": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_recover_options": {
+        "type": "set",
+        "default": [
+            "BACKUP",
+            "QUICK"
+        ],
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NORMAL",
+            "BACKUP",
+            "FORCE",
+            "QUICK",
+            "OFF"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slow_query_log_file": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_trx_fragment_unit": {
+        "type": "text",
+        "default": "bytes",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "bytes",
+            "rows",
+            "statements"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_cluster_name": {
+        "type": "text",
+        "default": "my_wsrep_cluster",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_sql_verify_checksum": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_length_for_sort_data": {
+        "type": "int",
+        "default": 1024,
+        "min": 4,
+        "max": 8388608,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "idle_readonly_transaction_timeout": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "myisam_stats_method": {
+        "type": "text",
+        "default": "NULLS_UNEQUAL",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NULLS_UNEQUAL",
+            "NULLS_EQUAL",
+            "NULLS_IGNORED"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "replicate_events_marked_for_skip": {
+        "type": "text",
+        "default": "REPLICATE",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "REPLICATE",
+            "FILTER_ON_SLAVE",
+            "FILTER_ON_MASTER"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_compression_level": {
+        "type": "int",
+        "default": 6,
+        "min": 0,
+        "max": 9,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "interactive_timeout": {
+        "type": "int",
+        "default": 28800,
+        "min": 1,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "secure_auth": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_osu_method": {
+        "type": "text",
+        "default": "TOI",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "TOI",
+            "RSU"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_error_count": {
+        "type": "int",
+        "default": 64,
+        "min": 0,
+        "max": 65535,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "slave_load_tmpdir": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "ft_min_word_len": {
+        "type": "int",
+        "default": 4,
+        "min": 1,
+        "max": 84,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "tcp_nodelay": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_forced_binlog_format": {
+        "type": "text",
+        "default": "NONE",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "MIXED",
+            "STATEMENT",
+            "ROW",
+            "NONE"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_run_triggers_for_rbr": {
+        "type": "text",
+        "default": "NO",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NO",
+            "YES",
+            "LOGGING",
+            "ENFORCE"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "default_password_lifetime": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_domain_parallel_threads": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 16383,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "myisam_mmap_size": {
+        "type": "int",
+        "default": 18446744073709551615,
+        "min": 7,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_snapshot_isolation": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_ft_enable_stopword": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_ft_enable_diag_print": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_ft_server_stopword_table": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "have_symlink": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "have_compress": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "key_cache_block_size": {
+        "type": "int",
+        "default": 1024,
+        "min": 512,
+        "max": 16384,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_log_dir_path": {
+        "type": "text",
+        "default": "/var/lib/mysql/",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_flush_neighbors": {
+        "type": "int",
+        "default": 1,
+        "min": 0,
+        "max": 2,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_flush_method": {
+        "type": "text",
+        "default": "O_DIRECT",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "fsync",
+            "O_DSYNC",
+            "littlesync",
+            "nosync",
+            "O_DIRECT",
+            "O_DIRECT_NO_FSYNC"
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "secure_timestamp": {
+        "type": "text",
+        "default": "NO",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NO",
+            "SUPER",
+            "REPLICATION",
+            "YES"
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_buffer_pool_size_max": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073701163008,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "binlog_row_image": {
+        "type": "text",
+        "default": "FULL",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "MINIMAL",
+            "NOBLOB",
+            "FULL",
+            "FULL_NODUP"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "myisam_use_mmap": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_binlog_total_size": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_buffer_pool_load_at_startup": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_recover": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "replicate_annotate_row_events": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "gtid_cleanup_batch_size": {
+        "type": "int",
+        "default": 64,
+        "min": 0,
+        "max": 2147483647,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_row_lookup_cost": {
+        "type": "float",
+        "default": 0.130839,
+        "min": 0.0,
+        "max": 1000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_scan_setup_cost": {
+        "type": "float",
+        "default": 10.0,
+        "min": 0.0,
+        "max": 100000000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "log_slave_updates": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_seeks_for_key": {
+        "type": "int",
+        "default": 4294967295,
+        "min": 1,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "deadlock_timeout_long": {
+        "type": "int",
+        "default": 50000000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "key_cache_segments": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 64,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "protocol_version": {
+        "type": "int",
+        "default": null,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "query_cache_min_res_unit": {
+        "type": "int",
+        "default": 4096,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "max_binlog_cache_size": {
+        "type": "int",
+        "default": 18446744073709547520,
+        "min": 4096,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "storage_engine": {
+        "type": "text",
+        "default": "InnoDB",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "enforce_storage_engine": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "sync_master_info": {
+        "type": "int",
+        "default": 10000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "skip_name_resolve": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_deadlock_detect": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_stats_on_metadata": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "large_page_size": {
+        "type": "int",
+        "default": null,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "read_binlog_speed_limit": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "read_rnd_buffer_size": {
+        "type": "int",
+        "default": 262144,
+        "min": 1,
+        "max": 2147483647,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_status_file": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "in_transaction": {
+        "type": "int",
+        "default": null,
+        "min": 0,
+        "max": 1,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_log_group_home_dir": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_log_file_size": {
+        "type": "int",
+        "default": 1073741824,
+        "min": 8388608,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "slave_transaction_retries": {
+        "type": "int",
+        "default": 10,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_search_depth": {
+        "type": "int",
+        "default": 62,
+        "min": 0,
+        "max": 62,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "optimizer_index_block_copy_cost": {
+        "type": "float",
+        "default": 0.0356,
+        "min": 0.0,
+        "max": 1000.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "tcp_keepalive_time": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 2147483,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "local_infile": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "block_encryption_mode": {
+        "type": "text",
+        "default": "aes-128-ecb",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "aes-128-ecb",
+            "aes-192-ecb",
+            "aes-256-ecb",
+            "aes-128-cbc",
+            "aes-192-cbc",
+            "aes-256-cbc",
+            "aes-128-ctr",
+            "aes-192-ctr",
+            "aes-256-ctr"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_log_file_size": {
+        "type": "int",
+        "default": 100663296,
+        "min": 4194304,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_on": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "log_slow_slave_statements": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_data_file_path": {
+        "type": "text",
+        "default": "ibdata1:12M:autoextend",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "replicate_ignore_db": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "ignore_builtin_innodb": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "replicate_ignore_table": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_dirty_reads": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "wsrep_sst_auth": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "column_compression_threshold": {
+        "type": "int",
+        "default": 100,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_checksum_algorithm": {
+        "type": "text",
+        "default": "full_crc32",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "crc32",
+            "strict_crc32",
+            "full_crc32",
+            "strict_full_crc32"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "alter_algorithm": {
+        "type": "text",
+        "default": "DEFAULT",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "DEFAULT",
+            "COPY",
+            "INPLACE",
+            "NOCOPY",
+            "INSTANT"
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "aria_log_purge_type": {
+        "type": "text",
+        "default": "immediate",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "immediate",
+            "external",
+            "at_flush"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "sql_log_bin": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "mysql56_temporal_format": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "server_uid": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_block_size": {
+        "type": "int",
+        "default": 8192,
+        "min": 4096,
+        "max": 32768,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_sst_donor": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_sr_store": {
+        "type": "text",
+        "default": "table",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "none",
+            "table"
+        ],
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "tmpdir": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "thread_pool_size": {
+        "type": "int",
+        "default": 8,
+        "min": 1,
+        "max": 100000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "wsrep_desync": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_data_file_buffering": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "session_track_state_change": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "max_allowed_packet": {
+        "type": "int",
+        "default": 16777216,
+        "min": 1024,
+        "max": 1073741824,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "table_open_cache_instances": {
+        "type": "int",
+        "default": 8,
+        "min": 1,
+        "max": 64,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "userstat": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "relay_log_info_file": {
+        "type": "text",
+        "default": "",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "session_track_system_variables": {
+        "type": "text",
+        "default": "autocommit,character_set_client,character_set_connection,character_set_results,redirect_url,time_zone",
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_autoinc_lock_mode": {
+        "type": "int",
+        "default": 1,
+        "min": 0,
+        "max": 2,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_sync_log_dir": {
+        "type": "text",
+        "default": "NEWFILE",
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            "NEVER",
+            "NEWFILE",
+            "ALWAYS"
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "gtid_domain_id": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_force_primary_key": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "lower_case_table_names": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 2,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "relay_log_purge": {
+        "type": "bool",
+        "default": 1,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_disk_read_ratio": {
+        "type": "float",
+        "default": 0.02,
+        "min": 0.0,
+        "max": 1.0,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "innodb_ft_total_cache_size": {
+        "type": "int",
+        "default": 640000000,
+        "min": 32000000,
+        "max": 1099511627776,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "version": {
+        "type": "text",
+        "default": null,
+        "min": null,
+        "max": null,
+        "allowed_values": null,
+        "is_dynamic": false,
+        "is_global": true,
+        "is_session": false
+    },
+    "optimizer_max_sel_args": {
+        "type": "int",
+        "default": 16000,
+        "min": 0,
+        "max": 4294967295,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_fast_shutdown": {
+        "type": "int",
+        "default": 1,
+        "min": 0,
+        "max": 3,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "idle_transaction_timeout": {
+        "type": "int",
+        "default": 0,
+        "min": 0,
+        "max": 31536000,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": false,
+        "is_session": true
+    },
+    "innodb_sync_spin_loops": {
+        "type": "int",
+        "default": 30,
+        "min": 0,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "aria_pagecache_age_threshold": {
+        "type": "int",
+        "default": 300,
+        "min": 100,
+        "max": 18446744073709551615,
+        "allowed_values": null,
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    },
+    "thread_pool_exact_stats": {
+        "type": "bool",
+        "default": 0,
+        "min": null,
+        "max": null,
+        "allowed_values": [
+            0,
+            1
+        ],
+        "is_dynamic": true,
+        "is_global": true,
+        "is_session": false
+    }
+}
