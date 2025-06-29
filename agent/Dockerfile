@@ -55,6 +55,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     netcat-openbsd \
     htop \
+    procps \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -102,7 +103,5 @@ RUN echo 'import re' > /app/rq_cli.py && \
     echo 'if __name__ == "__main__":' >> /app/rq_cli.py && \
     echo '    sys.argv[0] = re.sub(r"(-script\.pyw|\.exe)?$", "", sys.argv[0])' >> /app/rq_cli.py && \
     echo '    sys.exit(main())' >> /app/rq_cli.py
-
-RUN pip install py-spy
 
 ENTRYPOINT ["supervisord", "-c", "/app/supervisord.conf"]

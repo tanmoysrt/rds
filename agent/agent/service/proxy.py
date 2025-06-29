@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 
 from generated.proxy_pb2 import (
     ProxyCreateRequest,
@@ -11,8 +12,8 @@ from generated.proxy_pb2 import (
     ProxyUpgradeRequest,
 )
 from generated.proxy_pb2_grpc import ProxyServiceServicer
-from agent.domain.proxy import Proxy
 
+from agent.domain.proxy import Proxy
 
 def to_grpc_proxy_info(proxy: Proxy) -> ProxyInfoResponse:
     return ProxyInfoResponse(

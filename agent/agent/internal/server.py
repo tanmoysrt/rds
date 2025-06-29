@@ -18,7 +18,7 @@ def init_server() -> grpc.Server:
 
     config = ServerConfig()
     server = grpc.server(
-        futures.ThreadPoolExecutor(max_workers=10),
+        futures.ThreadPoolExecutor(max_workers=5),
         interceptors=[
             AuthTokenValidatorInterceptor(config=config),
             AsyncJobInterceptor(

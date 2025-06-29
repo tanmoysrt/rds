@@ -1,6 +1,7 @@
 import asyncio
 import contextlib
 import datetime
+import random
 import threading
 import time
 import traceback
@@ -193,8 +194,9 @@ class EtcdStateMonitor:
         with contextlib.suppress(Exception):
             RQScheduler.cancel(job_id)
         # Schedule the job to sync users for all proxies
+        delay = random.uniform(2, 5)
         RQScheduler.schedule(
-            scheduled_time=datetime.datetime.now(datetime.timezone.utc),
+            scheduled_time=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=delay),
             func=Proxy.sync_users_for_all_proxies,
             interval=300, # Sync every 5 minutes
             repeat=None, # Repeat indefinitely
@@ -207,20 +209,11 @@ class EtcdStateMonitor:
         with contextlib.suppress(Exception):
             RQScheduler.cancel(job_id)
         # Schedule the job to sync backend servers for all proxies
+        delay = random.uniform(2, 5)
         RQScheduler.schedule(
-            scheduled_time=datetime.datetime.now(datetime.timezone.utc),
+            scheduled_time=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=delay),
             func=Proxy.sync_backend_servers_for_all_proxies,
             interval=1800, # Sync every 30 minutes
             repeat=None, # Repeat indefinitely
             id=job_id,
         )
-
-
-
-if __name__ == "__main__":
-    monitor = EtcdStateMonitor()
-    # Schedule periodic tasks
-    monitor.schedule_auto_sync_proxysql_backend_servers()
-    monitor.schedule_auto_sync_proxysql_users()
-    # Run the monitor
-    asyncio.run(monitor.run())

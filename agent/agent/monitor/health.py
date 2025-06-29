@@ -165,7 +165,3 @@ class MySQLHealthCheckMonitor:
             self.sync_monitored_db_ids_periodically(),
         )
 
-
-if __name__ == "__main__":
-    monitor = MySQLHealthCheckMonitor()
-    asyncio.run(monitor.run())

@@ -1,9 +1,7 @@
 import traceback
 
 import grpc
-import podman.errors.exceptions
 from google.protobuf.empty_pb2 import Empty
-from podman import PodmanClient
 
 from generated.inter_agent_pb2 import (
     CheckDatabaseReachabilityRequest,
@@ -23,11 +21,12 @@ from agent.helpers import (
     get_working_etcd_cred_of_cluster,
 )
 from agent.internal.config import ClusterConfig
-from agent.internal.etcd_client import Etcd3Client
 
 
 class InterAgentService(InterAgentServiceServicer):
     def RequestRsyncAccess(self, request:RequestRsyncAccessRequest, context) -> RequestRsyncAccessResponse:
+        from podman import PodmanClient
+
         node = MySQL(request.node_id)
         if node.model.cluster_id != request.cluster_id:
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
@@ -79,6 +78,9 @@ class InterAgentService(InterAgentServiceServicer):
             return RequestRsyncAccessResponse()
 
     def RevokeRsyncAccess(self, request:RevokeRsyncAccessRequest, context):
+        from podman import PodmanClient
+        from podman.errors.exceptions import NotFound as PodmanNotFound
+
         if not request.instance_id.startswith( f"rsync.{request.cluster_id}."):
             context.set_code(grpc.StatusCode.PERMISSION_DENIED)
             context.set_details("Invalid instance ID or does not match the cluster and node.")
@@ -92,7 +94,7 @@ class InterAgentService(InterAgentServiceServicer):
             # Force remove the container
             try:
                 client.containers.remove(request.instance_id, force=True)
-            except podman.errors.exceptions.NotFound:
+            except PodmanNotFound:
                 return Empty()
             except Exception:
                 traceback.print_exc()
@@ -111,6 +113,8 @@ class InterAgentService(InterAgentServiceServicer):
         return Empty()
 
     def CheckDatabaseReachability(self, request:CheckDatabaseReachabilityRequest, context) -> CheckDatabaseReachabilityResponse:
+        from agent.internal.etcd_client import Etcd3Client
+
         server_config = ServerConfig()
         try:
             username, password = get_working_etcd_cred_of_cluster(request.cluster_id)
