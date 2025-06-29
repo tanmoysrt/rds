@@ -24,6 +24,7 @@ def read_variable_definitions(db_type: str, version: str | None = None) -> Simpl
 def validate_config(
         current_config: Dict[str, Any] | None,
         updates: Dict[str, Any],
+        remove_configs: List[str],
         db_type: str,
         version: str | None = None
 ) -> Tuple[bool, Dict[str, Any], Dict[str, str], bool]:
@@ -44,6 +45,7 @@ def validate_config(
     errors = {}
     restart_required = False
     filtered_updates = {}
+    new_config = current_config.copy()
 
     for var_name, new_value in updates.items():
         var_name_lower = var_name.lower()
@@ -130,8 +132,12 @@ def validate_config(
             except (ValueError, TypeError):
                 pass  # Keep as None if casting fails
 
-        # Skip if new value matches current or default value
-        if casted_value == casted_current_value or casted_value == casted_default_value:
+        # Skip if new value matches current value
+        if casted_value == casted_current_value:
+            continue
+
+        # Skip if new value matches default value and that's not in the current config
+        if casted_value == casted_default_value and var_name not in current_config:
             continue
 
         # Validate range for numeric types
@@ -158,8 +164,35 @@ def validate_config(
         if not var_def.is_dynamic:
             restart_required = True
 
+    for var_name in remove_configs:
+        var_name_lower = var_name.lower()
+
+        # Check if variable exists
+        if not hasattr(variable_definitions, var_name_lower):
+            errors[var_name] = "Unknown variable"
+            continue
+
+        var_def = getattr(variable_definitions, var_name_lower)
+
+        # Check if variable supports SET type (not supported)
+        if var_def.type == VariableType.SET:
+            errors[var_name] = "SET type variables are not supported"
+            continue
+
+        # Check if variable is global (required)
+        if not var_def.is_global:
+            errors[var_name] = "Only global variables are supported"
+            continue
+
+        # Check if restart is required for removal
+        if not var_def.is_dynamic:
+            restart_required = True
+
+        # Remove the variable from the new configuration
+        if var_name in new_config:
+            del new_config[var_name]
+
     # Create the new configuration by merging current with filtered updates
-    new_config = current_config.copy()
     new_config.update(filtered_updates)
 
     return len(errors) == 0, new_config, errors, restart_required

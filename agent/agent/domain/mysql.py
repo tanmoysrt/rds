@@ -5,6 +5,7 @@ import time
 from pathlib import Path
 from typing import override
 
+from agent.libs.mysql_config_validator import validate_config
 from generated.extras_pb2 import DBHealthStatus, DBType
 from generated.inter_agent_pb2 import (
     RequestRsyncAccessRequest,
@@ -63,6 +64,7 @@ class MySQL(SystemdService):
             "data_path": str(data_path),
             "config_path": str(config_dir_path),
             "init_path": str(init_dir_path),
+            "db_options": {}
         }
 
         # Fetch cluster configuration
@@ -133,11 +135,12 @@ class MySQL(SystemdService):
         self.data_path = metadata["data_path"]
         self.config_path = metadata["config_path"]
         self.init_path = metadata["init_path"]
+        self.db_options = metadata.get("db_options", {})
 
         self._db_instance_for_health_check:DatabaseClient|None = None
 
     def update_version(self, image:str, tag:str):
-        return self.update(image=image, tag=tag)
+        return self.update(image=image, tag=tag, deploy=True)
 
     def setup_replica(self):
         """
@@ -273,7 +276,7 @@ class MySQL(SystemdService):
                                 MASTER_USE_GTID = {"current_pos" if slave_pos else "slave_pos"}""",
                 (master_node_config.ip, master_node_config.db_port, self.cluster_config.replication_user, self.cluster_config.replication_password),
             )
-            self.set_read_only_mode(True)
+            self.enable_read_only_mode()
             conn.query("START SLAVE")
 
     def configure_as_master(self):
@@ -283,7 +286,7 @@ class MySQL(SystemdService):
         with self.db_conn as conn:
             conn.query("STOP SLAVE")
             conn.query("RESET SLAVE ALL")
-            self.set_read_only_mode(False)
+            self.disable_read_only_mode()
 
     def sync_replication_config(self, cluster_config:ClusterConfig=None):
         """
@@ -342,29 +345,21 @@ class MySQL(SystemdService):
         conn.query("GRANT SELECT ON mysql.user TO %s@'%%'", (config.replication_user,))
         conn.query("FLUSH PRIVILEGES")
 
-    def set_read_only_mode(self, read_only:bool):
+    def enable_read_only_mode(self):
         """
         Update the read-only mode of the MySQL instance.
 
         NOTE: Users with `SUPER` privilege can still write to the database even in read-only mode.
         So be cautious while granting `SUPER` privilege to users + avoid syncing them on ProxySQL.
         """
-        conn = self.db_conn
+        self.modify_db_options_and_restart_if_required({
+            "read_only": 1,
+        })
 
-        # Persist changes in config
-        mysql_config_path = Path(self.config_path) / "rds.cnf"
-        with open(mysql_config_path, "w") as f:
-            f.write(render_template("mysql/config/rds.cnf", {
-                **self.model.metadata_json,
-                "read_only": read_only,
-            }))
-
-        # Change in runtime
-        if read_only:
-            conn.query("SET GLOBAL read_only = ON;")
-        else:
-            conn.query("SET GLOBAL read_only = OFF;")
-
+    def disable_read_only_mode(self):
+        self.modify_db_options_and_restart_if_required({
+            "read_only": 0,
+        })
 
     @override
     def delete(self):
@@ -414,6 +409,85 @@ class MySQL(SystemdService):
             except Exception as e:
                 print(f"Failed to sync replication config for server {server_id}: {e}")
 
+    def modify_db_options_and_restart_if_required(self, updates:dict, remove_keys:list[str]|None=None, restart_timeout:int=180):
+        """
+        In this case, we will use `modify_db_options` method to apply the changes.
+        Then, restart the MySQL instance if required.
+        Then, wait for the MySQL instance to be ready.
+        And refresh the db_conn so that next operation doesn't fail
+        """
+        is_restart_required = self.modify_db_options(updates, remove_keys)
+        if is_restart_required:
+            self.restart()
+            self.wait_for_db(timeout=restart_timeout)
+            self._db_instance_for_health_check = None
+        else:
+            self._db_instance_for_health_check = None
+
+
+    def modify_db_options(self, updates:dict, remove_keys:list[str]|None=None) -> bool:
+        """
+        Modify the database options for this MySQL instance.
+        This will update the rds.cnf file and apply the changes to the running instance.
+
+        :param updates: Dictionary of options to update, e.g. {"read_only": True, "innodb_flush_log_at_trx_commit": 2}
+        :param remove_keys: List of keys to remove from the db_options
+        :return:
+            bool: indicating whether db restart is required or not
+        """
+        if remove_keys is None:
+            remove_keys = []
+
+        existing_options = self.db_options.copy()
+
+        is_valid, updated_config, errors, restart_required = validate_config(existing_options, updates, remove_keys, self.model.service, self.minor_version)
+        if not is_valid:
+            error_msg = "Invalid configuration changes:\n"
+            for var_name, error in errors.items():
+                error_msg += f"{var_name}: {error}\n"
+            raise ValueError(error_msg)
+
+        # Write in rds.conf file
+        mysql_config_path = Path(self.config_path) / "rds.cnf"
+        with open(mysql_config_path, "w") as f:
+            f.write(render_template("mysql/config/rds.cnf", {
+            **self.model.metadata_json,
+            "db_options": updated_config,
+        }))
+
+        # Update in backend db
+        self.update(metadata={
+            **self.model.metadata_json,
+            "db_options": updated_config,
+        })
+        self.db_options = updated_config
+
+        if restart_required:
+            return True
+
+        if not updated_config:
+            return False
+
+        try:
+            # Open a new connection to apply the changes
+            with self.db_conn as conn:
+                for key, value in updated_config.items():
+                    conn.query(f"SET GLOBAL {key} = %s", (value,))
+            # As most of the changes are dynamic, we don't need to restart the MySQL instance.
+            return False
+        except Exception as e:
+            print(f"Failed to apply changes to the running MySQL instance: {e}")
+            # As it is failed to apply changes, we will return True to indicate that restart is required.
+            return True
+
+    @property
+    def minor_version(self) -> str:
+        if not self.model.tag or self.model.tag == "latest":
+            return "latest"
+        parts = self.model.tag.split(".")
+        if len(parts) < 2:
+            return "latest"
+        return parts[0] + "." + parts[1]
 
     @staticmethod
     def get_all(**kwargs) -> list[str]:

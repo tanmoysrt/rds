@@ -21,7 +21,7 @@ class ServiceStatus(enum.Enum):
 
 class SystemdService:
     @classmethod
-    def create(cls, image:str, tag:str, environment_variables:dict[str, str], command:str|None, mounts:dict[str,str], podman_args:list[str], cluster_id:str, etcd_username:str, etcd_password:str, service_id:str|None=None, service:str="", metadata:dict[str, str]|None=None):
+    def create(cls, image:str, tag:str, environment_variables:dict[str, str], command:str|None, mounts:dict[str,str], podman_args:list[str], cluster_id:str, etcd_username:str, etcd_password:str, service_id:str|None=None, service:str="", metadata:dict[str, str|dict]|None=None):
         if not isinstance(environment_variables, dict):
             raise ValueError("environment_variables must be a dictionary")
         if not isinstance(mounts, dict):
@@ -94,7 +94,7 @@ class SystemdService:
             "failed": ServiceStatus.FAILED,
         }.get(status, ServiceStatus.FAILED)
 
-    def update(self, image:str|None=None, tag:str|None=None, environment_variables:dict[str,str]|None=None, mounts:dict[str,str]|None=None, podman_args:list[str]|None=None, metadata:dict[str,str]|None=None):
+    def update(self, image:str|None=None, tag:str|None=None, environment_variables:dict[str,str]|None=None, mounts:dict[str,str]|None=None, podman_args:list[str]|None=None, metadata:dict[str,str|dict]|None=None, deploy:bool=False):
         if image is not None:
             self.model.image = image
         if tag is not None:
@@ -108,7 +108,8 @@ class SystemdService:
         if metadata is not None:
             self.model.metadata_json = metadata
         self.model.save()
-        self._deploy()
+        if deploy:
+            self._deploy()
 
     def delete(self):
         if self.status == ServiceStatus.ACTIVE:

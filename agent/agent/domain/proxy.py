@@ -87,7 +87,7 @@ class Proxy(SystemdService):
         self.config_path = metadata["config_path"]
 
     def update_version(self, image:str, tag:str):
-        return self.update(image=image, tag=tag)
+        return self.update(image=image, tag=tag, deploy=True)
 
     def sync_servers(self, cluster_config: ClusterConfig | None = None) -> bool:
         """

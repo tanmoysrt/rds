@@ -12,9 +12,10 @@ max_binlog_size = 100M
 
 log_error = /var/lib/mysql/mysql-error.log
 
-{% if read_only %}
-read_only = 1
-{% endif %}
+{% for key, value in db_options.items() %}
+{{ key }} = {{ value }}
+{% endfor %}
+
 
 [client]
 port = {{ db_port }}

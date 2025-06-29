@@ -61,6 +61,12 @@ class DatabaseClient:
             List of rows as dictionaries (column_name: value) or
             List of lists (column names followed by rows).
         """
+
+        # If not reachable, close the connection
+        if not self.is_reachable():
+            self.close()
+
+        # Then proceed with the query execution
         try:
             with self._connection.cursor() as cursor:
                 cursor.execute(query, params)
