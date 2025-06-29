@@ -1,7 +1,7 @@
 from peewee import SqliteDatabase
 
 local_database = SqliteDatabase(
-	"db.sqlite3",
+	"data/agent/db.sqlite3",
 	timeout=15,
 	pragmas={
 		"journal_mode": "wal",

@@ -1,14 +1,14 @@
 import time
 from typing import Literal
 
-import docker
-from docker import DockerClient
-
 from agent.internal.db_client import DatabaseClient
 
 
 class TmpDBContainer:
     def __init__(self, db_type:Literal["mysql", "mariadb"], tag:str="latest", root_password:str|None=None, db_user:str="test_user", db_password:str="test_password", auto_start:bool=False):
+        from docker import DockerClient
+        import docker
+
         self._docker_client: DockerClient|None = docker.from_env()
         self._id = None
         self._db_type:str = db_type

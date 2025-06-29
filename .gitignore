@@ -2,13 +2,3 @@ env
 __pycache__
 generated/__pycache__
 .idea
-config.lock
-config.json
-db.*
-!db.py
-*.rdb
-client/test.py
-certs
-server/__init__.py
-visualizer
-Dockerfile

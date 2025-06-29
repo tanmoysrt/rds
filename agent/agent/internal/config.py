@@ -15,8 +15,8 @@ from agent.internal.etcd_client import Etcd3Client
 class ServerConfig:
     _instance = None
 
-    _config_file = "config.json"
-    _config_file_lock = "config.lock"
+    _config_file = "data/agent/config.json"
+    _config_file_lock = "data/agent/config.lock"
     _base_path:str
 
     redis_port:int

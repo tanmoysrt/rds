@@ -189,8 +189,8 @@ class MySQL(SystemdService):
                 "--exclude", "ib_logfile*",
                 "--exclude", "ibtmp1",
                 "--exclude", "mysqld-relay-bin.*",
-                "--exclude", "relay-log.info",
-                "--exclude", "mysql-error.log",
+                "--exclude", "relay-logs.info",
+                "--exclude", "mysql-error.logs",
                 "--inplace", # To avoid creating temporary files, for large ibd files it's useful
                 "-e", f"ssh -p {rsync_access.port} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null",
                 f"{rsync_access.username}@{master_node_config.ip}:/data/", self.data_path

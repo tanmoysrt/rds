@@ -8,6 +8,7 @@ db.*
 client/test.py
 visualizer
 data
+extras
 !data/agent/.keep
 !data/agent/logs/.keep
 !data/agent/certs/.keep
