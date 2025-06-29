@@ -261,6 +261,7 @@ class MySQL(SystemdService):
         master_node_config = self.cluster_config.get_node(master_node_id)
 
         with self.db_conn as conn:
+            self.enable_read_only_mode()
             conn.query("STOP SLAVE")
             conn.query("RESET SLAVE ALL")
             # Set the slave_pos if provided, otherwise use the current GTID position
@@ -276,17 +277,29 @@ class MySQL(SystemdService):
                                 MASTER_USE_GTID = {"current_pos" if slave_pos else "slave_pos"}""",
                 (master_node_config.ip, master_node_config.db_port, self.cluster_config.replication_user, self.cluster_config.replication_password),
             )
-            self.enable_read_only_mode()
+            self.modify_db_options_and_restart_if_required({
+                "rpl_semi_sync_slave_enabled": 1,
+                "rpl_semi_sync_master_enabled": 0
+            })
             conn.query("START SLAVE")
 
     def configure_as_master(self):
         if self.model.id not in self.cluster_config.online_master_node_ids:
             raise Exception(f"Node {self.model.id} is not an online master node in the cluster configuration.")
 
+        self.enable_read_only_mode()
+
         with self.db_conn as conn:
             conn.query("STOP SLAVE")
             conn.query("RESET SLAVE ALL")
-            self.disable_read_only_mode()
+
+        self.modify_db_options_and_restart_if_required({
+            "rpl_semi_sync_master_enabled": 1,
+            "rpl_semi_sync_slave_enabled": 0,
+            "rpl_semi_sync_master_wait_point": "AFTER_SYNC",
+            "rpl_semi_sync_master_wait_no_slave": 1,
+        })
+        self.disable_read_only_mode()
 
     def sync_replication_config(self, cluster_config:ClusterConfig=None):
         """
