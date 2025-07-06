@@ -1,0 +1,156 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "prompt",
+ "creation": "2025-07-06 13:14:10.612412",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "status",
+  "instance_id",
+  "column_break_lqbe",
+  "provider",
+  "cluster",
+  "networking_section",
+  "public_ip",
+  "column_break_zowt",
+  "private_ip",
+  "column_break_gnob",
+  "ssh_port",
+  "section_break_zndp",
+  "ssh_root_user",
+  "ssh_root_public_key",
+  "column_break_ovfw",
+  "ssh_non_root_user",
+  "ssh_non_root_public_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "instance_id",
+   "fieldtype": "Data",
+   "label": "Instance ID",
+   "mandatory_depends_on": "eval: doc.provider == \"Generic\""
+  },
+  {
+   "default": "Generic",
+   "fieldname": "provider",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Provider",
+   "options": "Generic\nPress",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_lqbe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nPending\nStarted\nStopped\nTerminated",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cluster",
+   "fieldtype": "Data",
+   "label": "Cluster",
+   "reqd": 1
+  },
+  {
+   "fieldname": "networking_section",
+   "fieldtype": "Section Break",
+   "label": "Networking"
+  },
+  {
+   "fieldname": "public_ip",
+   "fieldtype": "Data",
+   "label": "Public IP",
+   "mandatory_depends_on": "eval: doc.provider == \"Generic\""
+  },
+  {
+   "fieldname": "column_break_zowt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "private_ip",
+   "fieldtype": "Data",
+   "label": "Private IP",
+   "mandatory_depends_on": "eval: doc.provider == \"Generic\""
+  },
+  {
+   "default": "22",
+   "fieldname": "ssh_port",
+   "fieldtype": "Int",
+   "label": "SSH Port",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_zndp",
+   "fieldtype": "Section Break",
+   "label": "SSH Details"
+  },
+  {
+   "fieldname": "ssh_root_public_key",
+   "fieldtype": "Code",
+   "label": "SSH Root Public Key",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ovfw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_gnob",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "root",
+   "fieldname": "ssh_root_user",
+   "fieldtype": "Data",
+   "label": "SSH Root User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ssh_non_root_user",
+   "fieldtype": "Data",
+   "label": "SSH Non Root User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ssh_non_root_public_key",
+   "fieldtype": "Code",
+   "label": "SSH Non Root Public Key",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-06 13:35:24.129225",
+ "modified_by": "Administrator",
+ "module": "Infrastructure",
+ "name": "Virtual Machine",
+ "naming_rule": "Set by user",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
