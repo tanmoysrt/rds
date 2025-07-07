@@ -30,6 +30,8 @@
   {
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Status",
    "options": "Pending\nRunning\nSuccess\nFailure",
    "read_only": 1
@@ -37,6 +39,8 @@
   {
    "fieldname": "play",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Play",
    "read_only": 1
   },
@@ -139,8 +143,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2025-07-06 16:02:55.236548",
+ "links": [
+  {
+   "group": "Tasks",
+   "link_doctype": "Ansible Task",
+   "link_fieldname": "play"
+  }
+ ],
+ "modified": "2025-07-07 21:05:47.773181",
  "modified_by": "Administrator",
  "module": "Infrastructure",
  "name": "Ansible Play",

@@ -1,8 +1,10 @@
 # Copyright (c) 2025, Frappe and contributors
 # For license information, please see license.txt
 
-# import frappe
+import frappe
 from frappe.model.document import Document
+
+from cargo.infrastructure import Ansible
 
 
 class VirtualMachine(Document):
@@ -27,4 +29,9 @@ class VirtualMachine(Document):
         status: DF.Literal["Draft", "Pending", "Started", "Stopped", "Terminated"]
     # end: auto-generated types
 
-    pass
+    @frappe.whitelist()
+    def ping(self):
+        self.ansible("ping.yml").run()
+
+    def ansible(self, playbook: str, variables: dict | None = None, run_as_root_user: bool = True):
+        return Ansible(self, playbook=playbook, variables=variables, run_as_root_user=run_as_root_user)

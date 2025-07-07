@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import subprocess
 from typing import TYPE_CHECKING
@@ -227,6 +229,8 @@ class Ansible:
         return parsed
 
     def _get_task_list(self):
+        # sudo apt install ansible-core
+        # Required for ansible-playbook
         return subprocess.check_output(["ansible-playbook", self.playbook_path, "--list-tasks"]).decode(
             "utf-8"
         )

@@ -128,8 +128,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2025-07-06 13:35:24.129225",
+ "links": [
+  {
+   "group": "Logs",
+   "link_doctype": "Ansible Play",
+   "link_fieldname": "virtual_machine"
+  }
+ ],
+ "modified": "2025-07-07 21:04:39.506606",
  "modified_by": "Administrator",
  "module": "Infrastructure",
  "name": "Virtual Machine",
